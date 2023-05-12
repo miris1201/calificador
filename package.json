@@ -1,0 +1,51 @@
+{
+  "name": "factura-admin",
+  "version": "0.1.0",
+  "description": "Admin para Juez Calificador",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.prod.js",
+    "build:dev": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server --open",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
+  },
+  "author": "Miriam Flores",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
+    "@sweetalert2/theme-dark": "^5.0.5",
+    "animejs": "^3.2.1",
+    "apexcharts": "^3.35.0",
+    "bootstrap": "^3.4.1",
+    "bootstrap-fileinput": "^5.2.7",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-minimizer-webpack-plugin": "^4.2.2",
+    "echarts": "^5.3.0",
+    "file-loader": "^6.2.0",
+    "font-awesome": "^4.7.0",
+    "html-loader": "^4.2.0",
+    "jquery": "^1.11.2",
+    "nouislider": "^15.5.1",
+    "select2": "^4.1.0-rc.0",
+    "select2-bootstrap-theme": "0.1.0-beta.10",
+    "sweetalert2": "^11.1.9",
+    "swiper": "^9.3.0",
+    "webpack": "^5.75.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@webpack-cli/generators": "^3.0.1",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.2",
+    "style-loader": "^3.3.1",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
+}
