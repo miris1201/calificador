@@ -1,0 +1,86 @@
+#menubar,
+#header,
+#content .section-header,
+.offcanvas-holder {
+    display: none;
+}
+
+#content,
+#content .section-body {
+    padding: 0;
+}
+
+.card-printable {
+    display: block;
+}
+
+.card-printable .card-head {
+    display: none;
+}
+
+head,
+.main {
+    font-size: 11px;
+}
+
+body,
+#content>section {
+    background-color: #ffffff;
+    border: 0;
+}
+
+.cabecera{
+    display: block;
+}
+
+.datos1{
+    text-align: center;
+}
+
+#barra_p{
+    display: none;
+}
+
+.fechas{
+    text-align: center;
+}
+
+#logo_img{
+    width: 155px;
+}
+
+#escudo_img{
+    width: 180px;
+    margin-left: auto;
+    display: block;
+}
+
+#map{
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+    position: absolute;
+}
+
+.historiales{
+    visibility: hidden;
+}
+
+div.btn_cabecera{
+    display: none;
+}
+
+#divFollow{
+    display: none;
+}
+
+
+#div_saltos{
+    display: block;
+}
+
+#btnFollow, #btnBack, #btnAssignDir, #deleteCopy, #Reasignar, #btnBack, #notificaciones, #anexos, #btnDeleteNota{
+    display: none;
+}
+
+

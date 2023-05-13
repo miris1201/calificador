@@ -1,0 +1,79 @@
+.main-title{
+    margin-top: 0;
+}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+    padding: 2px 2px;
+}
+.table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th{
+    background-color: #dddddd;
+}
+/********* T�tulos de las listas*/
+h1, .h1 {
+    font-size: 23px;
+}
+
+/********Texto del breadcrumb (Donde estamos)*************/
+.breadcrumb > .active {
+    color: inherit;
+    opacity: 0.7;
+    font-weight: 400;
+    font-size: 14px;
+}
+/* ESTILOS EN LOS ROLES*/
+.child-menu{
+    padding-left: 39px;
+}
+.mostrar, .ocultar{
+    cursor: pointer;
+    font-size: 1.5em;
+    top: 3px;
+    position: relative;
+}
+
+.mostrar:hover, .ocultar:hover{
+    color: #ef4b0e;
+}
+/* END ESTILOS EN LOS ROLES*/
+/* Esta es para cambiar el color del encabezado de las tablas
+section .style-primary, .offcanvas-pane .style-primary, .card .style-primary, section.style-primary, .offcanvas-pane.style-primary, .card.style-primary {
+    background-color: #ed8e27;
+    border-color: #2196f3;
+    color: #ffffff;
+}
+*/
+.btn-primary {
+    color: #ffffff;
+    background-color: #b22028;
+    border-color: #b22028;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+    color: #ffffff;
+    background-color: #7c1921;
+    border-color: #7c1921;
+}
+.btn_filter_input {
+    padding-right: 0;
+}
+.btn_filter {
+    padding: 0;
+}
+.float_filter{
+    position: absolute;
+    width: 100%;
+    top: 42px;
+    right: 1px;
+    z-index: 1000;
+}
+
+.form-control-feedback {
+    pointer-events: auto;
+}
+.img-show-not{
+    width: 120px;
+}
