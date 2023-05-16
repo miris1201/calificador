@@ -1,5 +1,5 @@
 <?php
-/*--------------------------------------------------------------------------------------------------------*/
+
 $dir_fc       = "";
 include_once $dir_fc.'connections/trop.php';
 include_once $dir_fc.'connections/php_config.php';
@@ -15,7 +15,7 @@ $checkMenu    = $server_name.$dir."/";
 $param        = "?controller=".$controller."&action=";
 
 $ruta_app     = "";
-$real_sis     = "sis_usuarios";
+$titulo_edi  = "Nuevo";
 $titulo_curr  = "Usuario";
 
 include_once $dir_fc.'data/inicial.class.php';
@@ -24,17 +24,105 @@ include_once $dir_fc.'data/users.class.php';
 
 $cInicial   = new cInicial();
 $cRoles     = new cRol();
-$cNuevo     = new cUsers();
+$cAccion    = new cUsers();
 
 include_once 'business/sys/check_session.php';
 
-$arrayModulo = $cNuevo->getArrayModulo();
+
+if( !isset($_SESSION[_is_view_] )){
+    $_SESSION[_is_view_] = 1;
+}
+
+$type = $_SESSION[_is_view_];
+$_SESSION[_type_] = $type;
+
+
+$id = 0;
+$id_usuario = "";
+$id_rol     = "";
+$empleado   = "";
+$usuario    = "";
+$nombre     = "";
+$apepa      = "";
+$apema      = "";
+$sexo       = "";
+$correo     = "";
+$imp        = "";
+$edit       = "";
+$elim       = "";
+$nuev       = "";
+$img        = "";
+$admin      = "";
+$activo     = "";
+
+
+$readOnly   = "";
+$showInput  = "";
+$frmName = "frmData";
+
+
+$direccion  = 0;
+$area       = 0;
+$return_paginacion = "";
+$requerido  = "";
+
+
+if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
+    if (!isset($_SESSION[_editar_]) || !is_numeric($_SESSION[_editar_]) || $_SESSION[_editar_] <= 0) {
+        $showinfo = false;
+       
+    } else {
+        $id = $_SESSION[_editar_];
+
+       
+        $cAccion->setId_usuario($id);
+        $rsEditar    = $cAccion->getRegbyId($id);
+
+        if ($rsEditar->rowCount() > 0) {
+            $arrEdi = $rsEditar->fetch(PDO::FETCH_OBJ);
+
+            $id_usuario = $arrEdi->id_usuario;
+            $id_rol     = $arrEdi->id_rol;
+            $id_turno   = $arrEdi->id_turno;
+            $id_zona    = $arrEdi->id_zona;
+            $usuario    = $arrEdi->usuario;
+            $nombre     = $arrEdi->nombre;
+            $apepa      = $arrEdi->apepa;
+            $apema      = $arrEdi->apema;
+            $sexo       = $arrEdi->sexo;
+            $admin      = $arrEdi->admin;
+            $activo     = $arrEdi->activo;
+
+            
+            if(!isset($pag)){ $pag=1;}
+            if(!isset($busqueda) || $busqueda == ""){$busqueda = "";}
+            $return_paginacion = "&pag=".$pag."&busqueda=".$busqueda;
+        } else {
+            $showinfo = false;
+        }
+    }
+} 
+
+
+if ($_SESSION[_is_view_] == 2) {
+    $titulo_edi = "Editando";
+    $showInput = "style='display: none'";
+    $frmName = "frmUpdate";
+    $requerido = "required";
+}
+if ($_SESSION[_is_view_] == 3) {
+    $titulo_edi = "Visualizando";
+    $readOnly = "disabled"; 
+    $showInput = "style='display: none'";
+    
+}
+
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Nuevo <?php echo $titulo_curr?> | <?php echo $titulo_paginas?></title>
+    <title><?php echo $titulo_edi. " " .$titulo_curr?> | <?php echo $titulo_paginas?></title>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <?php include("dist/inc/headercommon.php"); ?>
@@ -45,7 +133,7 @@ $arrayModulo = $cNuevo->getArrayModulo();
 <div id="base">
     <div class="offcanvas"></div>
     <div id="content">
-        <section class="section-body">
+        <section class="section-body contain-lg">
             <div class="row">
                 <div class="col-lg-8">
                 </div>
@@ -62,7 +150,7 @@ $arrayModulo = $cNuevo->getArrayModulo();
                             </a>
                         </li>
                         <li class="active">
-                            Nuevo <?php echo $titulo_curr?>
+                            <?php echo $titulo_edi. " " .$titulo_curr?>
                         </li>
                     </ol>
                 </div>
@@ -80,12 +168,12 @@ $arrayModulo = $cNuevo->getArrayModulo();
                         </a>
                     </div>
                     <strong class="text-uppercase">
-                        CREANDO NUEVO <?php echo $titulo_curr?>
+                        <?php echo $titulo_edi. " " .$titulo_curr?>
                     </strong>
                 </div>
                 <div class="card-body">
                     <form 
-                        id="frmAddUser" 
+                        id="<?php echo $frmName?>" 
                         class="form" 
                         role="form" 
                         method="post" >
@@ -104,7 +192,8 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                                     id="nombre"
                                                     autocomplete="off"
                                                     style="text-transform: capitalize;"
-                                                    required>
+                                                    required
+                                                    value="<?php echo $nombre?>">
                                                 <label 
                                                     for="nombre">
                                                     Nombre(s)<span class="text-danger">*</span>
@@ -116,7 +205,8 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                                 <input type="text" class="form-control" 
                                                        name="apepat" id="apepat" 
                                                        style="text-transform: capitalize;"
-                                                       autocomplete="off">
+                                                       autocomplete="off"
+                                                       value="<?php echo $apepa?>">
                                                 <label for="apepat">Apellido Paterno 
                                                     <span class="text-danger">*</span>
                                                 </label>
@@ -127,26 +217,27 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                                 <input type="text" class="form-control" 
                                                         name="apemat" id="apemat"
                                                         style="text-transform: capitalize;" 
-                                                        autocomplete="off">
+                                                        autocomplete="off"
+                                                        value="<?php echo $apema?>">
                                                 <label for="apemat">Apellido Materno 
-                                                    <span class="text-danger">*</span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                             <div class="form-group floating-label">
                                                 <input type="text" class="form-control" 
                                                         name="usuario" id="usuario" 
                                                         autocomplete="off" 
-                                                        required>
+                                                        required
+                                                        value="<?php echo $usuario?>">
                                                 <label for="usuario">Nombre de Usuario 
                                                     <span class="text-danger">*</span>
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                             <div class="form-group floating-label">
                                                 <input type="password" class="form-control"
                                                         name="clave" id="clave"
@@ -157,12 +248,43 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                             <div class="form-group floating-label">
-                                                <input type="email" class="form-control" 
-                                                        name="correo" id="correo"
-                                                        autocomplete="off">
-                                                <label for="correo">Correo electrónico </label>
+                                                <select name="id_turno" id="id_turno"
+                                                    class="form-control" required>
+                                                    <option value=""></option>
+                                                    <?php
+                                                    $rsT = $cAccion->getCatTurno();
+                                                    while($rwT = $rsT->fetch(PDO::FETCH_OBJ)){
+                                                        $sel = "";
+                                                        if ($id_turno == $rwT->id_turno) {
+                                                            $sel = "selected";
+                                                        }
+                                                        ?>
+                                                        <option value="<?php echo $rwT->id_turno?>" <?php echo $sel?>>
+                                                            <?php echo $rwT->descripcion?>
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <label for="id_turno">Turno 
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group floating-label">
+                                                <select name="id_zona" id="id_zona"
+                                                    class="form-control" required>
+                                                    <option value=""></option>
+                                                    <option value="1"  <?php if ($id_zona == 1) { echo "selected";} ?>>Poniente</option>
+                                                    <option value="2"  <?php if ($id_zona == 2) { echo "selected";} ?>>Oriente</option>
+                                                   
+                                                </select>
+                                                <label for="id_zona">Zona 
+                                                    <span class="text-danger">*</span>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -172,8 +294,8 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                                 <select name="sexo" id="sexo"
                                                     class="form-control" required>
                                                     <option value=""></option>
-                                                    <option value="1">Masculino</option>
-                                                    <option value="2">Femenino</option>
+                                                    <option value="1"  <?php if ($sexo == 1) { echo "selected";} ?> >Femenino</option>
+                                                    <option value="2"  <?php if ($sexo == 2) { echo "selected";} ?>>Masculino</option>
                                                 </select>
                                                 <label for="sexo">Género: 
                                                     <span class="text-danger">*</span>
@@ -188,8 +310,8 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                                     <select name="admin" id="admin" 
                                                         class="form-control" required>
                                                         <option value=""></option>
-                                                        <option value="0">Usuario Estándar</option>
-                                                        <option value="1">Usuario Administrativo</option>
+                                                        <option value="0"  <?php if ($admin == 0) { echo "selected";} ?>>Usuario Estándar</option>
+                                                        <option value="1"  <?php if ($admin == 1) { echo "selected";} ?>>Usuario Administrativo</option>
                                                     </select>
                                                     <label for="admin">Tipo de usuario 
                                                         <span class="text-danger">*</span>
@@ -198,11 +320,7 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                             </div>
                                             <?php
                                         }  
-                                        ?>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        
+                                        ?>                                        
                                         <div class="col-md-4">
                                             <div class="form-group floating-label">
                                                 <select name="id_rol" id="id_rol" 
@@ -243,7 +361,121 @@ $arrayModulo = $cNuevo->getArrayModulo();
                                                         <b>Seleccionar todos</b>
                                                     </label>
                                                 </div>
-                                                <div id="permisos_ajax"> </div>
+                                                <div id="permisos_ajax">
+                                                    <?php
+                                                    if ($id > 0) {
+                                                        $cRoles->setId($id_rol);
+                                                        $rsRol           = $cRoles->parentsMenu();
+                                                        while ($rowReg   = $rsRol->fetch(PDO::FETCH_OBJ)) {
+                                                        $chk = "";
+                                                        $cAccion->setId_menu($rowReg->id_menu);
+                                                        $checked_r  = $cAccion->checarMenuUser();
+                                                        if ($checked_r->rowCount() > 0) {
+                                                            $chk = "checked";
+                                                        }
+                                                        ?>
+                                                        <div id="<?php echo $rowReg->id_menu?>" class="parents-menu_<?php echo $rowReg->id_menu?>">
+                                                            <div class="checkbox">
+                                                                <span id="mostrar_<?php echo $rowReg->id_menu?>" 
+                                                                        class="btn-plus-ne mostrar"> 
+                                                                        <i class="fa fa-plus-square-o"></i>
+                                                                </span>
+                                                                <span id="ocultar_<?php echo $rowReg->id_menu?>" 
+                                                                        class="btn-plus-ne ocultar"> 
+                                                                    <i class="fa fa-minus-square-o"></i>
+                                                                </span>
+                                                                <label> <input name="menus[]" id="menu_<?php echo $rowReg->id_menu?>" 
+                                                                        type="checkbox"
+                                                                        value="<?php echo $rowReg->id_menu?>" <?php echo $chk ?>
+                                                                        title="<?php echo $rowReg->texto?>"> <?php echo $rowReg->texto ?>
+                                                                </label>
+                                                            </div>
+                                                            <input type="hidden" 
+                                                                id="grupo_m_<?php echo $rowReg->id_menu?>" 
+                                                                name="grupo[<?php echo $rowReg->id_menu?>]" 
+                                                                value="<?php echo $rowReg->id_grupo?>">
+                                                        </div>
+                                                        <?php $rsRol_c  = $cRoles->childsMenu($rowReg->id_menu); ?>
+                                                        <div id="child-menu_<?php echo $rowReg->id_menu?>" class="child-menu">
+                                                            <?php
+                                                            while ($rowReg_c = $rsRol_c->fetch(PDO::FETCH_OBJ)) {
+                                                                $chk_imp     = "";
+                                                                $chk_edit    = "";
+                                                                $chk_nuevo   = "";
+                                                                $chk_elim    = "";
+                                                                $chk_exportar= "";
+                                                                $chk_2 = "";
+                                                                $cAccion->setId_menu($rowReg_c->id_menu);
+                                                                $checked_r_2 = $cAccion->checarMenuUser();
+                                                                if ($checked_r_2->rowCount() > 0) {
+                                                                    $chk_2 = "checked";
+                                                                    $rw_check = $checked_r_2->fetch(PDO::FETCH_OBJ);
+                                                                    $chk_imp = $rw_check->imp;
+                                                                    $chk_edit = $rw_check->edit;
+                                                                    $chk_nuevo = $rw_check->nuevo;
+                                                                    $chk_elim  = $rw_check->elim;
+                                                                    $chk_exportar = $rw_check->exportar;
+                                                                }
+                                                                ?>
+                                                                <input type="hidden" 
+                                                                        id="grupo_m_<?php echo $rowReg_c->id_menu?>" 
+                                                                        name="grupo[<?php echo $rowReg_c->id_menu?>]" 
+                                                                        value="<?php echo $rowReg_c->id_grupo?>">
+                                                                <div class="checkbox">
+                                                                    <label class="separador-desc">
+                                                                        <input name="menus[]" 
+                                                                            id="child_<?php echo $rowReg->id_menu?> _<?php echo $rowReg_c->id_menu?>" 
+                                                                            type="checkbox"
+                                                                            value="<?php echo $rowReg_c->id_menu?>" 
+                                                                            title="<?php echo $rowReg_c->texto?>" 
+                                                                            <?php echo $chk_2 ?>>
+                                                                            <?php echo $rowReg_c->texto ?>
+                                                                    </label>
+                                                                    <label class="separador">
+                                                                        <input type="checkbox" 
+                                                                            name="permiso_imp[<?php echo $rowReg_c->id_menu?>]" value="1"
+                                                                            title="Imprimir" id="permiso_imp<?php echo $rowReg_c->id_menu?>" 
+                                                                            <?php if($chk_imp == 1){ echo "checked";}?>>
+                                                                        Imprimir
+                                                                    </label>
+                                                                    <label class="separador">
+                                                                        <input type="checkbox" 
+                                                                            name="permiso_nuevo[<?php echo $rowReg_c->id_menu?>]" value="1"
+                                                                            title="Nuevo" id="permiso_nuevo<?php echo $rowReg_c->id_menu?>" 
+                                                                            <?php if($chk_nuevo == 1){ echo "checked";}?>>
+                                                                        Nuevo
+                                                                    </label>
+                                                                    <label class="separador">
+                                                                        <input type="checkbox" 
+                                                                            name="permiso_edit[<?php echo $rowReg_c->id_menu?>]" value="1"
+                                                                            title="Editar" id="permiso_edit<?php echo $rowReg_c->id_menu?>" 
+                                                                            <?php if($chk_edit == 1){ echo "checked";}?>>
+                                                                        Editar
+                                                                    </label>
+                                                                    <label class="separador">
+                                                                        <input type="checkbox" 
+                                                                            name="permiso_elim[<?php echo $rowReg_c->id_menu?>]" value="1"
+                                                                            title="Eliminar" id="permiso_elim<?php echo $rowReg_c->id_menu?>" 
+                                                                            <?php if($chk_elim == 1){ echo "checked";}?>>
+                                                                        Eliminar
+                                                                    </label>
+                                                                    <label class="separador">
+                                                                        <input type="checkbox" 
+                                                                            name="permiso_exportar[<?php echo $rowReg_c->id_menu?>]" value="1"
+                                                                            title="Exportar" id="permiso_exportar<?php echo $rowReg_c->id_menu?>" 
+                                                                            <?php if($chk_exportar == 1){ echo "checked";}?>>
+                                                                        Exportar
+                                                                    </label>
+                                                                </div>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                        <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </div>
                                             </div>
                                         </div>
                                     </article>

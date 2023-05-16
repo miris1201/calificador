@@ -2,7 +2,7 @@
 $identifierName = "DEV";
 $proyId         = "_dev_juez";
 
-define('c_page_title','Admin Juez Calificador');
+define('c_page_title','Juez Calificador');
 define('c_num_reg',10);
 define('id_usr','cve_admin_cer'.$proyId);
 define('_BODY_STYLE_','menubar-hoverable header-fixed menubar-pin');

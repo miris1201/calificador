@@ -42,25 +42,16 @@
             $padreActivo = "";
             $menu = "<ul>";
             while ($row2 = $result2->fetch(PDO::FETCH_OBJ)){
-                if($sys_id_men == $row2->id){
+                if($sys_id_men == $row2->id_menu){
                     $activo = "active expanded";
                     $padreActivo = "active expanded";
                 }else{
                     $activo = "";
-                }
-
-                $strAccesskey = "";
-                $strBadgeAk   = "";
-
-                if( $row2->accesskey != null ) {
-                    $strAccesskey = "accesskey='".$row2->accesskey."'";
-                    $strBadgeAk   = "<span class='badge '>(". $row2->accesskey .")</span>";
-                } 
-                    
+                }                                 
 
                 $menu.="<li class='".$activo."'>
-                            <a href='".$raiz.$row2->link."' $strAccesskey>
-                                <span class='title'>".$row2->texto." $strBadgeAk</span>
+                            <a href='".$raiz.$row2->link."' >
+                                <span class='title'>".$row2->texto." </span>
                                 
                             </a>
                         </li>";

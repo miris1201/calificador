@@ -1,5 +1,5 @@
 {
-  "name": "factura-admin",
+  "name": "calificador",
   "version": "0.1.0",
   "description": "Admin para Juez Calificador",
   "main": "index.js",

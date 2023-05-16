@@ -177,3 +177,4 @@ window.cpwModal = (id) => {
     $('#idModalcpw').modal('show');
 
 }
+

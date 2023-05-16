@@ -2,7 +2,6 @@ import Swal from 'sweetalert2';
 import '@sweetalert2/theme-dark/dark.min.css';
 
 import { sel, deshabilitarboton, habilitaboton, show, hide } from '../../helpers/general';
-import { apiAddress, apiArea } from '../../helpers/fetch';
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -12,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 const selectElement = sel('#ckSelectAll');
-const frmAddUser = sel('#frmAddUser');
-const frmUpdateUser = sel('#frmUpdateUser');
+const frmAddUser = sel('#frmData');
+const frmUpdateUser = sel('#frmUpdate');
 
 if (frmAddUser != null) {
     frmAddUser.addEventListener('submit', function(event) {
@@ -39,16 +38,6 @@ selectElement.addEventListener('change', () => {
     }
 
 });
-
-sel('#id_rol').addEventListener('change', () =>{
-    let perfil = sel('#id_rol').value;
-    if(perfil == 5 || perfil == 4){
-        hide('.divorigen');
-    }else{
-        show('.divorigen');
-    }
-});
-
 
 const handleSubmitAddUser = (form) => {
     deshabilitarboton('btn_guardar', 1);
@@ -122,6 +111,20 @@ $(document).on('change', '[name="menus[]"]', function() {
     }
 })
 
+$('select#id_rol').on('change', function(e) {
+    let id = this.value;
+    if (id != "") {
+        const url = `business/admin/sis_usuarios/ajax/getMenuRol.php?id_rol=${ id }`;
+        fetch(url)
+            .then((resp) => resp.text())
+            .then(function(html) {
+                sel('#permisos_ajax').innerHTML = html;
+            })
+            .catch(function(error) {
+                sel('#permisos_ajax').innerHTML = error;
+            });
+    }
+})
 
 $(document).on('click', '.mostrar', function() {
     let elemSeleccionado = this.parentElement.parentElement;

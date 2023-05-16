@@ -19,22 +19,10 @@
             </ul>
         </div>
         <div class="headerbar-right">
-            <ul class="header-nav header-nav-options">                
-                <li class="dropdown hidden-xs">
-                    <a   
-                        class="btn btn-icon-toggle" 
-                        data-toggle="dropdown"
-                        id="btnNotifications">
-                        <i class="glyphicon glyphicon-bell"></i>
-                        <sup class="badge style-danger" id="count_bell"></sup>
-                    </a>
-                    <ul class="dropdown-menu animation-expand" id="listNot"></ul>           
-                </li>
-            </ul>
             <ul class="header-nav header-nav-profile">
                 <li class="dropdown">                    
                     <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
-                        <img src="<?php echo $raiz?>dist/assets/img/<?php echo $_SESSION[s_img]?>" class="round">
+                        <i class="fa fa-user"></i>
                         <span class="profile-info">
                             <?php echo $_SESSION[s_nombre]?>
                             <small><?php echo $_SESSION[rol]?></small>

@@ -85,12 +85,12 @@ $ruta_app = "";
             <div class="section-body">
                 <div class="row">
                     <div class="col-lg-8">
-                        <h1 class="text-primary main-title">
+                        <h2 class="text-primary main-title">
                             Lista de Usuarios 
                             <span class="badge">
                                 <?php echo $countRegistros?>
                             </span>
-                        </h1>
+                        </h2>
                     </div>
                     <div class="col-lg-4">
                         <ol class="breadcrumb pull-right">
@@ -107,7 +107,7 @@ $ruta_app = "";
                                 ?>
                                 <a 
                                     class="btn ink-reaction btn-floating-action btn-accent" 
-                                    href="<?php echo $param?>nuevo" 
+                                    onclick="openMyLink(1,0, '<?php echo $param?>nuevo');"
                                     title="Agregar un nuevo Registro">
                                     <i class="fa fa-plus"></i>
                                 </a>
@@ -179,7 +179,7 @@ $ruta_app = "";
                                                 <td class="text-center">
                                                     <a 
                                                         href="javascript:void(0);" 
-                                                        onclick="openMyLink(0,<?php echo $iId ?>, '<?php echo $param."ver&pag=".$pag.$fPaginacion?>')" 
+                                                        onclick="openMyLink(3,<?php echo $iId ?>, '<?php echo $param.'nuevo&pag='.$pag.$fPaginacion?>')" 
                                                         class="btn ink-reaction btn-icon-toggle"
                                                         data-toggle="tooltip" 
                                                         data-placement="top"
@@ -192,7 +192,7 @@ $ruta_app = "";
                                                         ?>
                                                         <a 
                                                             href="javascript:void(0);" 
-                                                            onclick="openMyLink(1,<?php echo $iId ?>, '<?php echo $param."ver&pag=".$pag.$fPaginacion?>')" 
+                                                            onclick="openMyLink(2, <?php echo $iId ?>, '<?php echo $param.'nuevo&pag='.$pag.$fPaginacion?>')" 
                                                             class="btn ink-reaction btn-icon-toggle"
                                                             data-toggle="tooltip" 
                                                             data-placement="top" 

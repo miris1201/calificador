@@ -13,12 +13,6 @@ class cRol extends BD {
     private $fin;
     private $limite;
     
-    private $imprimir;
-    private $nuevo;
-    private $editar;
-    private $eliminar;
-    private $exportar;
-
     /**
      * Get the value of id
      */ 
@@ -59,25 +53,6 @@ class cRol extends BD {
         return $this;
     }
 
-    /**
-     * Get the value of descripcion
-     */ 
-    public function getDescripcion()
-    {
-        return $this->descripcion;
-    }
-
-    /**
-     * Set the value of descripcion
-     *
-     * @return  self
-     */ 
-    public function setDescripcion($descripcion)
-    {
-        $this->descripcion = $descripcion;
-
-        return $this;
-    }
 
     /**
      * Get the value of id_menu
@@ -185,106 +160,6 @@ class cRol extends BD {
         return $this;
     }
 
-    /**
-     * Get the value of imprimir
-     */ 
-    public function getImprimir()
-    {
-        return $this->imprimir;
-    }
-
-    /**
-     * Set the value of imprimir
-     *
-     * @return  self
-     */ 
-    public function setImprimir($imprimir)
-    {
-        $this->imprimir = $imprimir;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of nuevo
-     */ 
-    public function getNuevo()
-    {
-        return $this->nuevo;
-    }
-
-    /**
-     * Set the value of nuevo
-     *
-     * @return  self
-     */ 
-    public function setNuevo($nuevo)
-    {
-        $this->nuevo = $nuevo;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of editar
-     */ 
-    public function getEditar()
-    {
-        return $this->editar;
-    }
-
-    /**
-     * Set the value of editar
-     *
-     * @return  self
-     */ 
-    public function setEditar($editar)
-    {
-        $this->editar = $editar;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of eliminar
-     */ 
-    public function getEliminar()
-    {
-        return $this->eliminar;
-    }
-
-    /**
-     * Set the value of eliminar
-     *
-     * @return  self
-     */ 
-    public function setEliminar($eliminar)
-    {
-        $this->eliminar = $eliminar;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of exportar
-     */ 
-    public function getExportar()
-    {
-        return $this->exportar;
-    }
-
-    /**
-     * Set the value of exportar
-     *
-     * @return  self
-     */ 
-    public function setExportar($exportar)
-    {
-        $this->exportar = $exportar;
-
-        return $this;
-    }
-
     public function getAllReg(){
         $milimite = "";
         $condition = "";
@@ -323,23 +198,23 @@ class cRol extends BD {
     }
 
     public function parentsMenu(){
-        $query = "  SELECT id, id_grupo, texto, link  FROM ws_menu
-                    WHERE id_grupo = 0 AND activo = 1 ORDER BY id ASC";
+        $query = "  SELECT id_menu, id_grupo, texto, link  FROM ws_menu
+                    WHERE id_grupo = 0 AND activo = 1 ORDER BY id_menu ASC";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
     }
 
     public function childsMenu($id_menu){
-        $query = "  SELECT id, id_grupo, texto, link  FROM ws_menu
-                    WHERE id_grupo = $id_menu and activo = 1 ORDER BY id ASC";
+        $query = "  SELECT id_menu, id_grupo, texto, link  FROM ws_menu
+                    WHERE id_grupo = $id_menu and activo = 1 ORDER BY id_menu ASC";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;       
     }
 
     public function checarRol_menu(){
-        $query ="   SELECT id, imp, edit, nuevo, elim, exportar 
+        $query ="   SELECT id, id_menu, imp, edit, nuevo, elim, exportar 
                       FROM ws_rol_menu 
                      WHERE id_menu = ".$this->getId_menu()." 
                         AND id_rol = ".$this->getId();

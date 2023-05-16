@@ -32,18 +32,18 @@ class cInicial extends BD
 
     public function menuChild($parent, $usr){
         try {
-            $query = " SELECT m.id, 
+            $query = " SELECT m.id_menu, 
                               m.texto, 
                               m.link, 
                               m.title, 
-                              m.class,
-                              m.accesskey
+                              m.class
                          FROM ws_menu m
                         WHERE m.id_grupo > 0 
                             AND m.activo = 1 
                             AND m.id_grupo = $parent
                             AND m.id_menu in (select id_menu from ws_usuario_menu WHERE id_usuario = ".$usr." )
                        ORDER BY orden ASC ";
+            // echo $query;
             $result = $this->conn->prepare($query);
             $result->execute();
             return $result;

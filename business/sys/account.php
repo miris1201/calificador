@@ -57,11 +57,6 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
         $nombre      = $arrEdi->nombre;
         $apepa       = $arrEdi->apepa;
         $apema       = $arrEdi->apema;
-        $correo      = $arrEdi->correo;
-        $imp         = $arrEdi->imp;
-        $edit        = $arrEdi->edit;
-        $elim        = $arrEdi->elim;
-        $nuev        = $arrEdi->nuev;
         $activo      = $arrEdi->activo;
         $admin       = $arrEdi->admin;
     }else{
@@ -69,7 +64,6 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
     }
 
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -86,7 +80,7 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
     <div class="offcanvas"></div>
     <div id="content">
         <section>
-            <div class="section-body">
+            <div class="section-body contain-lg">
                 <div class="row">
                     <div class="col-lg-8"></div>
                     <div class="col-lg-4">
@@ -175,109 +169,25 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group floating-label">
-                                                        <input type="email" class="form-control" name="correo" id="correo"
-                                                               required autocomplete="off" value="<?php echo $correo?>">
-                                                        <label for="correo">Correo electrónico <span class="text-danger">*</span></label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group floating-label">
                                                         <select name="sexo" id="sexo" class="form-control" required readonly>
                                                             <option value=""></option>
-                                                            <option value="1" <?php if ($sexo == 1) { echo "selected";} ?>>Masculino</option>
-                                                            <option value="2" <?php if ($sexo == 2) { echo "selected";} ?>>Femenino</option>
+                                                            <option value="1" <?php if ($sexo == 1) { echo "selected";} ?>>Femenino</option>
+                                                            <option value="2" <?php if ($sexo == 2) { echo "selected";} ?>>Masculino</option>
                                                         </select>
                                                         <label for="sexo">Sexo: <span class="text-danger">*</span></label>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-12 col-md-6">
-                                                    <div class="form-group">
-                                                        <select 
-                                                            name="id_colonia" 
-                                                            id="id_colonia" 
-                                                            class="form-control" 
-                                                            required>
-                                                            <option value=""></option>
-                                                            <?php
-                                                            $getCalle = $cEditar->getPublicColonias();
-                                                            while($rowc = $getCalle->fetch(PDO::FETCH_OBJ)){
-                                                            ?>
-                                                                <option value="<?php echo $rowc->id_comunidad?>">
-                                                                    <?php echo $rowc->colonia?>
-                                                                </option>
-                                                            <?php
-                                                            }
-
-                                                            ?>
-                                                        </select>
-                                                        <label for="id_colonia">
-                                                            Colonia <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="form-group floating-label">
-                                                        <input 
-                                                            type="text" 
-                                                            class="form-control" 
-                                                            name="domicillio" 
-                                                            id="domicillio" 
-                                                            autocomplete="off"
-                                                            >
-                                                        <label for="domicillio">
-                                                            Domicilio
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <div class="form-group floating-label">
-                                                        <input 
-                                                            type="text" 
-                                                            class="form-control" 
-                                                            name="telefono" 
-                                                            id="telefono" 
-                                                            autocomplete="off"
-                                                            >
-                                                        <label for="telefono">Telefono Fijo
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group floating-label">
-                                                        <input 
-                                                            type="test" 
-                                                            class="form-control" 
-                                                            name="tel_movil" 
-                                                            id="tel_movil"
-                                                            autocomplete="off" >
-                                                        <label for="tel_movil">
-                                                            Teléfono Movil
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </div>                                            
                                         </fieldset>
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
                                                     <button type="button" 
-                                                        class="btn ink-reaction btn-block btn-default" 
+                                                        class="btn ink-reaction btn-block style-success" 
                                                         id="btn_cp"
                                                         onclick="cpwModal()">
                                                         <i class="fa fa-key"></i> 
                                                         Cambiar Contraseña
-                                                    </button>
-                                                </div>
-                                                <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
-                                                    <button type="submit" 
-                                                        class="btn ink-reaction btn-block btn-info" 
-                                                        id="btn_guardar">
-                                                        <i class="glyphicon glyphicon-floppy-disk"></i> Guardar Cambios
                                                     </button>
                                                 </div>
                                             </div>
