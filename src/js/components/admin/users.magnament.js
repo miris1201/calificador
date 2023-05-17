@@ -167,7 +167,7 @@ const handleSubmitUpdateUser = (form) => {
                     })
                     .then((result) => {
                         let ruta = sel("#current_file").value;
-                        window.location.assign(`${ruta}index`);
+                        window.location.assign(`${ruta}`);
                     });
             } else {
                 Swal.fire({

@@ -16,19 +16,17 @@ $usuario       = "";
 $nombre        = "";
 $apepat        = "";
 $apemat        = "";
-$correo        = "";
 $sexo          = "";   
 $clave         = "";
 $admin         = "";
-$origen_user   = array();
-$id_aplicativo = "";
-$id_modulo     = "";
+$id_zona       = "";
+$id_turno      = "";
 
 $imp      = 0;
-$nuevo    = 0;
-$edi      = 0;
+$nuev     = 0;
+$edit     = 0;
 $elim     = 0;
-$exportar = 0;
+$export   = 0;
 
 $done     = 0;
 $alert    = "warning";
@@ -37,7 +35,9 @@ extract($_REQUEST);
 
 
 if(!is_numeric($id_usuario) || $id_usuario <= 0 || $usuario == "" || $nombre == ""      || 
-   $apepat == ""            || $apemat == ""    || $sexo == ""    || $origen_user == "" ){
+   $apepat == ""            || $sexo == ""    || 
+   !is_numeric($id_zona) || $id_zona <= 0 ||
+   !is_numeric($id_turno) || $id_turno <= 0 ){
 
     $resp = "Debes de ingresar correctamente los datos";
 }
@@ -47,67 +47,65 @@ else{
     }else{
         $user_admin = 0;
     }
-    //Checar si intentó cmabiar su nombre de usuario
-    $cAccion->setUsuario($usuario);
-    $cAccion->setId_usuario($id_usuario);
 
-    $userCoincidencia = $cAccion->foundUserConcidencia();
+    if(!isset($imp)) {  $imp = 0;}
+    if(!isset($edit)){ $edit = 0;}
+    if(!isset($elim)){ $elim = 0;}
+    if(!isset($nuev)){ $nuev = 0;}
+    if(!isset($export)){ $export = 0;}
+
+    //Checar si intentó cmabiar su nombre de usuario
+    $data = array($usuario, $id_usuario);
+
+    $userCoincidencia = $cAccion->foundUserConcidencia( $data );
     if ($userCoincidencia == 1){
         //Si se encuentra coincidencia quiere decir que no cambio su nombre de usuario
         $userFound = 0;
     }else{
         //De lo contrario buscar si existe un usuario con el mismo nombre
-        $userFound = $cAccion->foundUser();
+        $userFound = $cAccion->foundUser( $usuario );
     }
 
-    if ($userFound>0) {
+    if ($userFound > 0) {
         $resp = "El usuario ya existe en la base de datos, favor de intentar con otro nombre de usuario";
 
     } else {
 
-        if($id_direccion == ""){
-            $id_direccion = 0;
-        }
+        $dataU = array(
+            $id_rol,
+            $id_zona,
+            $id_turno,    
+            $usuario, 
+            $nombre,
+            $apepat,
+            $apemat,
+            $sexo,
+            $user_admin,
+            $id_usuario
+        );
 
-
-        if(!isset($imp)) {  $imp = 0;}
-        if(!isset($edit)){ $edit = 0;}
-        if(!isset($elim)){ $elim = 0;}
-        if(!isset($nuev)){ $nuev = 0;}
-
-        $cAccion->setId_rol($id_rol);
-        $cAccion->setId_direccion($id_direccion);
-        $cAccion->setNombre($nombre);
-        $cAccion->setApepa($apepat);
-        $cAccion->setApema($apemat);
-        $cAccion->setCorreo($correo);
-        $cAccion->setSexo($sexo);
-        $cAccion->setImprimir($imp);
-        $cAccion->setEditar($edit);
-        $cAccion->setEliminar($elim);
-        $cAccion->setNvo_usr($nuev);
-        $cAccion->setAdmin($user_admin);
-
-        $inserted = $cAccion->updateReg();
+        $inserted = $cAccion->updateReg( $dataU );
 
         if(is_numeric($inserted) AND $inserted > 0){
             if(isset($menus)){
+                $cAccion->setId_usuario($id_usuario);
                 $cAccion->deleteRegUsMenu();
-                foreach ($menus as $id_arr => $valor_arr) {
-                    
-                    $cAccion->setImprimir(0);
-                    $cAccion->setNuevo(0);
-                    $cAccion->setEditar(0);
-                    $cAccion->setEliminar(0);
-                    $cAccion->setExportar(0);
-
+                foreach ($menus as $id_arr => $valor_arr) {                                        
                     $imp      = 0;
-                    $nuevo    = 0;
-                    $edi      = 0;
+                    $nuev    = 0;
+                    $edit      = 0;
                     $elim     = 0;
-                    $exportar = 0;
+                    $export = 0;
 
-                    $cAccion->setId_menu($valor_arr);
+                    $dataDtl = array(
+                        $id_usuario,
+                        $valor_arr,
+                        $imp,            
+                        $edit,   
+                        $elim, 
+                        $nuev,
+                        $export
+                    );
                     if(isset($grupo)){
                         $grupo_rec = $grupo[$valor_arr];
                         if($grupo_rec <> 0){
@@ -115,25 +113,30 @@ else{
                                 $imp = $permiso_imp[$valor_arr];
                             }
                             if(isset($permiso_nuevo[$valor_arr])){
-                                $nuevo = $permiso_nuevo[$valor_arr];
+                                $nuev = $permiso_nuevo[$valor_arr];
                             }
                             if(isset($permiso_edit[$valor_arr])){
-                                $edi = $permiso_edit[$valor_arr];
+                                $edit = $permiso_edit[$valor_arr];
                             }
                             if(isset($permiso_elim[$valor_arr])){
                                 $elim = $permiso_elim[$valor_arr];
                             }
                             if(isset($permiso_exportar[$valor_arr])){
-                                $exportar = $permiso_exportar[$valor_arr];
+                                $export = $permiso_exportar[$valor_arr];
                             }
-                            $cAccion->setImprimir($imp);
-                            $cAccion->setNuevo($nuevo);
-                            $cAccion->setEditar($edi);
-                            $cAccion->setEliminar($elim);
-                            $cAccion->setExportar($exportar);
+                            $dataDtl = array(
+                                $id_usuario,
+                                $valor_arr,
+                                $imp,            
+                                $edit,   
+                                $elim, 
+                                $nuev,
+                                $export
+                            );
                         }
                     }
-                    $correcto = $cAccion->insertRegdtluser();
+
+                    $correcto = $cAccion->insertRegdtluser( $dataDtl );
                     if(!is_numeric($correcto)){
                         die($correcto);
                     }

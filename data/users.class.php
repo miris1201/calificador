@@ -209,137 +209,11 @@ class cUsers extends BD
         return $this;
     }
 
-    /**
-     * Get the value of id_direccion
-     */ 
-    public function getId_direccion()
-    {
-        return $this->id_direccion;
-    }
-
-    /**
-     * Set the value of id_direccion
-     *
-     * @return  self
-     */ 
-    public function setId_direccion($id_direccion)
-    {
-        $this->id_direccion = $id_direccion;
-
-        return $this;
-    }
-
-        /**
-     * Get the value of id_origen
-     */ 
-    public function getId_origen()
-    {
-        return $this->id_origen;
-    }
-
-
-    /**
-     * Set the value of id_origen
-     *
-     * @return  self
-     */ 
-    public function setId_origen($id_origen)
-    {
-        $this->id_origen = $id_origen;
-
-        return $this;
-    }
-
-    
-    /**
-     * Get the value of id_usuario_origen
-     */ 
-    public function getId_usuario_origen()
-    {
-        return $this->id_usuario_origen;
-    }
-
-    /**
-     * Set the value of id_usuario_origen
-     *
-     * @return  self
-     */ 
-    public function setId_usuario_origen($id_usuario_origen)
-    {
-        $this->id_usuario_origen = $id_usuario_origen;
-
-        return $this;
-    }
-
-    
-    /**
-     * Get the value of id_area
-     */ 
-    public function getId_area()
-    {
-        return $this->id_area;
-    }
-
-    /**
-     * Set the value of id_area
-     *
-     * @return  self
-     */ 
-    public function setId_area($id_area)
-    {
-        $this->id_area = $id_area;
-
-        return $this;
-    }
-
-
-        /**
-     * Get the value of id_aplicativo
-     */ 
-    public function getId_aplicativo()
-    {
-        return $this->id_aplicativo;
-    }
-
-    /**
-     * Set the value of id_aplicativo
-     *
-     * @return  self
-     */ 
-    public function setId_aplicativo($id_aplicativo)
-    {
-        $this->id_aplicativo = $id_aplicativo;
-
-        return $this;
-    }
-
-
-       /**
-     * Get the value of id_modulo
-     */ 
-    public function getId_modulo()
-    {
-        return $this->id_modulo;
-    }
-
-    /**
-     * Set the value of id_modulo
-     *
-     * @return  self
-     */ 
-    public function setId_modulo($id_modulo)
-    {
-        $this->id_modulo = $id_modulo;
-
-        return $this;
-    }
-
 
     public function getUser( $dataUser ) {
         $query = " SELECT 
                         U.id_usuario, 
-                        U.id_rol, 
-                        U.id_direccion, 
+                        U.id_rol,
                         U.usuario, 
                         U.nombre, 
                         U.admin,
@@ -372,7 +246,8 @@ class cUsers extends BD
         $filtro = $this->getFiltro();
 
         if ($filtro != ""){
-            $condition = " AND CONCAT_WS(' ', U.nombre, U.apepa, U.apema) LIKE '%$filtro%' ";
+            $condition = " AND CONCAT_WS(' ', U.nombre, U.apepa, U.apema) LIKE '%".$filtro."%' 
+                            OR usuario LIKE '%".$filtro."%' ";
         }
 
         $condNoSuper = ( $rol > 1 ) ? ' AND U.id_rol > 1 ' : '';
@@ -407,7 +282,6 @@ class cUsers extends BD
                       FROM ws_usuario_menu 
                      WHERE id_menu = " . $this->getId_menu() . "
                        AND id_usuario = " . $this->getId_usuario();
-        echo $query;
         $result = $this->conn->prepare($query);
         $result->execute();
 
@@ -425,13 +299,13 @@ class cUsers extends BD
     }
 
     
-    public function foundUserConcidencia(){
+    public function foundUserConcidencia( $data ){
         //Busca si existe un usuario con el nombre
         $query = " SELECT usuario 
                      FROM ws_usuario 
-                    WHERE usuario = '".$this->getUsuario()."' AND id_usuario = ".$this->getId_usuario();
+                    WHERE usuario = ? AND id_usuario = ? ";
         $result    = $this->conn->prepare($query);
-        $result->execute();
+        $result->execute( $data);
         $registrosf = $result->rowCount();
         return $registrosf;
     }
@@ -444,49 +318,23 @@ class cUsers extends BD
         return $registrosf;
     }
 
-    public function updateReg(){
+    public function updateReg( $dataU ){
         $correcto   = 1;
         $exec       = $this->conn->conexion();
-        $sexo       = $this->getSexo();
-
-        if($sexo == 1){
-            $img= "avatar5.png";
-        }else{
-            $img= "avatar2.png";
-        }
-
         $update = " UPDATE ws_usuario
                        SET id_rol        = ?,
+                           id_zona       = ?, 
+                           id_turno      = ?, 
                            usuario       = ?,
-                           sexo          = ?,
                            nombre        = ?,
                            apepa         = ?,
                            apema         = ?,
-                           admin         = ?,
-                           img           = ?
+                           sexo          = ?,
+                           admin         = ?
                      WHERE id_usuario    = ?";
         $result = $this->conn->prepare($update);
         $exec->beginTransaction();
-
-        $dataVal = array(
-            $this->getId_rol(),
-            $this->getId_direccion(),
-            $this->getUsuario(),
-            $sexo,
-            $this->getNombre(),
-            $this->getApepa(),
-            $this->getApema(),
-            $this->getCorreo(),
-            $this->getImprimir(),
-            $this->getEditar(),
-            $this->getEliminar(),
-            $this->getNvo_usr(),
-            $this->getAdmin(),
-            $img,
-            $this->getId_usuario(),
-        );
-        
-        $result->execute( $dataVal );
+        $result->execute( $dataU);
         $exec->commit();
         return $correcto;
     }
@@ -721,10 +569,9 @@ class cUsers extends BD
     }
 
     public function getUserLock(){
-        $query = "  SELECT id_usuario, id_rol, id_direccion, usuario, nombre,
+        $query = "  SELECT id_usuario, id_rol, usuario, nombre,
                             CONCAT_WS(' ', nombre, apepa, apema) AS nombrecompleto, correo,
-                            sexo, img, DATE_FORMAT(fec_ingreso, '%d/%m/%Y' ) AS fecha_ingreso,
-                            imp, edit, elim, nuev
+                            sexo, img, DATE_FORMAT(fec_ingreso, '%d/%m/%Y' ) AS fecha_ingreso
                     FROM ws_usuario 
                     where id_usuario = ".$this->getId_usuario()." and clave = '".$this->getClave()."'
                     AND activo = 1";

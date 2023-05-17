@@ -54,8 +54,7 @@ try {
     $_SESSION[user]         = $datos['usuario'];
     $_SESSION[id_rol]       = $datos['id_rol'];
     $_SESSION[rol]          = $datos['rol'];
-    $_SESSION[admin]        = $datos['admin'];            
-    $_SESSION[id_direccion] = $datos['id_direccion'];            
+    $_SESSION[admin]        = $datos['admin'];                   
 
     $cUsers->setId_usuario($_SESSION[id_usr]);
 

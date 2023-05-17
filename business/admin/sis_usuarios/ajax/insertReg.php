@@ -75,11 +75,11 @@ if($usuario      == "" || $nombre == "" || $apepat == "" || $id_zona == "" ||
         if(is_numeric($inserted) AND $inserted > 0){
             if(isset($menus)){
                 foreach ($menus as $id_arr => $valor_arr) {
-                    $imp      = 1;
-                    $nuevo    = 1;
-                    $edi      = 1;
+                    $imp      = 0;
+                    $nuevo    = 0;
+                    $edi      = 0;
                     $elim     = 0;
-                    $exportar = 1;
+                    $exportar = 0;
 
                     $dataDtl = array(
                         $inserted,
@@ -91,8 +91,6 @@ if($usuario      == "" || $nombre == "" || $apepat == "" || $id_zona == "" ||
                         $export
                     );
                     
-                
-                    $cAccion->setId_menu($valor_arr);
                     if(isset($grupo)){                        
                         $grupo_rec = $grupo[$valor_arr];
                         if($grupo_rec <> 0){

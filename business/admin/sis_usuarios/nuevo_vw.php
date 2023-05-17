@@ -58,11 +58,11 @@ $activo     = "";
 
 $readOnly   = "";
 $showInput  = "";
-$frmName = "frmData";
+$frmName    = "frmData";
 
 
-$direccion  = 0;
-$area       = 0;
+$id_zona    = 0;
+$id_turno   = 0;
 $return_paginacion = "";
 $requerido  = "";
 
@@ -177,7 +177,8 @@ if ($_SESSION[_is_view_] == 3) {
                         class="form" 
                         role="form" 
                         method="post" >
-                        <input type="hidden" name="current_file" id="current_file" value="<?php echo $param?>"/>
+                        <input type="hidden" name="current_file" id="current_file" value="<?php echo $param."index".$return_paginacion?>"/>  
+                        <input type="hidden" name="id_usuario" id="id_usuario" value="<?php echo $id?>">
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-sm-12">
                                 <fieldset>
@@ -193,7 +194,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                     autocomplete="off"
                                                     style="text-transform: capitalize;"
                                                     required
-                                                    value="<?php echo $nombre?>">
+                                                    value="<?php echo $nombre?>"
+                                                    <?php echo $readOnly?>>
                                                 <label 
                                                     for="nombre">
                                                     Nombre(s)<span class="text-danger">*</span>
@@ -206,7 +208,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                        name="apepat" id="apepat" 
                                                        style="text-transform: capitalize;"
                                                        autocomplete="off"
-                                                       value="<?php echo $apepa?>">
+                                                       value="<?php echo $apepa?>"
+                                                       <?php echo $readOnly?>>
                                                 <label for="apepat">Apellido Paterno 
                                                     <span class="text-danger">*</span>
                                                 </label>
@@ -218,7 +221,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                         name="apemat" id="apemat"
                                                         style="text-transform: capitalize;" 
                                                         autocomplete="off"
-                                                        value="<?php echo $apema?>">
+                                                        value="<?php echo $apema?>"
+                                                        <?php echo $readOnly?>>
                                                 <label for="apemat">Apellido Materno 
                                                 </label>
                                             </div>
@@ -231,18 +235,19 @@ if ($_SESSION[_is_view_] == 3) {
                                                         name="usuario" id="usuario" 
                                                         autocomplete="off" 
                                                         required
-                                                        value="<?php echo $usuario?>">
+                                                        value="<?php echo $usuario?>"
+                                                        <?php echo $readOnly?>>
                                                 <label for="usuario">Nombre de Usuario 
                                                     <span class="text-danger">*</span>
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3" <?php echo $showInput?>>
                                             <div class="form-group floating-label">
                                                 <input type="password" class="form-control"
                                                         name="clave" id="clave"
                                                         autocomplete="off"
-                                                        required>
+                                                        <?php echo $readOnly?>>
                                                 <label for="clave">Password (clave de acceso)
                                                     <span class="text-danger">*</span>
                                                 </label>
@@ -251,7 +256,7 @@ if ($_SESSION[_is_view_] == 3) {
                                         <div class="col-sm-3">
                                             <div class="form-group floating-label">
                                                 <select name="id_turno" id="id_turno"
-                                                    class="form-control" required>
+                                                    class="form-control" required <?php echo $readOnly?>>
                                                     <option value=""></option>
                                                     <?php
                                                     $rsT = $cAccion->getCatTurno();
@@ -275,7 +280,7 @@ if ($_SESSION[_is_view_] == 3) {
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group floating-label">
-                                                <select name="id_zona" id="id_zona"
+                                                <select name="id_zona" id="id_zona" <?php echo $readOnly?>
                                                     class="form-control" required>
                                                     <option value=""></option>
                                                     <option value="1"  <?php if ($id_zona == 1) { echo "selected";} ?>>Poniente</option>
@@ -291,7 +296,7 @@ if ($_SESSION[_is_view_] == 3) {
                                     <div class="row form-group">
                                         <div class="col-sm-4">
                                             <div class="form-group floating-label">
-                                                <select name="sexo" id="sexo"
+                                                <select name="sexo" id="sexo" <?php echo $readOnly?>
                                                     class="form-control" required>
                                                     <option value=""></option>
                                                     <option value="1"  <?php if ($sexo == 1) { echo "selected";} ?> >Femenino</option>
@@ -307,7 +312,7 @@ if ($_SESSION[_is_view_] == 3) {
                                             ?>
                                             <div class="col-sm-4">
                                                 <div class="form-group floating-label">
-                                                    <select name="admin" id="admin" 
+                                                    <select name="admin" id="admin" <?php echo $readOnly?>
                                                         class="form-control" required>
                                                         <option value=""></option>
                                                         <option value="0"  <?php if ($admin == 0) { echo "selected";} ?>>Usuario Estándar</option>
@@ -323,14 +328,18 @@ if ($_SESSION[_is_view_] == 3) {
                                         ?>                                        
                                         <div class="col-md-4">
                                             <div class="form-group floating-label">
-                                                <select name="id_rol" id="id_rol" 
+                                                <select name="id_rol" id="id_rol" <?php echo $readOnly?>
                                                     class="form-control rol" required>
                                                     <option value=""></option>
                                                     <?php
                                                     $rs_rol = $cRoles->getAllRoles();
                                                     while($rw_rol = $rs_rol->fetch(PDO::FETCH_OBJ)){
+                                                        $sel = "";
+                                                        if ($id_rol == $rw_rol->id) {
+                                                            $sel = "selected";
+                                                        }
                                                         ?>
-                                                        <option value="<?php echo $rw_rol->id?>">
+                                                        <option value="<?php echo $rw_rol->id?>" <?php echo $sel?>>
                                                             <?php echo $rw_rol->rol." - ".$rw_rol->descripcion?>
                                                         </option>
                                                     <?php
@@ -357,7 +366,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                             id="ckSelectAll" 
                                                             type="checkbox" 
                                                             value="1" 
-                                                            title="Imprimir Registros">
+                                                            title="Imprimir Registros"
+                                                            <?php echo $readOnly?>>
                                                         <b>Seleccionar todos</b>
                                                     </label>
                                                 </div>
@@ -377,7 +387,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <div id="<?php echo $rowReg->id_menu?>" class="parents-menu_<?php echo $rowReg->id_menu?>">
                                                             <div class="checkbox">
                                                                 <span id="mostrar_<?php echo $rowReg->id_menu?>" 
-                                                                        class="btn-plus-ne mostrar"> 
+                                                                        class="btn-plus-ne mostrar" > 
                                                                         <i class="fa fa-plus-square-o"></i>
                                                                 </span>
                                                                 <span id="ocultar_<?php echo $rowReg->id_menu?>" 
@@ -385,14 +395,14 @@ if ($_SESSION[_is_view_] == 3) {
                                                                     <i class="fa fa-minus-square-o"></i>
                                                                 </span>
                                                                 <label> <input name="menus[]" id="menu_<?php echo $rowReg->id_menu?>" 
-                                                                        type="checkbox"
+                                                                        type="checkbox" <?php echo $readOnly?>
                                                                         value="<?php echo $rowReg->id_menu?>" <?php echo $chk ?>
                                                                         title="<?php echo $rowReg->texto?>"> <?php echo $rowReg->texto ?>
                                                                 </label>
                                                             </div>
                                                             <input type="hidden" 
                                                                 id="grupo_m_<?php echo $rowReg->id_menu?>" 
-                                                                name="grupo[<?php echo $rowReg->id_menu?>]" 
+                                                                name="grupo[<?php echo $rowReg->id_menu?>]"
                                                                 value="<?php echo $rowReg->id_grupo?>">
                                                         </div>
                                                         <?php $rsRol_c  = $cRoles->childsMenu($rowReg->id_menu); ?>
@@ -428,20 +438,22 @@ if ($_SESSION[_is_view_] == 3) {
                                                                             type="checkbox"
                                                                             value="<?php echo $rowReg_c->id_menu?>" 
                                                                             title="<?php echo $rowReg_c->texto?>" 
-                                                                            <?php echo $chk_2 ?>>
+                                                                            <?php echo $chk_2 ?> <?php echo $readOnly?>>
                                                                             <?php echo $rowReg_c->texto ?>
                                                                     </label>
                                                                     <label class="separador">
                                                                         <input type="checkbox" 
                                                                             name="permiso_imp[<?php echo $rowReg_c->id_menu?>]" value="1"
-                                                                            title="Imprimir" id="permiso_imp<?php echo $rowReg_c->id_menu?>" 
+                                                                            title="Imprimir" id="permiso_imp<?php echo $rowReg_c->id_menu?>"
+                                                                            <?php echo $readOnly?> 
                                                                             <?php if($chk_imp == 1){ echo "checked";}?>>
                                                                         Imprimir
                                                                     </label>
                                                                     <label class="separador">
                                                                         <input type="checkbox" 
                                                                             name="permiso_nuevo[<?php echo $rowReg_c->id_menu?>]" value="1"
-                                                                            title="Nuevo" id="permiso_nuevo<?php echo $rowReg_c->id_menu?>" 
+                                                                            title="Nuevo" id="permiso_nuevo<?php echo $rowReg_c->id_menu?>"
+                                                                            <?php echo $readOnly?> 
                                                                             <?php if($chk_nuevo == 1){ echo "checked";}?>>
                                                                         Nuevo
                                                                     </label>
@@ -449,13 +461,15 @@ if ($_SESSION[_is_view_] == 3) {
                                                                         <input type="checkbox" 
                                                                             name="permiso_edit[<?php echo $rowReg_c->id_menu?>]" value="1"
                                                                             title="Editar" id="permiso_edit<?php echo $rowReg_c->id_menu?>" 
+                                                                            <?php echo $readOnly?>
                                                                             <?php if($chk_edit == 1){ echo "checked";}?>>
                                                                         Editar
                                                                     </label>
                                                                     <label class="separador">
                                                                         <input type="checkbox" 
                                                                             name="permiso_elim[<?php echo $rowReg_c->id_menu?>]" value="1"
-                                                                            title="Eliminar" id="permiso_elim<?php echo $rowReg_c->id_menu?>" 
+                                                                            title="Eliminar" id="permiso_elim<?php echo $rowReg_c->id_menu?>"
+                                                                            <?php echo $readOnly?> 
                                                                             <?php if($chk_elim == 1){ echo "checked";}?>>
                                                                         Eliminar
                                                                     </label>
@@ -463,6 +477,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                                         <input type="checkbox" 
                                                                             name="permiso_exportar[<?php echo $rowReg_c->id_menu?>]" value="1"
                                                                             title="Exportar" id="permiso_exportar<?php echo $rowReg_c->id_menu?>" 
+                                                                            <?php echo $readOnly?>
                                                                             <?php if($chk_exportar == 1){ echo "checked";}?>>
                                                                         Exportar
                                                                     </label>
@@ -480,6 +495,9 @@ if ($_SESSION[_is_view_] == 3) {
                                         </div>
                                     </article>
                                 </fieldset>
+                                <?php 
+                                    if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
+                                ?>
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
@@ -492,6 +510,9 @@ if ($_SESSION[_is_view_] == 3) {
                                         </div>
                                     </div>
                                 </fieldset>
+                                <?php 
+                                        }
+                                        ?>
                             </div>
                         </div>
                     </form>

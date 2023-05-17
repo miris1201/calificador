@@ -27,7 +27,7 @@ $cFn      = new cFunction();
 $cLista   = new cUsers();
 
 include_once 'business/sys/check_session.php';    
-$registros  = 20; 
+$registros  = c_num_reg;
 
 if (isset($_GET["pag"])) { $pag = $_GET["pag"];} else { $pag = 1;}
 if (is_numeric($pag)) { $inicio = (($pag - 1) * $registros);} else {$inicio = 0;}
@@ -347,13 +347,13 @@ $ruta_app = "";
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-success">
+            <div class="modal-header" style="background-color: #5F9EA0;">
                 <button 
                     type="button" 
                     class="close" 
                     data-dismiss="modal">×</button>
-                <h5 class="modal-title">Búsqueda</h5>
-            </div>              
+                <h5 class="modal-title" style="color: #E0FFFF;">Búsqueda</h5>
+            </div>                     
             <form 
                 role="form" 
                 id="frmSearch" 

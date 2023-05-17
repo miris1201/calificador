@@ -223,8 +223,8 @@ class cRol extends BD {
         return $result;
     }
 
-    public function getRolbyId(){
-        $query = "  SELECT id, rol, descripcion, activo FROM ws_rol WHERE id = ".$this->getId();
+    public function getRegbyId( $id ){
+        $query = "  SELECT id, rol, descripcion, activo FROM ws_rol WHERE id = ".$id;
         $result   = $this->conn->prepare($query);
         $result->execute();
         return $result;
