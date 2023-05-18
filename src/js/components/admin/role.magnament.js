@@ -7,8 +7,8 @@ sel('#rol').focus();
 
 const selectElement = sel('#ckSelectAll');
 
-const frmAddRole = sel('#frmAddRole');
-const frmEditRole = sel('#frmEditRole');
+const frmAddRole = sel('#frmData');
+const frmEditRole = sel('#frmUpdate');
 
 
 if (frmAddRole != null) {
@@ -48,7 +48,7 @@ const handleSubmitAddRole = (form) => {
                     })
                     .then((result) => {
                         let ruta = sel("#current_file").value;
-                        window.location.assign(`${ruta}index`);
+                        window.location.assign(`${ruta}`);
                     });
             } else {
                 Swal.fire({
@@ -105,7 +105,7 @@ const handleSubmitEditRole = (form) => {
                     })
                     .then((result) => {
                         let ruta = sel("#current_file").value;
-                        window.location.assign(`${ruta}index`);
+                        window.location.assign(`${ruta}`);
                     });
             } else {
                 Swal.fire({

@@ -100,13 +100,14 @@ $ruta_app = "";
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-head style-accent-bright">
+                    <div class="card-head" style="background-color: #5F9EA0;">
                         <div class="tools pull-left">
                             <?php
                             if($_SESSION[nuev] == "1") {
                                 ?>
                                 <a 
-                                    class="btn ink-reaction btn-floating-action btn-accent" 
+                                    class="btn ink-reaction btn-floating-action"
+                                    style="background-color: #B0C4DE;" 
                                     onclick="openMyLink(1,0, '<?php echo $param?>nuevo');"
                                     title="Agregar un nuevo Registro">
                                     <i class="fa fa-plus"></i>
@@ -368,21 +369,20 @@ $ruta_app = "";
                                 <input 
                                     type="text" 
                                     class="form-control dirty" 
-                                    name="txtBuscar" 
-                                    id="idSearch" 
-                                    autocomplete="off"                                    
+                                    name="txtBuscar"  
+                                    id="idSearch"
+                                    autocomplete="off"
                                 />
                                 <label for="idSearch">
                                     Nombre: <span class="text-danger">*</span>
                                 </label>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button 
-                        type="button" 
+                        type="button"
                         class="btn btn-link btn-danger" 
                         data-dismiss="modal">
                         Cerrar
@@ -390,7 +390,8 @@ $ruta_app = "";
                     <button 
                         type="submit" 
                         id="btnHandleSubmitSearch" 
-                        class="btn bg-success ink-reaction" >
+                        class="btn ink-reaction"
+                        style="background-color: #B0C4DE;">
                         Realizar Búsqueda
                     </button>
                 </div>

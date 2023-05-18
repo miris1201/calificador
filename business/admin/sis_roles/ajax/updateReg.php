@@ -9,50 +9,68 @@ $cAccion  = new cRol();
 $id_rol             = "";
 $rol                = "";
 $descripcion        = "";
+
 $permiso_imp[]      = "";
 $permiso_nuevo[]    = "";
 $permiso_edit[]     = "";
 $permiso_elim[]     = "";
 $permiso_exportar[] = "";
-$imp                = 0;
-$nuevo              = 0;
-$edi                = 0;
-$elim               = 0;
-$exportar           = 0;
-$done               = 0;
-$aplicar            = 0;
+
+$imp      = 0;
+$nuev     = 0;
+$edit     = 0;
+$elim     = 0;
+$exportar = 0;
+
+$done   = 0;
+$resp   = "";
+
 extract($_REQUEST);
 
-$cAccion->setId($id_rol);
-$cAccion->setRol($rol);
-$cAccion->setDescripcion($descripcion);
-$actualiza = $cAccion->updateReg();
+$data  = array(
+        $rol, 
+        $descripcion,
+        $id_rol );
 
-if ($actualiza>0) {
+$actualiza = $cAccion->updateReg( $data );
+
+if ($actualiza > 0) {
     $done = 1;
+    $alert = "success";
     $resp = "Registro actualizado correctamente.";
     
-    $cAccion->setImprimir(0);
-    $cAccion->setNuevo(0);
-    $cAccion->setEditar(0);
-    $cAccion->setEliminar(0);
-    $cAccion->setExportar(0);
+    if(!isset($imp)) {  $imp = 0;}
+    if(!isset($edit)){ $edit = 0;}
+    if(!isset($elim)){ $elim = 0;}
+    if(!isset($nuev)){ $nuev = 0;}
+    if(!isset($exportar)){ $exportar = 0;}
 
-    $cAccion->deleteRegRM();
+
     if(isset($menus)){
+        $cAccion->setId($id_rol);
+        $cAccion->deleteRegRM();
         foreach ($menus as $id_arr => $valor_arr) {
-            $cAccion->setId_menu($valor_arr);
+
+            $dataR = array(
+                $id_rol,
+                $valor_arr,
+                $imp,            
+                $edit,   
+                $elim, 
+                $nuev,
+                $exportar );
+                    
             if(isset($grupo)){
                 $grupo_rec = $grupo[$valor_arr];
-                if($grupo_rec <> 0){
+                if($grupo_rec <> 0){                    
                     if(isset($permiso_imp[$valor_arr])){
                         $imp = $permiso_imp[$valor_arr];
                     }
                     if(isset($permiso_nuevo[$valor_arr])){
-                        $nuevo = $permiso_nuevo[$valor_arr];
+                        $nuev = $permiso_nuevo[$valor_arr];
                     }
                     if(isset($permiso_edit[$valor_arr])){
-                        $edi = $permiso_edit[$valor_arr];
+                        $edit = $permiso_edit[$valor_arr];
                     }
                     if(isset($permiso_elim[$valor_arr])){
                         $elim = $permiso_elim[$valor_arr];
@@ -61,19 +79,21 @@ if ($actualiza>0) {
                         $exportar = $permiso_exportar[$valor_arr];
                     }
 
-                    $cAccion->setImprimir($imp);
-                    $cAccion->setNuevo($nuevo);
-                    $cAccion->setEditar($edi);
-                    $cAccion->setEliminar($elim);
-                    $cAccion->setExportar($exportar);
+                    $dataR = array( $id_rol,
+                                $valor_arr,
+                                $imp,
+                                $edit,
+                                $elim,
+                                $nuev, 
+                                $exportar );
                 }
             }
-            $cAccion->insertRegdtl();
+            $cAccion->insertRegdtl( $dataR );
         }
     }
 
 }else{
     $resp = "Ocurrió un inconveniente .. ".$actualiza;
 }
-echo json_encode(array("done" => $done, "resp" => $resp));
+echo json_encode(array("done" => $done, "resp" => $resp, "alert" => $alert));
 ?>

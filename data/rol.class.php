@@ -231,16 +231,16 @@ class cRol extends BD {
         
     }
 
-    public function updateReg(){
+    public function updateReg( $dataR ){
         $correcto   = 1;
         $exec       = $this->conn->conexion();
         $update     = " UPDATE  ws_rol 
-                           SET  rol = '".$this->getRol()."', 
-                                descripcion = '".$this->getDescripcion()."'
-                     WHERE id = ".$this->getId();
+                           SET  rol = ?, 
+                                descripcion = ?
+                         WHERE id = ?";
         $result = $this->conn->prepare($update);
         $exec->beginTransaction();
-        $result->execute();
+        $result->execute( $dataR );
         $exec->commit();
         
         return $correcto;
@@ -271,17 +271,15 @@ class cRol extends BD {
         return $correcto;        
     }
 
-    public function insertRegdtl(){
+    public function insertRegdtl( $data ){
         $exec = $this->conn->conexion();
         $correcto   = 1;
-        $insert_dtl ="INSERT INTO ws_rol_menu (id_rol, id_menu, imp, edit, elim, nuevo, exportar) 
-                            VALUES (".$this->getId().", ".$this->getId_menu().", ".$this->getImprimir().", 
-                                    ".$this->getEditar().", ".$this->getEliminar().", ".$this->getNuevo().",
-                                    ".$this->getExportar().")";
+        $insert_dtl = " INSERT INTO ws_rol_menu (id_rol, id_menu, imp, edit, elim, nuevo, exportar) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $result = $this->conn->prepare($insert_dtl);
         $exec->beginTransaction();
-        $result->execute();
+        $result->execute( $data );
         if ($correcto == 1){
             $correcto= $exec->lastInsertId();
         }

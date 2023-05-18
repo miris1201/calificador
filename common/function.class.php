@@ -76,13 +76,16 @@ class cFunction
     function fn_paginacion($pagina, $numeroTotalPaginas, $raiz, $ruta_paginado, $busqueda){
         $paginado = "<div class='col-md-12'>";
         if ($pagina > 1 && $numeroTotalPaginas > 1) { // Mostrar si no es la primera pagina
-            $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=1$busqueda'  title='Primera página' class='btn ink-reaction btn-floating-action btn-sm btn-primary' style='float:left;'>
+            $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=1$busqueda'  title='Primera página' class='btn ink-reaction btn-floating-action btn-sm' style='float:left; background-color: #5F9EA0;'>
             <i class='fa fa-angle-double-left'></i>
 
                          </a>";
         }   // Mostrar si no es la primera pagina
         if ($pagina > 1) {
-            $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=" . ($pagina - 1) . "$busqueda' title='Regresar a página anterior' class='btn ink-reaction btn-floating-action btn-sm btn-primary' style='float:left;'>
+            $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=" . ($pagina - 1) . "$busqueda' 
+                            title='Regresar a página anterior' 
+                            class='btn ink-reaction btn-floating-action btn-sm' 
+                            style='float:left; background-color: #5F9EA0;'>
                         <i class='fa fa-angle-left'></i>
                      </a>";
         }
@@ -104,10 +107,15 @@ class cFunction
             if ($pagina == $numeroTotalPaginas) {
                 $paginado.= "";
             } else {
-                $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=" . ($pagina + 1) . "$busqueda' title='Siguiente página' class='btn ink-reaction btn-floating-action btn-sm btn-primary'>
-                            <i class='fa fa-angle-right'></i>
-                         </a>";
-                $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=" . $numeroTotalPaginas . "$busqueda'' title='Última página' class='btn ink-reaction btn-floating-action btn-sm btn-primary'>
+                $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=" . ($pagina + 1) . "$busqueda' 
+                                title='Siguiente página' 
+                                class='btn ink-reaction btn-floating-action btn-sm' 
+                                style='background-color: #5F9EA0;'>
+                                <i class='fa fa-angle-right'></i>
+                            </a>";
+                $paginado.= "<a href='" . $raiz . $ruta_paginado."&pag=" . $numeroTotalPaginas . "$busqueda'' 
+                                title='Última página' class='btn ink-reaction btn-floating-action btn-sm' 
+                                style='background-color: #5F9EA0;'>
                             <i class='fa fa-angle-double-right'></i>
                          </a>";
             }

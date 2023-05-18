@@ -73,7 +73,6 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
        
     } else {
         $id = $_SESSION[_editar_];
-
        
         $cAccion->setId_usuario($id);
         $rsEditar    = $cAccion->getRegbyId($id);
@@ -159,11 +158,13 @@ if ($_SESSION[_is_view_] == 3) {
             if($_SESSION[nuev] == "1") {
             ?>
             <div class="card">
-                <div class="card-head style-accent-bright">
+                <div class="card-head" style="background-color: #5F9EA0;">
                     <div class="tools pull-left">
                         <a 
-                            class="btn ink-reaction btn-floating-action btn-accent-light" 
-                            href='<?php echo $param."index"?>' title="Regresar a la lista">
+                            class="btn ink-reaction btn-floating-action" 
+                            href='<?php echo $param."index"?>' 
+                            style="background-color: #B0C4DE;"
+                            title="Regresar a la lista">
                             <i class="fa fa-arrow-left"></i>
                         </a>
                     </div>
@@ -498,14 +499,17 @@ if ($_SESSION[_is_view_] == 3) {
                                 <?php 
                                     if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
                                 ?>
-                                <fieldset>
+                                <fieldset> <br>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
                                             <button 
                                                 type="submit" 
-                                                class="btn ink-reaction btn-block btn-primary" 
+                                                class="btn ink-reaction btn-block"
+                                                style="background-color: #B0C4DE;" 
                                                 id="btn_guardar">
-                                                <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
+                                                <strong>
+                                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                                                Guardar </strong>
                                             </button>
                                         </div>
                                     </div>

@@ -39,6 +39,7 @@ $frmName = "frmData";
 $return_paginacion = "";
 $requerido  = "";
 $id = 0;
+$id_rol = 0;
 $rol = "";
 $descripcion = "";
 
@@ -48,7 +49,6 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
        
     } else {
         $id = $_SESSION[_editar_];
-
 
         $rsEditar    = $cAccion->getRegbyId($id);
 
@@ -196,13 +196,21 @@ if ($_SESSION[_is_view_] == 3) {
                                                                         id="ckSelectAll" 
                                                                         type="checkbox" 
                                                                         value="1" 
+                                                                        <?php echo $readOnly?>
                                                                         title="Imprimir Registros">
                                                                     <b>Seleccionar todos</b>
                                                                 </label>
                                                             </div>
                                                             <?php
+                                                            $cAccion->setId($id_rol);
                                                             $rsRol           = $cAccion->parentsMenu();
-                                                            while ($rowReg   = $rsRol->fetch(PDO::FETCH_OBJ)) {                                                               
+                                                            while ($rowReg   = $rsRol->fetch(PDO::FETCH_OBJ)) {     
+                                                                $chk = "";
+                                                                $cAccion->setId_menu($rowReg->id_menu);
+                                                                $checked_r  = $cAccion->checarRol_menu();
+                                                                if ($checked_r->rowCount() > 0) {
+                                                                    $chk = "checked";
+                                                                }                                                          
                                                                 ?>
                                                                 <div id="<?php echo $rowReg->id_menu?>">
                                                                     <div class="checkbox checkbox-styled">
@@ -218,6 +226,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                                             <input  name="menus[]" 
                                                                                     id="menu_<?php echo $rowReg->id_menu?>"
                                                                                     type="checkbox" 
+                                                                                    <?php echo $chk?>
+                                                                                    <?php echo $readOnly?>
                                                                                     value="<?php echo $rowReg->id_menu?>" 
                                                                                     title="<?php echo $rowReg->texto?>">
                                                                             <?php echo $rowReg->texto ?>
@@ -234,46 +244,76 @@ if ($_SESSION[_is_view_] == 3) {
                                                                 <div id="child-menu_<?php echo $rowReg->id_menu?>" class="child-menu">
                                                                     <?php
                                                                     while ($rowReg_c = $rsRol_c->fetch(PDO::FETCH_OBJ)) {
-                                                                      
+                                                                        $chk_imp     = "";
+                                                                        $chk_edit    = "";
+                                                                        $chk_nuevo   = "";
+                                                                        $chk_elim    = "";
+                                                                        $chk_exportar= "";
+                                                                        $chk_2 = "";
+                                                                        $cAccion->setId_menu($rowReg_c->id_menu);
+                                                                        $checked_r_2 = $cAccion->checarRol_menu();
+                                                                        if ($checked_r_2->rowCount() > 0) {
+                                                                            $chk_2 = "checked";
+                                                                            $rw_check = $checked_r_2->fetch(PDO::FETCH_OBJ);
+                                                                            $chk_imp = $rw_check->imp;
+                                                                            $chk_edit = $rw_check->edit;
+                                                                            $chk_nuevo = $rw_check->nuevo;
+                                                                            $chk_elim  = $rw_check->elim;
+                                                                            $chk_exportar = $rw_check->exportar;
+                                                                        }
                                                                         ?>
                                                                         <input type="hidden" id="grupo_m_<?php echo $rowReg_c->id_menu?>" 
                                                                                 name="grupo[<?php echo $rowReg_c->id_menu?>]" 
                                                                                 value="<?php echo $rowReg_c->id_grupo?>">
                                                                         <div class="checkbox checkbox-styled">
                                                                             <label class="separador-desc">
-                                                                                <input name="menus[]" id="child_<?php echo $rowReg->id_menu?> _<?php echo $rowReg_c->id_menu?>" 
+                                                                                <input name="menus[]" 
+                                                                                        id="child_<?php echo $rowReg->id_menu?> _<?php echo $rowReg_c->id_menu?>" 
                                                                                         type="checkbox"
-                                                                                        value="<?php echo $rowReg_c->id_menu?>" title="<?php echo $rowReg_c->texto?>">
+                                                                                        value="<?php echo $rowReg_c->id_menu?>" 
+                                                                                        title="<?php echo $rowReg_c->texto?>"
+                                                                                        <?php echo $chk_2 ?>
+                                                                                        <?php echo $readOnly?>>
                                                                                 <?php echo $rowReg_c->texto ?>
                                                                             </label>
                                                                             <label class="separador">
                                                                                 <input type="checkbox" name="permiso_imp[<?php echo $rowReg_c->id_menu?>]" 
-                                                                                        value="1" title="Editar" 
-                                                                                        id="permiso_imp<?php echo $rowReg_c->id_menu?>" >
+                                                                                        value="1" title="Imprimir" 
+                                                                                        <?php echo $readOnly?>
+                                                                                        id="permiso_imp<?php echo $rowReg_c->id_menu?>" 
+                                                                                        <?php if($chk_imp == 1){ echo "checked";}?>>
                                                                                 Imprimir
                                                                             </label>
                                                                             <label class="separador">
                                                                                 <input type="checkbox" name="permiso_nuevo[<?php echo $rowReg_c->id_menu?>]" 
-                                                                                        value="1" title="Editar" 
-                                                                                        id="permiso_nuevo<?php echo $rowReg_c->id_menu?>">
+                                                                                        value="1" title="Nuevo" 
+                                                                                        <?php echo $readOnly?>
+                                                                                        id="permiso_nuevo<?php echo $rowReg_c->id_menu?>"
+                                                                                        <?php if($chk_nuevo == 1){ echo "checked";}?>>
                                                                                 Nuevo
                                                                             </label>
                                                                             <label class="separador">
                                                                                 <input type="checkbox" name="permiso_edit[<?php echo $rowReg_c->id_menu?>]" 
                                                                                         value="1" title="Editar" 
-                                                                                        id="permiso_edit<?php echo $rowReg_c->id_menu?>">
+                                                                                        <?php echo $readOnly?>
+                                                                                        id="permiso_edit<?php echo $rowReg_c->id_menu?>"
+                                                                                        <?php if($chk_edit == 1){ echo "checked";}?>>
                                                                                 Editar
                                                                             </label>
                                                                             <label class="separador">
                                                                                 <input type="checkbox" name="permiso_elim[<?php echo $rowReg_c->id_menu?>]" 
-                                                                                        value="1" title="Editar" 
-                                                                                        id="permiso_elim<?php echo $rowReg_c->id_menu?>">
+                                                                                        value="1" title="Eliminar" 
+                                                                                        <?php echo $readOnly?>
+                                                                                        id="permiso_elim<?php echo $rowReg_c->id_menu?>"
+                                                                                        <?php if($chk_elim == 1){ echo "checked";}?>>
                                                                                 Eliminar
                                                                             </label>
                                                                             <label class="separador">
                                                                                 <input type="checkbox" name="permiso_exportar[<?php echo $rowReg_c->id_menu?>]" 
-                                                                                        value="1" title="Editar" 
-                                                                                        id="permiso_exportar<?php echo $rowReg_c->id_menu?>">
+                                                                                        value="1" title="Exportar" 
+                                                                                        <?php echo $readOnly?>
+                                                                                        id="permiso_exportar<?php echo $rowReg_c->id_menu?>"
+                                                                                        <?php if($chk_exportar == 1){ echo "checked";}?>>
                                                                                 Exportar
                                                                             </label>
                                                                         </div>
