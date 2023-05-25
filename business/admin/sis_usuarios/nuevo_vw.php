@@ -45,8 +45,6 @@ $usuario    = "";
 $nombre     = "";
 $apepa      = "";
 $apema      = "";
-$sexo       = "";
-$correo     = "";
 $imp        = "";
 $edit       = "";
 $elim       = "";
@@ -82,13 +80,11 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
 
             $id_usuario = $arrEdi->id_usuario;
             $id_rol     = $arrEdi->id_rol;
-            $id_turno   = $arrEdi->id_turno;
             $id_zona    = $arrEdi->id_zona;
             $usuario    = $arrEdi->usuario;
             $nombre     = $arrEdi->nombre;
             $apepa      = $arrEdi->apepa;
             $apema      = $arrEdi->apema;
-            $sexo       = $arrEdi->sexo;
             $admin      = $arrEdi->admin;
             $activo     = $arrEdi->activo;
 
@@ -162,7 +158,7 @@ if ($_SESSION[_is_view_] == 3) {
                     <div class="tools pull-left">
                         <a 
                             class="btn ink-reaction btn-floating-action" 
-                            href='<?php echo $param."index"?>' 
+                            href='<?php echo $param."index".$return_paginacion?>' 
                             style="background-color: #B0C4DE;"
                             title="Regresar a la lista">
                             <i class="fa fa-arrow-left"></i>
@@ -256,37 +252,11 @@ if ($_SESSION[_is_view_] == 3) {
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group floating-label">
-                                                <select name="id_turno" id="id_turno"
-                                                    class="form-control" required <?php echo $readOnly?>>
-                                                    <option value=""></option>
-                                                    <?php
-                                                    $rsT = $cAccion->getCatTurno();
-                                                    while($rwT = $rsT->fetch(PDO::FETCH_OBJ)){
-                                                        $sel = "";
-                                                        if ($id_turno == $rwT->id_turno) {
-                                                            $sel = "selected";
-                                                        }
-                                                        ?>
-                                                        <option value="<?php echo $rwT->id_turno?>" <?php echo $sel?>>
-                                                            <?php echo $rwT->descripcion?>
-                                                        </option>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
-                                                <label for="id_turno">Turno 
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group floating-label">
                                                 <select name="id_zona" id="id_zona" <?php echo $readOnly?>
                                                     class="form-control" required>
                                                     <option value=""></option>
                                                     <option value="1"  <?php if ($id_zona == 1) { echo "selected";} ?>>Poniente</option>
-                                                    <option value="2"  <?php if ($id_zona == 2) { echo "selected";} ?>>Oriente</option>
-                                                   
+                                                    <option value="2"  <?php if ($id_zona == 2) { echo "selected";} ?>>Oriente</option>                                                   
                                                 </select>
                                                 <label for="id_zona">Zona 
                                                     <span class="text-danger">*</span>
@@ -294,20 +264,7 @@ if ($_SESSION[_is_view_] == 3) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col-sm-4">
-                                            <div class="form-group floating-label">
-                                                <select name="sexo" id="sexo" <?php echo $readOnly?>
-                                                    class="form-control" required>
-                                                    <option value=""></option>
-                                                    <option value="1"  <?php if ($sexo == 1) { echo "selected";} ?> >Femenino</option>
-                                                    <option value="2"  <?php if ($sexo == 2) { echo "selected";} ?>>Masculino</option>
-                                                </select>
-                                                <label for="sexo">Género: 
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                            </div>
-                                        </div>
+                                    <div class="row form-group">                                        
                                         <?php
                                         if(isset($_SESSION[admin]) && $_SESSION[admin] == 1){
                                             ?>

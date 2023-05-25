@@ -27,7 +27,6 @@ $showinfo   = true;
 $id_usuario = "";
 $id_rol     = "";
 $usuario    = "";
-$sexo       = "";
 $nombre     = "";
 $apepa      = "";
 $apema      = "";
@@ -53,7 +52,6 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
         $id_usuario  = $arrEdi->id_usuario;
         $id_rol      = $arrEdi->id_rol;
         $usuario     = $arrEdi->usuario;
-        $sexo        = $arrEdi->sexo;
         $nombre      = $arrEdi->nombre;
         $apepa       = $arrEdi->apepa;
         $apema       = $arrEdi->apema;
@@ -104,9 +102,10 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
                             $card_style   = "style-gray-light";
                         }
                         ?>
-                        <div class="card-head <?php echo $card_style?>">
+                        <div class="card-head" style="background-color: #5F9EA0;">
                             <div class="tools pull-left">
-                                <a class="btn ink-reaction btn-floating-action btn-primary"
+                                <a class="btn ink-reaction btn-floating-action"
+                                    style="background-color: #B0C4DE;"
                                    href='<?php echo $raiz?>?controller=business&action=show' 
                                    title="Regresar al inicio">
                                    <i class="fa fa-arrow-left"></i>
@@ -167,23 +166,14 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
                                                         <label for="usuario">Nombre de Usuario <span class="text-danger">*</span></label>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group floating-label">
-                                                        <select name="sexo" id="sexo" class="form-control" required readonly>
-                                                            <option value=""></option>
-                                                            <option value="1" <?php if ($sexo == 1) { echo "selected";} ?>>Femenino</option>
-                                                            <option value="2" <?php if ($sexo == 2) { echo "selected";} ?>>Masculino</option>
-                                                        </select>
-                                                        <label for="sexo">Sexo: <span class="text-danger">*</span></label>
-                                                    </div>
-                                                </div>
                                             </div>                                            
                                         </fieldset>
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
                                                     <button type="button" 
-                                                        class="btn ink-reaction btn-block style-success" 
+                                                        class="btn ink-reaction btn-block"
+                                                        style="background-color: #B0C4DE;"  
                                                         id="btn_cp"
                                                         onclick="cpwModal()">
                                                         <i class="fa fa-key"></i> 

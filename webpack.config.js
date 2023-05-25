@@ -19,6 +19,8 @@ module.exports = {
         usersm: './src/js/components/admin/users.magnament.js',
         role: './src/js/components/admin/role.js',
         rolem: './src/js/components/admin/role.magnament.js',
+        catalogos: './src/js/components/catalogos/catalogos.js',
+        catalogosm: './src/js/components/catalogos/catalogos.magnament.js',
     },
     // output: {
     //     path: __dirname + '/dist',
@@ -101,7 +103,23 @@ module.exports = {
             chunks: [
                 'rolem',
             ]
-        }),     
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/nocontent.html',
+            filename: './components/catalogos.php',
+            inject: 'body',
+            chunks: [
+                'catalogos',
+            ]
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/nocontent.html',
+            filename: './components/catalogos.magnament.php',
+            inject: 'body',
+            chunks: [
+                'catalogosm',
+            ]
+        }),   
         
         new CopyPlugin({
             patterns: [

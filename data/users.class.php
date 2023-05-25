@@ -217,8 +217,7 @@ class cUsers extends BD
                         U.usuario, 
                         U.nombre, 
                         U.admin,
-                        CONCAT_WS(' ', U.nombre, U.apepa, U.apema) AS nombrecompleto, 
-                        U.sexo,
+                        CONCAT_WS(' ', U.nombre, U.apepa, U.apema) AS nombrecompleto,
                         DATE_FORMAT(U.fec_ingreso, '%d/%m/%Y') AS fecha_ingreso,
                         R.rol, 
                         M.link AS carpeta
@@ -259,7 +258,7 @@ class cUsers extends BD
                            U.id_zona, 
                            U.admin
                       FROM ws_usuario as U 
-                     WHERE 1 = 1 $condition $condNoSuper               
+                     WHERE id_rol <= 2 $condition $condNoSuper               
                     ORDER BY id_usuario DESC ".$milimite;
         $result = $this->conn->prepare($query);
         $result->execute();
@@ -267,10 +266,10 @@ class cUsers extends BD
     }
 
     public function getRegbyid(){
-        $query = "  SELECT id_usuario, id_rol, id_turno, id_zona, usuario, sexo,  
+        $query = "  SELECT id_usuario, id_rol, id_zona, usuario,  
                             nombre, apepa, apema, admin, activo
                      FROM ws_usuario 
-                    WHERE id_usuario = ".$this->getId_usuario() ." 
+                    WHERE id_usuario = ".$this->getId_usuario() ."
                     LIMIT 1";
         $result = $this->conn->prepare($query);
         $result->execute();
@@ -324,12 +323,10 @@ class cUsers extends BD
         $update = " UPDATE ws_usuario
                        SET id_rol        = ?,
                            id_zona       = ?, 
-                           id_turno      = ?, 
                            usuario       = ?,
                            nombre        = ?,
                            apepa         = ?,
                            apema         = ?,
-                           sexo          = ?,
                            admin         = ?
                      WHERE id_usuario    = ?";
         $result = $this->conn->prepare($update);
@@ -385,18 +382,14 @@ class cUsers extends BD
 
         $insert = " INSERT INTO ws_usuario(id_rol, 
                                            id_zona,
-                                           id_turno,
                                            fec_ingreso, 
                                            usuario, 
                                            clave,  
                                            nombre, 
                                            apepa, 
                                            apema, 
-                                           sexo, 
                                            admin)
                                     VALUES (?,
-                                           ?,
-                                           ?,
                                            ?,
                                            ?,
                                            ?,
@@ -455,8 +448,6 @@ class cUsers extends BD
     public function insertRegUser( $dataUser ){
 
         $correcto= 1;
-
-        $img  = ($this->getSexo() == 1) ? "avatar5.png" : "avatar2.png";        
         $exec = $this->conn->conexion();
 
         $insert = " INSERT INTO ws_usuario(
@@ -468,7 +459,6 @@ class cUsers extends BD
                                     nombre,
                                     apepa,
                                     apema,
-                                    sexo,
                                     correo,
                                     domicillio,
                                     telefono,
@@ -571,7 +561,7 @@ class cUsers extends BD
     public function getUserLock(){
         $query = "  SELECT id_usuario, id_rol, usuario, nombre,
                             CONCAT_WS(' ', nombre, apepa, apema) AS nombrecompleto, correo,
-                            sexo, img, DATE_FORMAT(fec_ingreso, '%d/%m/%Y' ) AS fecha_ingreso
+                            DATE_FORMAT(fec_ingreso, '%d/%m/%Y' ) AS fecha_ingreso
                     FROM ws_usuario 
                     where id_usuario = ".$this->getId_usuario()." and clave = '".$this->getClave()."'
                     AND activo = 1";
@@ -588,9 +578,7 @@ class cUsers extends BD
                        SET nombre   = '".$this->getNombre()."', 
                            apepa    = '".$this->getApepa()."',
                            apema    = '".$this->getApema()."',
-                           usuario  = '" . $this->getUsuario() . "', 
-                           correo   = '" . $this->getCorreo() . "',
-                           sexo     = '" . $this->getSexo() . "'
+                           usuario  = '" . $this->getUsuario() . "'
                      WHERE id_usuario = " . $this->getId_usuario();
         $result = $this->conn->prepare($update);
         $exec->beginTransaction();

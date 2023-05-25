@@ -34,10 +34,8 @@ $alert    = "warning";
 extract($_REQUEST);
 
 
-if(!is_numeric($id_usuario) || $id_usuario <= 0 || $usuario == "" || $nombre == ""      || 
-   $apepat == ""            || $sexo == ""    || 
-   !is_numeric($id_zona) || $id_zona <= 0 ||
-   !is_numeric($id_turno) || $id_turno <= 0 ){
+if(!is_numeric($id_usuario) || $id_usuario <= 0 || $usuario == "" || $nombre == "" || 
+   $apepat == ""            || !is_numeric($id_zona) || $id_zona <= 0 ){
 
     $resp = "Debes de ingresar correctamente los datos";
 }
@@ -74,12 +72,10 @@ else{
         $dataU = array(
             $id_rol,
             $id_zona,
-            $id_turno,    
             $usuario, 
             $nombre,
             $apepat,
             $apemat,
-            $sexo,
             $user_admin,
             $id_usuario
         );

@@ -8,8 +8,6 @@ define('id_usr','cve_admin_cer'.$proyId);
 define('_BODY_STYLE_','menubar-hoverable header-fixed menubar-pin');
 //SESIONES ---
 define('id_rol','tram_id_rol_cer'.$proyId );
-define('id_direccion','tram_id_dir_cer'.$proyId );
-define('id_area', 'tram_id_area_cer'.$proyId );
 define('user', 'usuario_cer'.$proyId );
 define('admin','tram_admin_cer'.$proyId );
 define('rol','tram_rol_cer'.$proyId );
@@ -18,8 +16,6 @@ define('edit','tram_edit_cer'.$proyId );
 define('elim','tram_elim_cer'.$proyId );
 define('nuev','tram_nuev_cer'.$proyId );
 define('export','tram_exp_cer'.$proyId );
-define('s_sexo','tram_sexo_cer'.$proyId );
-define('s_img','tram_img_cer'.$proyId );
 define('s_nombre','tram_nombre_cer'.$proyId );
 define('s_ncompleto','tram_ncompleto_cer'.$proyId );
 define('s_f_i','tram_fecha_ingreso_cer'.$proyId );
@@ -40,7 +36,3 @@ define('_menu_', 'id_menu_navega_'.$proyId);
 //Sesiones busqueda Reportes
 define('array_filtros', 'array_filtros'.$proyId );
 define('descripcion_filtros', 'descripcion_filtros'.$proyId );
-
-define('direcciones_api', 'direcciones_api_sesion'.$proyId);
-define('areas_api', 'areas_api_sesion'.$proyId);
-define('apis_post', 'consumir_apis_post'.$proyId);

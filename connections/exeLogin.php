@@ -48,7 +48,6 @@ try {
     
     $_SESSION[s_ncompleto]  = $datos['nombrecompleto'];
     $_SESSION[s_nombre]     = $datos['nombre'];
-    $_SESSION[s_sexo]       = $datos['sexo'];
     $_SESSION[s_f_i]        = $datos['fecha_ingreso'];
     $_SESSION[id_usr]       = $datos['id_usuario'];
     $_SESSION[user]         = $datos['usuario'];

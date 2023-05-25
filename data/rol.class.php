@@ -188,9 +188,9 @@ class cRol extends BD {
             $condition .= " AND id > 1 ";
         }
 
-        $query = " SELECT id, rol, descripcion  
+        $query = " SELECT id, rol, descripcion
                      FROM ws_rol 
-                    WHERE activo = 1 $condition
+                    WHERE activo = 1 AND onshow = 1 $condition
                    ORDER BY id ASC";
         $result = $this->conn->prepare($query);
         $result->execute();

@@ -12,27 +12,31 @@ extract($_REQUEST);
 
 $current_file = basename($_SERVER["PHP_SELF"]);
 $dir          = dirname($_SERVER['PHP_SELF'])."/".$controller;
-$checkMenu    = $server_name.$dir."/";    
+$checkMenu    = $server_name.$dir."/";
 $param        = "?controller=".$controller."&action=";
 
-$sys_id_men   = 2;
+$sys_id_men   = 6;
 $sys_tipo     = 0;
 
 include_once $dir_fc.'data/inicial.class.php';
 include_once $dir_fc.'common/function.class.php';
-include_once $dir_fc.'data/users.class.php';
+include_once $dir_fc.'data/catalogos.class.php';
 
-$cInicial = new cInicial();  
-$cFn      = new cFunction(); 
-$cLista   = new cUsers();
+$cInicial = new cInicial();
+$cFn      = new cFunction();
+$cLista   = new cCatalogos();
 
 include_once 'business/sys/check_session.php';    
+
+
+$title_act  = "Faltas";
 $registros  = c_num_reg;
+
+extract($_REQUEST);
+
 
 if (isset($_GET["pag"])) { $pag = $_GET["pag"];} else { $pag = 1;}
 if (is_numeric($pag)) { $inicio = (($pag - 1) * $registros);} else {$inicio = 0;}
-
-$ingreso = 1;
 
 if ($busqueda == "") {
     $filtro      = "";
@@ -42,39 +46,43 @@ if ($busqueda == "") {
 } else {
     $filtro      = $busqueda;
     $fPaginacion = "&busqueda=".$busqueda;
-    $back = " <a type='button' 
-                 class='btn btn-accent-dark btn-floating-action ink-reaction'  
-                 href='".$param."index' 
-                 title='(Eliminar filtro de búsqueda)'>
-                 <span class='fa fa-filter'></span>
-              </a>";
-    $MSJresult = $cFn->custom_alert("info", " ", "Resultados encontrados con la busqueda: " . $busqueda . "", 1, 1);
+    
+    $back = "<a type='button' class='btn btn-floating-action ink-reaction' 
+                style='background-color: #B0C4DE;' 
+                href='".$param."index' title='(Eliminar filtro de búsqueda)'>
+                <span class='fa fa-filter'></span>
+            </a>";
+    $MSJresult = $cFn->custom_alert(
+        'info', 
+        'Resultados encontrados con la busqueda',
+        $busqueda,
+        1, 
+        1
+    );
 }
-
-$rol = $_SESSION[id_rol];
 
 $cLista->setFiltro($filtro);
 $cLista->setInicio($inicio);
 $cLista->setFin($registros);
 $cLista->setLimite(0);
 
-$rs_count       = $cLista->getAllReg( $rol ); 
+$rs_count       = $cLista->getAllFaltas(); //Cuenta todos los registros (le doy 0 al limite)
 $countRegistros = $rs_count->rowCount();
 $numeroTotalPaginas = ceil($countRegistros/$registros);
 
 $cLista->setLimite(1);
-$rsRegShow = $cLista->getAllReg( $rol );  
+$rsRegShow = $cLista->getAllFaltas(); //Trae todos los registros (ya le puse limite)
 
 $ruta_app = "";
-
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Usuarios | <?php echo $titulo_paginas?></title>
+    <title><?php echo $title_act?> | <?php echo $titulo_paginas?></title>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <?php include("dist/inc/headercommon.php"); ?>
+    <link rel="stylesheet" type="text/css" href="dist/assets/css/select2.min.css?v=1.001">
 </head>
 <body class="<?php echo _BODY_STYLE_ ?> ">
 <?php include ($dir_fc."inc/header.php")?>
@@ -82,11 +90,11 @@ $ruta_app = "";
     <div class="offcanvas"></div>
     <div id="content">
         <section>
-            <div class="section-body">
+            <div class="section-body contain-lg">
                 <div class="row">
                     <div class="col-lg-8">
                         <h2 class="text-primary main-title">
-                            Lista de Usuarios 
+                            Catálogo de <?php echo $title_act ?> 
                             <span class="badge">
                                 <?php echo $countRegistros?>
                             </span>
@@ -94,8 +102,8 @@ $ruta_app = "";
                     </div>
                     <div class="col-lg-4">
                         <ol class="breadcrumb pull-right">
-                            <li><a href="<?php echo $raiz?>business/">Inicio</a></li>
-                            <li class="active">Lista de Usuarios</li>
+                            <li><a href="<?php echo $param?>business/">Inicio</a></li>
+                            <li class="active">Lista de <?php echo $title_act ?></li>
                         </ol>
                     </div>
                 </div>
@@ -103,19 +111,17 @@ $ruta_app = "";
                     <div class="card-head" style="background-color: #5F9EA0;">
                         <div class="tools pull-left">
                             <?php
-                            if($_SESSION[nuev] == "1") {
-                                ?>
-                                <a 
-                                    class="btn ink-reaction btn-floating-action"
+                            if($_SESSION[nuev] == 1) { ?>
+                                <a class="btn ink-reaction btn-floating-action"
                                     style="background-color: #B0C4DE;" 
-                                    onclick="openMyLink(1,0, '<?php echo $param?>nuevo');"
-                                    title="Agregar un nuevo Registro">
+                                   onclick="openMyLink(1,0, '<?php echo $param?>nuevo');"
+                                   title="Agregar un nuevo Registro">
                                     <i class="fa fa-plus"></i>
                                 </a>
-                            <?php
+                                <?php
                             }
-                            echo $back?>
-
+                            echo $back;
+                            ?>
                         </div>
                         <div class="tools">
                             <div class="navbar-search">
@@ -131,33 +137,30 @@ $ruta_app = "";
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div id="respuesta_ajax">
-                                    <?php echo $MSJresult?></div>
+                                <div id="respuesta_ajax"><?php echo $MSJresult?></div>
                             </div>
                         </div>
                         <div class="row form-group">
-                            <?php
-                            if ($countRegistros >= 1) {
+                        <?php if ($countRegistros >= 1) {
                             ?>
                             <div class="col-md-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover">
+                                    <table class="table table-hover table-striped">
                                         <thead>
-                                        <tr>
-                                            <td width="2%"></td>
-                                            <th>Usuario</th>
-                                            <th>Nombre</th>
-                                            <th class="text-center">Funciones</th>
-                                        </tr>
+                                            <tr>
+                                                <td width="2%" class="text-right"></td>
+                                                <td class="text-center" width="8%">Artículo</td>
+                                                <td width="40%">Descripción</td>
+                                                <th class="text-center">Funciones</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                         <?php
-                                        while ($rowReg  = $rsRegShow->fetch(PDO::FETCH_OBJ)) {
-                                            $iId        = $rowReg->id_usuario;
-                                            $sUsuario   = $rowReg->usuario;
-                                            $sNombre    = $rowReg->nombre;
-                                            $r_admin    = $rowReg->admin;
-                                            $isActive   = $rowReg->activo;
+                                        while ($rowReg    = $rsRegShow->fetch(PDO::FETCH_OBJ)) {
+                                            $iId          = $rowReg->id_articulo;
+                                            $articulo     = $rowReg->articulo;
+                                            $descripcion  = $rowReg->descripcion;
+                                            $isActive      = $rowReg->activo;
 
                                             if($isActive == 1){
                                                 $showEstatus = "fa fa-check-circle text-success";
@@ -172,14 +175,11 @@ $ruta_app = "";
                                             }
                                             ?>
                                             <tr>
-                                                <td>
-                                                    <span class="pull-left <?php echo $showEstatus?>"></span>
-                                                </td>
-                                                <td><?php echo $sUsuario?></td>
-                                                <td><?php echo $sNombre?> </td>
+                                                <td><span class="pull-left <?php echo $showEstatus?>"></span></td>
+                                                <td class="text-center"><?php echo $articulo?></td>
+                                                <td><?php echo $descripcion?></td>
                                                 <td class="text-center">
-                                                    <a 
-                                                        href="javascript:void(0);" 
+                                                    <a href="javascript:void(0);" 
                                                         onclick="openMyLink(3,<?php echo $iId ?>, '<?php echo $param.'nuevo&pag='.$pag.$fPaginacion?>')" 
                                                         class="btn ink-reaction btn-icon-toggle"
                                                         data-toggle="tooltip" 
@@ -188,51 +188,38 @@ $ruta_app = "";
                                                         <i class="fa fa-eye"> </i>
                                                     </a>
                                                     <?php
-
                                                     if($_SESSION[edit] == 1) {
                                                         if($isActive == 1){
                                                         ?>
                                                         <a 
                                                             href="javascript:void(0);" 
-                                                            onclick="openMyLink(2, <?php echo $iId ?>, '<?php echo $param.'nuevo&pag='.$pag.$fPaginacion?>')" 
+                                                            onclick="openMyLink(2,<?php echo $iId ?>, '<?php echo $param.'nuevo&pag='.$pag.$fPaginacion?>')" 
                                                             class="btn ink-reaction btn-icon-toggle"
                                                             data-toggle="tooltip" 
                                                             data-placement="top" 
                                                             title="Editar Registro">
                                                             <span class="glyphicon glyphicon-pencil"></span>
                                                         </a>
-                                                        <?php       
-                                                        }                                                  
-                                                        if (($_SESSION[admin]) || $_SESSION[id_rol] <= 2) { 
-                                                        ?>
-                                                            <a 
-                                                                onclick="cpwModal(<?php echo $iId ?>)"
-                                                                class="btn ink-reaction btn-icon-toggle"
-                                                                data-toggle="tooltip" 
-                                                                data-placement="top"
-                                                                title="Cambiar Contraseña">
-                                                                <i class="fa fa-key"></i>
-                                                            </a>
-                                                        <?php
+                                                    <?php
                                                         }
                                                     }
-                                                    if($_SESSION[elim] == 1) { ?>
+                                                    if($_SESSION[elim] == 1){ ?>
                                                         <a 
-                                                            onclick="handleDeleteReg(<?php echo $iId.','.$bajaAlta ?>)"
+                                                            onclick="handleDeleteA(<?php echo $iId.','.$bajaAlta ?>)"
                                                             class="btn ink-reaction btn-icon-toggle btn-warning"
                                                             data-placement="top" 
                                                             title="<?php echo $titleAB ?>">
                                                             <span class="<?php echo $icoAB ?>"></span>
                                                         </a>
                                                         <a 
-                                                            onclick="handleDeleteReg(<?php echo $iId?>, 3)" 
+                                                            onclick="handleDeleteA(<?php echo $iId?>, 3)" 
                                                             data-toggle="tooltip"
                                                             class="btn ink-reaction btn-icon-toggle btn-danger" 
                                                             data-placement="top" 
                                                             title="Eliminar">
                                                             <span class="fa fa-trash"></span>
                                                         </a>
-                                                        <?php
+                                                    <?php                                                        
                                                     }
                                                     ?>
                                                 </td>
@@ -252,7 +239,7 @@ $ruta_app = "";
                         </div>
                         <?php
                         }else{
-                            echo $cFn->custom_alert("info", "", "No se encontraron registros en la base de datos. ", 1, 1);                            
+                            echo $cFn->custom_alert("info", "", "No se encontraron registros en la base de datos. ", 1, 1);  
                         }
                         ?>
                     </div>
@@ -262,85 +249,7 @@ $ruta_app = "";
     </div>
     <?php include($dir_fc."inc/menucommon.php") ?>
 </div>
-<?php include("dist/components/users.php"); ?>
-<div 
-    class="modal small fade" 
-    id="idModalcpw" 
-    tabindex="-1" 
-    role="dialog" 
-    aria-labelledby="myModalLabel" 
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h5 class="modal-title">Cambiar Contraseña</h5>
-            </div>              
-            <form role="form" id="idCPW" class="form">
-                <div class="modal-body">
-                    <p class="error-text">
-                        <i class="fa fa-warning text-danger modal-icon"></i>
-                        <span id="men">
-                            <b> ¿Está seguro que quieres cambiar contraseña?</b>
-                        </span>                    
-                    </p>
-                    <div class="row">
-                        <div id="respuesta_cpw"></div>
-                        <input 
-                            type="hidden" 
-                            id="id_user_pw" 
-                            name="id_user_pw"/>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group floating-label">
-                                <input 
-                                    type="password" 
-                                    class="form-control" 
-                                    name="nuevaclave" 
-                                    id="nuevaclave"
-                                    required 
-                                    autocomplete="off" 
-                                    maxlength="16">
-                                <label for="nuevaclave">
-                                    Contraseña Nueva <span class="text-danger">*</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group floating-label">
-                                <input 
-                                    type="password" 
-                                    class="form-control" 
-                                    id="confclave" 
-                                    name="confclave" 
-                                    required
-                                    autocomplete="off" 
-                                    maxlength="16">
-                                <label for="confclave">
-                                    Confirmar Contraseña <span class="text-danger">*</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button 
-                        type="button" 
-                        class="btn btn-link btn-danger" 
-                        data-dismiss="modal">Cerrar
-                    </button>
-                    <button 
-                        type="submit" 
-                        id="btn_aceptar_cpw" 
-                        class="btn bg-success ink-reaction" >
-                        Aceptar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<?php include("dist/components/catalogos.php"); ?>
 <div 
     class="modal small fade" 
     id="idModalSearch" 
@@ -350,41 +259,39 @@ $ruta_app = "";
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #5F9EA0;">
+            <div class="modal-header bg-success">
                 <button 
                     type="button" 
                     class="close" 
                     data-dismiss="modal">×</button>
-                <h5 class="modal-title" style="color: #E0FFFF;">Búsqueda</h5>
-            </div>                     
+                <h5 class="modal-title">Búsqueda</h5>
+            </div>              
             <form 
                 role="form" 
                 id="frmSearch" 
                 class="form">
                 <div class="modal-body">
                     <div class="row">
-                        <div id="respuesta_cpw"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group floating-label">
                                 <input 
                                     type="text" 
                                     class="form-control dirty" 
-                                    name="txtBuscar"  
-                                    id="idSearch"
-                                    autocomplete="off"
+                                    name="txtBuscar" 
+                                    id="idSearch" 
+                                    autocomplete="off"                                    
                                 />
-                                <label for="idSearch">
-                                    Nombre: <span class="text-danger">*</span>
+                                <label for="idSearchG">
+                                    Nombre / No. empleado: <span class="text-danger">*</span>
                                 </label>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button 
-                        type="button"
+                        type="button" 
                         class="btn btn-link btn-danger" 
                         data-dismiss="modal">
                         Cerrar
@@ -392,8 +299,7 @@ $ruta_app = "";
                     <button 
                         type="submit" 
                         id="btnHandleSubmitSearch" 
-                        class="btn ink-reaction"
-                        style="background-color: #B0C4DE;">
+                        class="btn bg-success ink-reaction" >
                         Realizar Búsqueda
                     </button>
                 </div>
@@ -401,9 +307,6 @@ $ruta_app = "";
         </div>
     </div>
 </div>
-<?php 
-$cLista->closeOut();
-?>
+
 </body>
 </html>
-

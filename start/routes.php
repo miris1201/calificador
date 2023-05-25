@@ -17,16 +17,28 @@ function call($controller, $action) {
         case 'controlador/admin/sis_roles':
             $controller = new admin_roles();
             break;
+        case 'controlador/catalogos/elementos':
+                $controller = new cElementos();
+            break;
+        case 'controlador/catalogos/faltas':
+                $controller = new cFaltas();
+            break;
+        case 'controlador/catalogos/uma':
+                $controller = new cUMA();
+            break;
     }
     $controller->{ $action }();
 }
 
 $controllers = array(
-    'controlador'                         => ['index'],
-    'controlador/business'                => ['show'],
-    'controlador/sys'                     => ['account', 'add_account'],
-    'controlador/admin/sis_usuarios'      => ['ver', 'index', 'nuevo'],
-    'controlador/admin/sis_roles' 	      => ['ver', 'index', 'nuevo'],
+    'controlador'                     => ['index'],
+    'controlador/business'            => ['show'],
+    'controlador/sys'                 => ['account', 'add_account'],
+    'controlador/admin/sis_usuarios'  => ['index', 'nuevo'],
+    'controlador/admin/sis_roles' 	  => ['index', 'nuevo'],
+    'controlador/catalogos/elementos' => ['index', 'nuevo'],
+    'controlador/catalogos/faltas'    => ['index', 'nuevo'],
+    'controlador/catalogos/uma'       => ['index', 'nuevo'],
 );
 
 if (array_key_exists($controller, $controllers)) {

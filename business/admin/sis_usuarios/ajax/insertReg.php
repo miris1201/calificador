@@ -58,8 +58,7 @@ if($usuario      == "" || $nombre == "" || $apepat == "" || $id_zona == "" ||
         $clave = MD5($clave);
         $data = array(
             $id_rol,
-            $id_zona,
-            $id_turno,            
+            $id_zona,   
             $f_ingreso,   
             $usuario, 
             $clave,
