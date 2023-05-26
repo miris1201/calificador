@@ -222,3 +222,134 @@ const handleSubmitUpdateE = (form) => {
             habilitaboton('btn_guardar');
         });
 }
+
+
+window.handleDeleteReg = (id, type) => {
+
+    const icon = (type == 3) ? 'warning' : 'info';
+    const showDelete = (type == 0) ? ' dar de baja' :
+        (type == 3) ? ' eliminar' : ' dar de alta';
+
+    Swal.fire({
+        title: `¿Estás seguro de ${ showDelete } el registro?`,
+        text: "",
+        icon: icon,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            changeStatusDtl(id, type);
+        }
+    });
+}
+
+const changeStatusDtl = (id, status) => {
+
+    const data = new FormData();
+
+    data.append('id', id);
+    data.append('tipo', status);
+
+    const url = 'business/catalogos/faltas/ajax/updateStatusDtl.php';
+
+    fetch(url, {
+            method: 'POST',
+            body: data
+        })
+        .then((resp) => resp.json())
+        .then(function({ done, resp, alert }) {
+            if (done == 1) {
+                Swal.fire({
+                        title: '¡Listo!',
+                        text: resp,
+                        icon: alert
+                    })
+                    .then(() => {
+                        location.reload()
+                    });
+            } else {
+                Swal.fire({
+                    icon: alert,
+                    title: 'Oops...',
+                    text: resp
+                });
+            }
+        })
+        .catch(function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: ':( ...',
+                text: error
+            });
+        });
+}
+
+window.handleSaveDtl = (id) => {
+
+    Swal.fire({
+        title: `¿Estás seguro de editar el registro?`,
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            SaveDtl(id);
+        }
+    });
+}
+
+const SaveDtl = (id) => {
+    debugger;
+    const data = new FormData();
+
+    data.append('id', id);
+
+    let fraccion = sel("#fraccion"+id).value;
+    let descripcion = sel("#descripcion_dtl"+id).value;
+    let hr_min = sel("#hr_min"+id).value;
+    let hr_max = sel("#hr_max"+id).value;
+
+    data.append('fraccion', fraccion);
+    data.append('descripcion', descripcion);
+    data.append('hr_min', hr_min);
+    data.append('hr_max', hr_max);
+
+    const url = 'business/catalogos/faltas/ajax/updateDtl.php';
+
+    fetch(url, {
+            method: 'POST',
+            body: data
+        })
+        .then((resp) => resp.json())
+        .then(function({ done, resp, alert }) {
+            if (done == 1) {
+                Swal.fire({
+                        title: '¡Listo!',
+                        text: resp,
+                        icon: alert
+                    })
+                    .then(() => {
+                        location.reload()
+                    });
+            } else {
+                Swal.fire({
+                    icon: alert,
+                    title: 'Oops...',
+                    text: resp
+                });
+            }
+        })
+        .catch(function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: ':( ...',
+                text: error
+            });
+        });
+}

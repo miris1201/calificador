@@ -38,6 +38,8 @@ $id_usuario  = "";
 $articulo    = "";
 $descripcion = "";
 
+$fraccion = "";
+
 $readOnly   = "";
 $showInput  = "";
 $frmName = "frmDataA";
@@ -106,7 +108,7 @@ if ($_SESSION[_is_view_] == 3) {
     <div class="offcanvas"></div>
     <div id="content">
         <section>
-            <div class="section-body contain-lg">
+            <div class="section-body">
                 <div class="row">
                     <div class="col-lg-8"></div>
                     <div class="col-lg-4">
@@ -186,8 +188,116 @@ if ($_SESSION[_is_view_] == 3) {
                                         </div>                                        
                                         </fieldset>
                                         <fieldset>
-                                            <h4>Fracciones del artículo</h4>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-center">
+                                                                    <strong>Fracciones del Artículo</strong>
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th width="2%"></th>
+                                                                <th class="text-center" width="1%">Fracción</th>
+                                                                <th class="text-center" width="40%">Descripción</th>
+                                                                <th class="text-center" width="1%">Hr. mínimo</th>
+                                                                <th class="text-center" width="1%">Hr. máxima</th>
+                                                                <th width="5%">Funciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php                                                     
+                                                            $rsDtl = $cAccion->getFaltaDtlbyid( $id_articulo );
+                                                            if ($rsDtl->rowCount() > 0) {
+                                                                while($arrDtl = $rsDtl->fetch(PDO::FETCH_OBJ)){
+                                                                $id_Dtl       = $arrDtl->id_articulo_dtl;
+                                                                $fraccion     = $arrDtl->fraccion;
+                                                                $descripcion  = $arrDtl->descripcion;
+                                                                $hr_min       = $arrDtl->hr_min;
+                                                                $hr_max       = $arrDtl->hr_max;
+                                                                $activo_i     = $arrDtl->activo;
 
+                                                                if($activo_i == 1){
+                                                                    $showEstatus = "fa fa-check-circle text-success";
+                                                                    $bajaAlta    = 0;
+                                                                    $icoAB       = "glyphicon glyphicon-ban-circle";
+                                                                    $titleAB     = "Dar de baja";
+                                                                } else {
+                                                                    $showEstatus = "fa fa-times-circle text-danger";
+                                                                    $bajaAlta    = 1;
+                                                                    $icoAB       = "fa fa-check";
+                                                                    $titleAB     = "Dar de alta";
+                                                                }
+                                                                ?>
+                                                                <tr>
+                                                                    <td>
+                                                                        <span class="pull-left <?php echo $showEstatus?>"></span> 
+                                                                    </td> 
+                                                                    <td>
+                                                                        <input type="text" class="form-control"
+                                                                        id="fraccion<?php echo $id_Dtl?>"
+                                                                        name="fraccion<?php echo $id_Dtl?>"
+                                                                        <?php echo $readOnly?> value="<?php echo $fraccion?>">    
+                                                                    </td> 
+                                                                    <td>
+                                                                        <textarea name="descripcion_dtl<?php echo $id_Dtl?>" id="descripcion_dtl<?php echo $id_Dtl?>" rows="3"
+                                                                        <?php echo $readOnly?>
+                                                                        class="form-control"><?php echo $descripcion?> </textarea>
+                                                                    </td> 
+                                                                    <td>
+                                                                        <input type="text" class="form-control" 
+                                                                            id="hr_min<?php echo $id_Dtl?>"
+                                                                            name="hr_min<?php echo $id_Dtl?>"
+                                                                        <?php echo $readOnly?> value="<?php echo $hr_min?>">    
+                                                                    </td> 
+                                                                    <td>
+                                                                        <input type="text" class="form-control"
+                                                                            id="hr_max<?php echo $id_Dtl?>"
+                                                                            name="hr_max<?php echo $id_Dtl?>"
+                                                                        <?php echo $readOnly?> value="<?php echo $hr_max?>">    
+                                                                    </td>
+                                                                    <td>
+                                                                        <a  onclick="handleSaveDtl(<?php echo $id_Dtl ?>)"
+                                                                            class="btn ink-reaction btn-icon-toggle"
+                                                                            data-placement="top" 
+                                                                            data-toggle="tooltip"
+                                                                            <?php echo $readOnly?>
+                                                                            title="Guardar cambios">
+                                                                            <span class="fa fa-save"></span>
+                                                                        </a>
+                                                                        <?php 
+                                                                        if($_SESSION[elim] == 1) {
+                                                                        ?>
+                                                                            <a onclick="handleDeleteReg(<?php echo $id_Dtl.','.$bajaAlta ?>)"
+                                                                                class="btn ink-reaction btn-icon-toggle"
+                                                                                data-placement="top" 
+                                                                                data-toggle="tooltip"
+                                                                                <?php echo $readOnly?>
+                                                                                title="<?php echo $titleAB ?>">
+                                                                                <span class="<?php echo $icoAB ?>"></span>
+                                                                            </a>
+                                                                            <a onclick="handleDeleteReg(<?php echo $id_Dtl?>, 3)" 
+                                                                                data-toggle="tooltip"
+                                                                                class="btn ink-reaction btn-icon-toggle" 
+                                                                                data-placement="top" 
+                                                                                <?php echo $readOnly?>
+                                                                                title="Eliminar">
+                                                                                <span class="fa fa-trash"></span>
+                                                                            </a>
+                                                                        <?php 
+                                                                        }
+                                                                        ?>
+                                                                    </td> 
+                                                                </tr>
+                                                            <?php 
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </fieldset>
                                         <?php 
                                         if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {

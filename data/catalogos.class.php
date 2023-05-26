@@ -148,6 +148,15 @@ class cCatalogos extends BD  {
         return $result;
     }
 
+    public function getFaltaDtlbyid( $id_dtl ){
+        $query = "  SELECT id_articulo_dtl, id_articulo, fraccion, descripcion, hr_min, hr_max, activo
+                    FROM cat_articulos_dtl 
+                    WHERE id_articulo = $id_dtl";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
     public function foundFalta( $giro ){
         //Busca si existe un giro con el nombre
         $query= "SELECT nombre FROM cat_articulos WHERE nombre = '$giro'";
