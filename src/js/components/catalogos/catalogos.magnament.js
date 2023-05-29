@@ -9,74 +9,28 @@ document.addEventListener("DOMContentLoaded", function() {
     // sel('#nombre').focus();
 });
 
-const frmDataG = sel('#frmDataG');
-const frmUpdateG = sel('#frmUpdateG');
+const frmDataF = sel('#frmDataF');
+const frmUpdateF = sel('#frmUpdateF');
 
-if (frmDataG != null) {
-    frmDataG.addEventListener('submit', function(event) {
+if (frmDataF != null) {
+    frmDataF.addEventListener('submit', function(event) {
         event.preventDefault();
-        handleSubmitAddG(frmDataG);
+        handleSubmitAddF(frmDataF);
     });
 }
 
-if (frmUpdateG != null) {
-    frmUpdateG.addEventListener('submit', function(event) {
+if (frmUpdateF != null) {
+    frmUpdateF.addEventListener('submit', function(event) {
         event.preventDefault();
-        handleSubmitUpdateG(frmUpdateG);
+        handleSubmitUpdateF(frmUpdateF);
     });
 }
 
-
-const handleSubmitAddG = (form) => {
+const handleSubmitAddF = (form) => {
     deshabilitarboton('btn_guardar', 1);
 
     const data = new FormData(form);
-    const url = 'business/catalogos/giros/ajax/insertReg.php';
-
-    fetch(url, {
-            method: 'POST',
-            body: data
-        })
-        .then((resp) => resp.json())
-        .then(function({ done, resp, alert }) {
-            if (done == 1) {
-                Swal.fire({
-                        title: '¡Listo!',
-                        text: resp,
-                        icon: alert
-                    })
-                    .then((result) => {
-                        let ruta = sel("#current_file").value;
-                        window.location.assign(`${ruta}index`);
-                    });
-            } else {
-                Swal.fire({
-                        icon: alert,
-                        title: 'Oops...',
-                        text: resp
-                    })
-                    .then(() => {
-                        sel("#nombre").focus();
-                    });
-            }
-            habilitaboton('btn_guardar');
-        })
-        .catch(function(error) {
-            Swal.fire({
-                icon: 'error',
-                title: ':( ...',
-                text: error
-            });
-            habilitaboton('btn_guardar');
-        });
-}
-
-
-const handleSubmitUpdateG = (form) => {
-    deshabilitarboton('btn_guardar', 1);
-
-    const data = new FormData(form);
-    const url = 'business/catalogos/giros/ajax/updateReg.php';
+    const url = 'business/catalogos/faltas/ajax/insertReg.php';
 
     fetch(url, {
             method: 'POST',
@@ -101,7 +55,56 @@ const handleSubmitUpdateG = (form) => {
                         text: resp
                     })
                     .then(() => {
-                        sel("#nombre").focus();
+                        sel("#articulo").focus();
+                    });
+            }
+            habilitaboton('btn_guardar');
+        })
+        .catch(function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: ':( ...',
+                text: error
+            });
+            habilitaboton('btn_guardar');
+        });
+}
+
+const handleSubmitUpdateF = (form) => {
+    deshabilitarboton('btn_guardar', 1);
+
+    const data = new FormData(form);
+    const url = 'business/catalogos/faltas/ajax/updateReg.php';
+
+    fetch(url, {
+            method: 'POST',
+            body: data
+        })
+        .then((resp) => resp.json())
+        .then(function({ done, resp, alert, edit }) {
+            if (done == 1) {
+                Swal.fire({
+                        title: '¡Listo!',
+                        text: resp,
+                        icon: alert
+                    })
+                    .then((result) => {
+                        if(edit == 0){
+                            let ruta = sel("#current_file").value;
+                            window.location.assign(`${ruta}`);
+                        } else {
+                            location.reload();
+                        }
+                        
+                    });
+            } else {
+                Swal.fire({
+                        icon: alert,
+                        title: 'Oops...',
+                        text: resp
+                    })
+                    .then(() => {
+                        sel("#articulo").focus();
                     });
             }
             habilitaboton('btn_guardar');
@@ -132,7 +135,6 @@ if (frmUpdateE != null) {
         handleSubmitUpdateE(frmUpdateE);
     });
 }
-
 
 const handleSubmitAddE = (form) => {
     deshabilitarboton('btn_guardar', 1);
@@ -177,7 +179,6 @@ const handleSubmitAddE = (form) => {
             habilitaboton('btn_guardar');
         });
 }
-
 
 const handleSubmitUpdateE = (form) => {
     deshabilitarboton('btn_guardar', 1);
@@ -305,16 +306,14 @@ window.handleSaveDtl = (id) => {
 }
 
 const SaveDtl = (id) => {
-    debugger;
     const data = new FormData();
-
-    data.append('id', id);
 
     let fraccion = sel("#fraccion"+id).value;
     let descripcion = sel("#descripcion_dtl"+id).value;
     let hr_min = sel("#hr_min"+id).value;
     let hr_max = sel("#hr_max"+id).value;
-
+    
+    data.append('id', id);
     data.append('fraccion', fraccion);
     data.append('descripcion', descripcion);
     data.append('hr_min', hr_min);
@@ -351,5 +350,111 @@ const SaveDtl = (id) => {
                 title: ':( ...',
                 text: error
             });
+        });
+}
+
+
+const frmDataU = sel('#frmDataU');
+const frmUpdateU = sel('#frmUpdateU');
+
+if (frmDataU != null) {
+    frmDataU.addEventListener('submit', function(event) {
+        event.preventDefault();
+        handleSubmitAddU(frmDataU);
+    });
+}
+
+if (frmUpdateU != null) {
+    frmUpdateU.addEventListener('submit', function(event) {
+        event.preventDefault();
+        handleSubmitUpdateU(frmUpdateU);
+    });
+}
+
+const handleSubmitAddU = (form) => {
+    deshabilitarboton('btn_guardar', 1);
+
+    const data = new FormData(form);
+    const url = 'business/catalogos/smd/ajax/insertReg.php';
+
+    fetch(url, {
+            method: 'POST',
+            body: data
+        })
+        .then((resp) => resp.json())
+        .then(function({ done, resp, alert }) {
+            if (done == 1) {
+                Swal.fire({
+                        title: '¡Listo!',
+                        text: resp,
+                        icon: alert
+                    })
+                    .then((result) => {
+                        let ruta = sel("#current_file").value;
+                        window.location.assign(`${ruta}`);
+                    });
+            } else {
+                Swal.fire({
+                        icon: alert,
+                        title: 'Oops...',
+                        text: resp
+                    })
+                    .then(() => {
+                        sel("#ejercicio").focus();
+                    });
+            }
+            habilitaboton('btn_guardar');
+        })
+        .catch(function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: ':( ...',
+                text: error
+            });
+            habilitaboton('btn_guardar');
+        });
+}
+
+const handleSubmitUpdateU = (form) => {
+    deshabilitarboton('btn_guardar', 1);
+
+    const data = new FormData(form);
+    const url = 'business/catalogos/smd/ajax/updateReg.php';
+
+    fetch(url, {
+            method: 'POST',
+            body: data
+        })
+        .then((resp) => resp.json())
+        .then(function({ done, resp, alert }) {
+            if (done == 1) {
+                Swal.fire({
+                        title: '¡Listo!',
+                        text: resp,
+                        icon: alert
+                    })
+                    .then((result) => {
+                        let ruta = sel("#current_file").value;
+                        window.location.assign(`${ruta}`);
+                    });
+            } else {
+                Swal.fire({
+                        icon: alert,
+                        title: 'Oops...',
+                        text: resp
+                    })
+                    .then(() => {
+                        sel("#ejercicio").focus();
+                    });
+            }
+            habilitaboton('btn_guardar');
+        })
+        .catch(function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: ':( ...',
+                text: error
+            });
+            habilitaboton('btn_guardar');
         });
 }

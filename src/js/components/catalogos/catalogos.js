@@ -38,14 +38,36 @@ const handleSubmitSearch = () => {
 
 }
 
-const changeStatusG = (id, status) => {
+window.handleDeleteF = (id, type) => {
+
+    const icon = (type == 3) ? 'warning' : 'info';
+    const showDelete = (type == 0) ? ' dar de baja' :
+        (type == 3) ? ' eliminar' : ' dar de alta';
+
+    Swal.fire({
+        title: `¿Estás seguro de ${ showDelete } el registro?`,
+        text: "",
+        icon: icon,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            changeStatusF(id, type);
+        }
+    });
+}
+
+const changeStatusF = (id, status) => {
 
     const data = new FormData();
 
     data.append('id', id);
     data.append('tipo', status);
 
-    const url = 'business/catalogos/giros/ajax/updateStatus.php';
+    const url = 'business/catalogos/faltas/ajax/updateStatus.php';
 
     fetch(url, {
             method: 'POST',
@@ -81,7 +103,9 @@ const changeStatusG = (id, status) => {
         });
 }
 
-window.handleDeleteRegG = (id, type) => {
+
+
+window.handleDeleteE = (id, type) => {
 
     const icon = (type == 3) ? 'warning' : 'info';
     const showDelete = (type == 0) ? ' dar de baja' :
@@ -98,10 +122,11 @@ window.handleDeleteRegG = (id, type) => {
     }).then((result) => {
 
         if (result.isConfirmed) {
-            changeStatusG(id, type);
+            changeStatusE(id, type);
         }
     });
 }
+
 
 const changeStatusE = (id, status) => {
 
@@ -146,7 +171,8 @@ const changeStatusE = (id, status) => {
         });
 }
 
-window.handleDeleteE = (id, type) => {
+
+window.handleDeleteU = (id, type) => {
 
     const icon = (type == 3) ? 'warning' : 'info';
     const showDelete = (type == 0) ? ' dar de baja' :
@@ -163,7 +189,49 @@ window.handleDeleteE = (id, type) => {
     }).then((result) => {
 
         if (result.isConfirmed) {
-            changeStatusE(id, type);
+            changeStatusU(id, type);
         }
     });
+}
+
+
+const changeStatusU = (id, status) => {
+
+    const data = new FormData();
+
+    data.append('id', id);
+    data.append('tipo', status);
+
+    const url = 'business/catalogos/smd/ajax/updateStatus.php';
+
+    fetch(url, {
+            method: 'POST',
+            body: data
+        })
+        .then((resp) => resp.json())
+        .then(function({ done, resp, alert }) {
+            if (done == 1) {
+                Swal.fire({
+                        title: '¡Listo!',
+                        text: resp,
+                        icon: alert
+                    })
+                    .then(() => {
+                        location.reload()
+                    });
+            } else {
+                Swal.fire({
+                    icon: alert,
+                    title: 'Oops...',
+                    text: resp
+                });
+            }
+        })
+        .catch(function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: ':( ...',
+                text: error
+            });
+        });
 }

@@ -7,48 +7,65 @@ include_once $dir_fc.'connections/php_config.php';
 
 $cAccion  = new cCatalogos();
 
-$nombre         = "";
-$descripcion    = "";
+$id_articulo = 0;
+$articulo    = "";
+$descripcion = "";
 
-$done  = 0;
-$resp  = "";
-$alert = "warning";
+$edit   = 0;
+$done   = 0;
+$alert  = "warning";
 
 extract($_REQUEST);
 
-if(  !is_numeric($no_empleado)
-    || $nombre == "" || $apepa == ""
-    ){ //Verficando datos vacios
+if( $articulo == "" || $descripcion == "" ){
     $resp = "Debes de ingresar correctamente los datos";
 
-}else{
+} else {
     
-    //buscar si existe un licencia con el mismo nombre
-    $elementoFound = $cAccion->foundElemento( $no_empleado );
+    //buscar si existe un falta con el mismo nombre
+    $faltaFound = $cAccion->foundFalta( $articulo );
 
-    if ($elementoFound > 0) {
-        $resp = "El elemento seleccionado ya existe en la base de datos, favor de revisar el catálogo.";
+    if ($faltaFound > 0) {
+        $resp = "La falta seleccionada ya existe en la base de datos, favor de revisar el catálogo.";
     } else {
         
-        $f_ingreso = date('Y-m-d');
-
         $data = array(
-            5,
-            $id_zona,   
-            $f_ingreso,   
-            $no_empleado, 
-            $nombre,
-            $apepa,
-            $apema
+            $articulo,
+            $descripcion
         );
 
-        $inserted = $cAccion->insertElemento( $data );
+        $inserted = $cAccion->insertFalta( $data );
 
         if(is_numeric($inserted) AND $inserted > 0){
 
             $done  = 1;
             $resp  = "Registro agregado correctamente.";
             $alert = "success";
+
+            if ($fraccion != "") {
+                if(!is_numeric($h_min) || !is_numeric($h_max)
+                || $descripcion_f == "") {
+                    $resp .= "Debes de ingresar correctamente los datos";
+                } else {
+
+                    $dataFaltaDtl = array(
+                        $inserted,
+                        $fraccion, 
+                        $descripcion_f,
+                        $h_min,
+                        $h_max                        
+                    );
+
+                    $inserted_Dtl = $cAccion->insertFraccion( $dataFaltaDtl );
+                    if(is_numeric($inserted_Dtl) AND $inserted_Dtl > 0){     
+                        $resp  .= " (Fracción agregada).";
+
+                    } else {                        
+                        $resp  .= " (Error al agregar la fracción).";
+                    
+                    }
+                }
+            }
         
         } else {
             $done  = 0;

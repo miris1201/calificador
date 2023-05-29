@@ -23,7 +23,7 @@ function call($controller, $action) {
         case 'controlador/catalogos/faltas':
                 $controller = new cFaltas();
             break;
-        case 'controlador/catalogos/uma':
+        case 'controlador/catalogos/smd':
                 $controller = new cUMA();
             break;
     }
@@ -38,11 +38,10 @@ $controllers = array(
     'controlador/admin/sis_roles' 	  => ['index', 'nuevo'],
     'controlador/catalogos/elementos' => ['index', 'nuevo'],
     'controlador/catalogos/faltas'    => ['index', 'nuevo'],
-    'controlador/catalogos/uma'       => ['index', 'nuevo'],
+    'controlador/catalogos/smd'       => ['index', 'nuevo'],
 );
 
 if (array_key_exists($controller, $controllers)) {
-
     if (in_array($action, $controllers[$controller])) {
         call($controller, $action);
     } else {

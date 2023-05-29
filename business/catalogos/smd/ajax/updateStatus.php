@@ -16,7 +16,7 @@ if(isset($tipo) && isset($id)){
 
     $cAccion->setId($id);
 
-    $do = ($tipo == 3) ? $cAccion->deleteReg('cat_articulos', 'id_articulo') : $cAccion->updateStatus('cat_articulos', 'id_articulo', $tipo);
+    $do = ($tipo == 3) ? $cAccion->deleteReg('tbl_smd', 'id_smd') : $cAccion->updateStatus('tbl_smd', 'id_smd', $tipo);
 
     if(is_numeric($do)){
         $done  = 1;

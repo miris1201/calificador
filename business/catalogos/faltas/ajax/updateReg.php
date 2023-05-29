@@ -10,56 +10,76 @@ include_once $dir_fc.'common/function.class.php';
 $cAccion  = new cCatalogos();
 $cFn      = new cFunction();  
 
-$id_usuario = 0;
-$nombre      = "";
-$apepa       = "";
-$apema       = "";
-$no_empleado = "";
+$id_articulo = 0;
+$articulo    = "";
+$descripcion = "";
 
-$done     = 0;
-$alert    = "warning";
+$edit   = 0;
+$done   = 0;
+$alert  = "warning";
 
 extract($_REQUEST);
 
-if(!is_numeric($id_usuario) || $id_usuario <= 0 
-    || !is_numeric($no_empleado)
-    || !is_numeric($id_zona)
-    || $nombre == "" || $apepa == "" ){
+if(!is_numeric($id_articulo) || $id_articulo <= 0 
+    || $articulo == "" || $descripcion == "" ){
     $resp = "Debes de ingresar correctamente los datos";
 
 } else {
 
-    $data = array($no_empleado, $id_usuario);
+    $data = array($articulo, $id_articulo);
 
-    $elementoCoincidencia = $cAccion->foundElementoConcidencia( $data );
-    if ($elementoCoincidencia == 1){
+    $falaCoincidencia = $cAccion->foundFaltaConcidencia( $data );
+    if ($falaCoincidencia == 1){
         //Si se encuentra coincidencia quiere decir que no cambio su nombre de usuario
-        $elementoFound = 0;
+        $falaFound = 0;
     }else{
         //De lo contrario buscar si existe un usuario con el mismo nombre
-        $elementoFound = $cAccion->foundElemento( $nombre );
+        $falaFound = $cAccion->foundFalta( $articulo );
     }
 
-    if ($elementoFound >0) {
-        $resp  = "El elemento ya existe en la base de datos, favor de revisar el catálogo.";
+    if ($falaFound >0) {
+        $resp  = "El artículo ya existe en la base de datos, favor de revisar el catálogo.";
     } else {
 
-        $dataElemento = array(
-            $id_zona, 
-            $no_empleado, 
-            $nombre, 
-            $apepa,
-            $apema,
-            $id_usuario
+        $dataFalta = array(
+            $articulo, 
+            $descripcion,
+            $id_articulo
         );
 
-        $update = $cAccion->updateElemento( $dataElemento );
+        $update = $cAccion->updateFalta( $dataFalta );
         if(is_numeric($update) AND $update > 0){
             
-
             $done  = 1;
             $resp  = "Registro actualizado correctamente.";
             $alert = "success";
+
+            if ($fraccion != "") {
+                if(!is_numeric($h_min) || !is_numeric($h_max)
+                || $descripcion_f == "") {
+                    $resp .= "Debes de ingresar correctamente los datos";
+                } else {
+
+                    $dataFaltaDtl = array(
+                        $id_articulo,
+                        $fraccion, 
+                        $descripcion_f,
+                        $h_min,
+                        $h_max                        
+                    );
+
+                    $inserted_Dtl = $cAccion->insertFraccion( $dataFaltaDtl );
+                    if(is_numeric($inserted_Dtl) AND $inserted_Dtl > 0){     
+                        $edit  = 1;
+                        $resp  .= " (Fracción agregada).";
+
+                    } else {                        
+                        $resp  .= " (Error al agregar la fracción).";
+                    
+                    }
+                }
+            }
+           
         }else{
             $done  = 0;
             $resp  = "Ocurrió un incoveniente con la base de datos: -- ".$inserted;
@@ -67,5 +87,8 @@ if(!is_numeric($id_usuario) || $id_usuario <= 0
     }
 }
 
-echo json_encode(array("done" => $done, "resp" => $resp, "alert" => $alert));
+echo json_encode(array( "done" => $done, 
+                        "resp" => $resp, 
+                        "edit" => $edit,
+                        "alert" => $alert));
 ?>

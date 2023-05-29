@@ -34,7 +34,8 @@ $_SESSION[_type_] = $type;
 
 
 $id = 0;
-$id_usuario  = "";
+
+$id_articulo = "";
 $articulo    = "";
 $descripcion = "";
 
@@ -42,7 +43,8 @@ $fraccion = "";
 
 $readOnly   = "";
 $showInput  = "";
-$frmName = "frmDataA";
+$showInput  = "";
+$frmName = "frmDataF";
 
 
 $direccion  = 0;
@@ -81,9 +83,10 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
 
 if ($_SESSION[_is_view_] == 2) {
     $titulo_edi = "Editando";
-    $showInput = "style='display: none'";
-    $frmName = "frmUpdateA";
+    // $showInput = "style='display: none'";
+    $frmName = "frmUpdateF";
     $requerido = "required";
+    $return_paginacion = "&e=1&pag=".$pag."&busqueda=".$busqueda;
 }
 if ($_SESSION[_is_view_] == 3) {
     $titulo_edi = "Visualizando";
@@ -185,9 +188,88 @@ if ($_SESSION[_is_view_] == 3) {
                                                     </label>
                                                 </div>
                                             </div>
-                                        </div>                                        
+                                        </div>   
+                                        <div class="row" <?php echo $showInput?>>
+                                            <legend>Nueva fracción</legend>
+                                            <div class="col-sm-1">
+                                                <div class="form-group floating-label">
+                                                    <input 
+                                                        type="text" 
+                                                        class="form-control"
+                                                        name="fraccion"
+                                                        id="fraccion"
+                                                        autocomplete="off"
+                                                        style="text-transform: capitalize;"
+                                                        <?php echo $readOnly?>>
+                                                    <label 
+                                                        for="fraccion">
+                                                        Artículo
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <div class="form-group floating-label">
+                                                    <input 
+                                                        type="text" 
+                                                        class="form-control"
+                                                        name="h_min"
+                                                        id="h_min"
+                                                        autocomplete="off"
+                                                        style="text-transform: capitalize;"
+                                                        <?php echo $readOnly?>>
+                                                    <label 
+                                                        for="h_min">
+                                                        Hr. min
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <div class="form-group floating-label">
+                                                    <input 
+                                                        type="text" 
+                                                        class="form-control"
+                                                        name="h_max"
+                                                        id="h_max"
+                                                        autocomplete="off"
+                                                        style="text-transform: capitalize;"
+                                                        <?php echo $readOnly?>>
+                                                    <label 
+                                                        for="h_max">
+                                                        Hr. max
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="form-group floating-label">
+                                                    <textarea name="descripcion_f" id="descripcion_f" rows="4"
+                                                        class="form-control" <?php echo $readOnly?>> </textarea>
+                                                    <label for="descripcion_f">Descripción
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>                                     
                                         </fieldset>
+                                        <?php 
+                                        if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
+                                        ?>
                                         <fieldset>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
+                                                    <button 
+                                                        type="submit" 
+                                                        class="btn ink-reaction btn-block"
+                                                        style="background-color: #B0C4DE;"  
+                                                        id="btn_guardar">
+                                                        <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <?php 
+                                        }
+                                        if ($id_articulo > 0) { 
+                                        ?>
+                                        <fieldset >
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <table class="table table-striped">
@@ -207,7 +289,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <?php                                                     
+                                                        <?php    
+                                                        if ($id_articulo > 0) {                          
                                                             $rsDtl = $cAccion->getFaltaDtlbyid( $id_articulo );
                                                             if ($rsDtl->rowCount() > 0) {
                                                                 while($arrDtl = $rsDtl->fetch(PDO::FETCH_OBJ)){
@@ -293,28 +376,13 @@ if ($_SESSION[_is_view_] == 3) {
                                                             <?php 
                                                                 }
                                                             }
+                                                        }
                                                             ?>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                        </fieldset>
-                                        <?php 
-                                        if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
-                                        ?>
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
-                                                    <button 
-                                                        type="submit" 
-                                                        class="btn ink-reaction btn-block"
-                                                        style="background-color: #B0C4DE;"  
-                                                        id="btn_guardar">
-                                                        <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </fieldset>
+                                        </fieldset>                                        
                                         <?php 
                                         }
                                         ?>

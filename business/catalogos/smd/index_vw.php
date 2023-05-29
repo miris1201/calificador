@@ -15,7 +15,7 @@ $dir          = dirname($_SERVER['PHP_SELF'])."/".$controller;
 $checkMenu    = $server_name.$dir."/";
 $param        = "?controller=".$controller."&action=";
 
-$sys_id_men   = 6;
+$sys_id_men   = 7;
 $sys_tipo     = 0;
 
 include_once $dir_fc.'data/inicial.class.php';
@@ -29,7 +29,7 @@ $cLista   = new cCatalogos();
 include_once 'business/sys/check_session.php';    
 
 
-$title_act  = "Faltas";
+$title_act  = "UMA";
 $registros  = c_num_reg;
 
 extract($_REQUEST);
@@ -66,12 +66,12 @@ $cLista->setInicio($inicio);
 $cLista->setFin($registros);
 $cLista->setLimite(0);
 
-$rs_count       = $cLista->getAllFaltas(); //Cuenta todos los registros (le doy 0 al limite)
+$rs_count       = $cLista->getAllUMA(); //Cuenta todos los registros (le doy 0 al limite)
 $countRegistros = $rs_count->rowCount();
 $numeroTotalPaginas = ceil($countRegistros/$registros);
 
 $cLista->setLimite(1);
-$rsRegShow = $cLista->getAllFaltas(); //Trae todos los registros (ya le puse limite)
+$rsRegShow = $cLista->getAllUMA(); //Trae todos los registros (ya le puse limite)
 
 $ruta_app = "";
 ?>
@@ -149,17 +149,17 @@ $ruta_app = "";
                                         <thead>
                                             <tr>
                                                 <td width="2%" class="text-right"></td>
-                                                <td class="text-center" width="8%">Artículo</td>
-                                                <td width="40%">Descripción</td>
+                                                <td width="10%">Ejercicio</td>
+                                                <td width="10%">Salario</td>
                                                 <th class="text-center">Funciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php
                                         while ($rowReg    = $rsRegShow->fetch(PDO::FETCH_OBJ)) {
-                                            $iId          = $rowReg->id_articulo;
-                                            $articulo     = $rowReg->articulo;
-                                            $descripcion  = $rowReg->descripcion;
+                                            $iId          = $rowReg->id_smd;
+                                            $ejercicio    = $rowReg->ejercicio;
+                                            $salario      = $rowReg->salario;
                                             $isActive      = $rowReg->activo;
 
                                             if($isActive == 1){
@@ -167,17 +167,19 @@ $ruta_app = "";
                                                 $bajaAlta    = 0;
                                                 $icoAB       = "fa fa-ban";
                                                 $titleAB     = "Dar de baja";
-                                            }else{
+
+                                            } else {
                                                 $showEstatus = "fa fa-times-circle text-danger";
                                                 $bajaAlta    = 1;
                                                 $icoAB       = "fa fa-check";
                                                 $titleAB     = "Dar de Alta";
                                             }
+
                                             ?>
                                             <tr>
                                                 <td><span class="pull-left <?php echo $showEstatus?>"></span></td>
-                                                <td class="text-center"><?php echo $articulo?></td>
-                                                <td><?php echo $descripcion?></td>
+                                                <td><?php echo $ejercicio?></td>
+                                                <td><?php echo $salario?></td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0);" 
                                                         onclick="openMyLink(3,<?php echo $iId ?>, '<?php echo $param.'nuevo&pag='.$pag.$fPaginacion?>')" 
@@ -189,8 +191,7 @@ $ruta_app = "";
                                                     </a>
                                                     <?php
                                                     if($_SESSION[edit] == 1) {
-                                                        if($isActive == 1){
-                                                        ?>
+                                                        if($isActive == 1){ ?>
                                                         <a 
                                                             href="javascript:void(0);" 
                                                             onclick="openMyLink(2,<?php echo $iId ?>, '<?php echo $param.'nuevo&pag='.$pag.$fPaginacion?>')" 
@@ -205,14 +206,14 @@ $ruta_app = "";
                                                     }
                                                     if($_SESSION[elim] == 1){ ?>
                                                         <a 
-                                                            onclick="handleDeleteF(<?php echo $iId.','.$bajaAlta ?>)"
+                                                            onclick="handleDeleteU(<?php echo $iId.','.$bajaAlta ?>)"
                                                             class="btn ink-reaction btn-icon-toggle btn-warning"
                                                             data-placement="top" 
                                                             title="<?php echo $titleAB ?>">
                                                             <span class="<?php echo $icoAB ?>"></span>
                                                         </a>
                                                         <a 
-                                                            onclick="handleDeleteF(<?php echo $iId?>, 3)" 
+                                                            onclick="handleDeleteU(<?php echo $iId?>, 3)" 
                                                             data-toggle="tooltip"
                                                             class="btn ink-reaction btn-icon-toggle btn-danger" 
                                                             data-placement="top" 
@@ -272,21 +273,19 @@ $ruta_app = "";
                 class="form">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-5">
                             <div class="form-group floating-label">
                                 <input 
                                     type="text" 
-                                    class="form-control dirty" 
-                                    name="txtBuscar" 
-                                    id="idSearch" 
-                                    autocomplete="off"                                    
-                                />
-                                <label for="idSearchG">
-                                    Nombre / No. empleado: <span class="text-danger">*</span>
+                                    class="form-control dirty"
+                                    name="txtBuscar"
+                                    id="idSearch"
+                                    autocomplete="off"/>
+                                <label for="idSearch">
+                                    Ejercicio: <span class="text-danger">*</span>
                                 </label>
                             </div>
-                        </div>
-                        
+                        </div>                        
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -307,6 +306,5 @@ $ruta_app = "";
         </div>
     </div>
 </div>
-
 </body>
 </html>

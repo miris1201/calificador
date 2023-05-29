@@ -10,55 +10,54 @@ include_once $dir_fc.'common/function.class.php';
 $cAccion  = new cCatalogos();
 $cFn      = new cFunction();  
 
-$id_usuario = 0;
-$nombre      = "";
-$apepa       = "";
-$apema       = "";
-$no_empleado = "";
+$id          = 0;
+$fraccion    = "";
+$descripcion = "";
+$hr_min      = "";
+$hr_max      = "";
 
 $done     = 0;
 $alert    = "warning";
 
 extract($_REQUEST);
 
-if(!is_numeric($id_usuario) || $id_usuario <= 0 
-    || !is_numeric($no_empleado)
-    || !is_numeric($id_zona)
-    || $nombre == "" || $apepa == "" ){
+if(!is_numeric($id) || $id <= 0 
+    || !is_numeric($hr_min)
+    || !is_numeric($hr_min)
+    || $fraccion == "" || $descripcion == "" ){
     $resp = "Debes de ingresar correctamente los datos";
 
 } else {
 
-    $data = array($no_empleado, $id_usuario);
+    $data = array($fraccion, $id);
 
-    $elementoCoincidencia = $cAccion->foundElementoConcidencia( $data );
-    if ($elementoCoincidencia == 1){
+    $fraccionCoincidencia = $cAccion->foundFraccionConcidencia( $data );
+    if ($fraccionCoincidencia == 1){
         //Si se encuentra coincidencia quiere decir que no cambio su nombre de usuario
-        $elementoFound = 0;
+        $fraccionFound = 0;
     }else{
         //De lo contrario buscar si existe un usuario con el mismo nombre
-        $elementoFound = $cAccion->foundElemento( $nombre );
+        $fraccionFound = $cAccion->foundFraccion( $fraccion );
     }
 
-    if ($elementoFound >0) {
-        $resp  = "El elemento ya existe en la base de datos, favor de revisar el catálogo.";
+    if ($fraccionFound >0) {
+        $resp  = "El registro ya existe en la base de datos, favor de revisar el catálogo.";
     } else {
 
-        $dataElemento = array(
-            $id_zona, 
-            $no_empleado, 
-            $nombre, 
-            $apepa,
-            $apema,
-            $id_usuario
+        $dataFraccion = array(
+            $fraccion, 
+            $descripcion, 
+            $hr_min, 
+            $hr_max,
+            $id
         );
 
-        $update = $cAccion->updateElemento( $dataElemento );
+        $update = $cAccion->updateFraccion( $dataFraccion );
         if(is_numeric($update) AND $update > 0){
             
 
             $done  = 1;
-            $resp  = "Registro actualizado correctamente.";
+            $resp  = "Fracción actualizad correctamente.";
             $alert = "success";
         }else{
             $done  = 0;

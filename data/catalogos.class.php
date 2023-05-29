@@ -158,8 +158,8 @@ class cCatalogos extends BD  {
     }
 
     public function foundFalta( $giro ){
-        //Busca si existe un giro con el nombre
-        $query= "SELECT nombre FROM cat_articulos WHERE nombre = '$giro'";
+        //Busca si existe un articulo con el nombre
+        $query= "SELECT articulo FROM cat_articulos WHERE articulo = '$giro'";
         $result = $this->conn->prepare($query);
         $result->execute();
         $registrosf = $result->rowCount();
@@ -184,6 +184,7 @@ class cCatalogos extends BD  {
         return $correcto;
     }
 
+   
     public function foundFaltaConcidencia( $data ){
         //Busca si existe un giro con el nombre
         $query= "   SELECT articulo FROM cat_articulos WHERE articulo = ? AND id_articulo = ? ";
@@ -198,9 +199,8 @@ class cCatalogos extends BD  {
         $exec       = $this->conn->conexion();
         
         $update = " UPDATE cat_articulos
-                      SET  nombre   = ?,
-                           descripcion = ?,
-                           especificaciones  = ?
+                      SET  articulo   = ?,
+                           descripcion = ?
                      WHERE id_articulo = ?";
         $result = $this->conn->prepare($update);
         $exec->beginTransaction();
@@ -209,6 +209,62 @@ class cCatalogos extends BD  {
         return $correcto;
     }
 
+    public function foundFraccionConcidencia( $data ){
+        //Busca si existe un giro con el nombre
+        $query= "   SELECT fraccion FROM cat_articulos_dtl WHERE fraccion = ? AND id_articulo_dtl = ? ";
+        $result = $this->conn->prepare($query);
+        $result->execute( $data );
+        $registrosf = $result->rowCount();
+        return $registrosf;
+    }
+
+    public function foundFraccion( $fraccion ){
+        //Busca si existe un giro con el nombre
+        $query= "SELECT fraccion FROM cat_articulos_dtl WHERE fraccion = '$fraccion'";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        $registrosf = $result->rowCount();
+        return $registrosf;
+    }
+
+    public function insertFraccion( $data ){
+        $correcto= 1;
+        $exec = $this->conn->conexion();
+
+        $insert = "INSERT INTO cat_articulos_dtl(id_articulo, fraccion, descripcion, hr_min, hr_max)
+                    VALUES (    ?, 
+                                ?,
+                                ?,
+                                ?,
+                                ?)";
+        $result = $this->conn->prepare($insert);
+        $exec->beginTransaction();
+        $result->execute($data);
+        if ($correcto == 1){
+            $correcto= $exec->lastInsertId();
+        }
+        $exec->commit();
+        return $correcto;
+    }
+
+
+
+    public function updateFraccion( $data ){
+        $correcto   = 1;
+        $exec       = $this->conn->conexion();
+        
+        $update = " UPDATE cat_articulos_dtl
+                      SET  fraccion    = ?,
+                           descripcion = ?,
+                           hr_min      = ?,
+                           hr_max    = ?
+                     WHERE id_articulo_dtl = ?";
+        $result = $this->conn->prepare($update);
+        $exec->beginTransaction();
+        $result->execute( $data );
+        $exec->commit();
+        return $correcto;
+    }
 
     public function getAllElementos(){
         //Incio fin son para paginado
@@ -295,6 +351,86 @@ class cCatalogos extends BD  {
                            apepa    = ?,
                            apema    = ?
                      WHERE id_usuario = ?";
+        $result = $this->conn->prepare($update);
+        $exec->beginTransaction();
+        $result->execute( $data );
+        $exec->commit();
+        return $correcto;
+    }
+
+
+    public function getAllUMA(){
+        //Incio fin son para paginado
+        $milimite = "";
+        $condition = "";
+        if ($this->getLimite() == 1){ $milimite = "LIMIT ".$this->getInicio().", ".$this->getFin();}
+
+        if ($this->getFiltro() != ""){
+            $condition = " WHERE ejercicio = ".$this->getFiltro()." ";
+        }
+
+        $query = "  SELECT id_smd, ejercicio, salario, activo
+                      FROM tbl_smd 
+                     $condition 
+                    ORDER BY ejercicio DESC ".$milimite;
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getUMAbyid( $id ){
+        $query = "  SELECT id_smd, ejercicio, salario, activo
+                      FROM tbl_smd 
+                     WHERE id_smd = $id LIMIT 1";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function foundUMA( $ejercicio ){
+        //Busca si existe un uma con el nombre
+        $query= "SELECT ejercicio FROM tbl_smd WHERE ejercicio = '$ejercicio'";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        $registrosf = $result->rowCount();
+        return $registrosf;
+    }
+
+    public function insertUMA( $data ){
+        $correcto= 1;
+        $exec = $this->conn->conexion();
+
+        $insert = "INSERT INTO tbl_smd( ejercicio, salario )
+                    VALUES (  ?, 
+                              ?)";
+
+        $result = $this->conn->prepare($insert);
+        $exec->beginTransaction();
+        $result->execute($data);
+        if ($correcto == 1){
+            $correcto= $exec->lastInsertId();
+        }
+        $exec->commit();
+        return $correcto;
+    }
+
+    public function foundUMAConcidencia( $data ){
+        //Busca si existe un registro con el nombre
+        $query= "   SELECT ejercicio FROM tbl_smd WHERE ejercicio = ? AND id_smd = ? ";
+        $result = $this->conn->prepare($query);
+        $result->execute( $data );
+        $registrosf = $result->rowCount();
+        return $registrosf;
+    }
+
+    public function updateUMA( $data ){
+        $correcto   = 1;
+        $exec       = $this->conn->conexion();
+        
+        $update = " UPDATE tbl_smd
+                      SET  ejercicio = ?,
+                           salario   = ?
+                     WHERE id_smd    = ?";
         $result = $this->conn->prepare($update);
         $exec->beginTransaction();
         $result->execute( $data );
