@@ -26,6 +26,9 @@ function call($controller, $action) {
         case 'controlador/catalogos/smd':
                 $controller = new cUMA();
             break;
+        case 'controlador/oficialia/remisiones':
+                $controller = new cLRemision();
+            break;
     }
     $controller->{ $action }();
 }
@@ -39,6 +42,7 @@ $controllers = array(
     'controlador/catalogos/elementos' => ['index', 'nuevo'],
     'controlador/catalogos/faltas'    => ['index', 'nuevo'],
     'controlador/catalogos/smd'       => ['index', 'nuevo'],
+    'controlador/oficialia/remisiones'=> ['index', 'nuevo', 'historial'],
 );
 
 if (array_key_exists($controller, $controllers)) {

@@ -21,6 +21,8 @@ module.exports = {
         rolem: './src/js/components/admin/role.magnament.js',
         catalogos: './src/js/components/catalogos/catalogos.js',
         catalogosm: './src/js/components/catalogos/catalogos.magnament.js',
+        remision: './src/js/components/oficialia/remision.js',
+        remisionm: './src/js/components/oficialia/remision.magnament.js',
     },
     // output: {
     //     path: __dirname + '/dist',
@@ -118,6 +120,22 @@ module.exports = {
             inject: 'body',
             chunks: [
                 'catalogosm',
+            ]
+        }),   
+        new HtmlWebpackPlugin({
+            template: './src/nocontent.html',
+            filename: './components/remision.php',
+            inject: 'body',
+            chunks: [
+                'remision',
+            ]
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/nocontent.html',
+            filename: './components/remision.magnament.php',
+            inject: 'body',
+            chunks: [
+                'remisionm',
             ]
         }),   
         
