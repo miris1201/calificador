@@ -10,7 +10,7 @@ $dir          = dirname($_SERVER['PHP_SELF'])."/".$controller;
 $checkMenu    = $server_name.$dir."/";   
 $param        = "?controller=".$controller."&action=";
 
-$sys_id_men   = 8;
+$sys_id_men   = 7;
 $sys_tipo     = 0; // Nuevo.
 
 $ruta_app     = "";

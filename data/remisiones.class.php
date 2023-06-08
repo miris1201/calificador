@@ -158,6 +158,89 @@ class cRemision extends BD
         return $result;
     }
 
+    public function getCatElementos(){
+        $query = "  SELECT id_usuario, no_empleado, CONCAT_WS(' ', nombre, apepa, apema) as nm_elemento
+                      FROM ws_usuario 
+                    where id_rol = 5 AND activo = 1
+                    ORDER BY no_empleado ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getCatColonias(){
+        $query = "  SELECT id_comunidad, colonia, tipologia
+                      FROM cat_comunidad 
+                    ORDER BY colonia ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getSectorByColonia( $id ) {
+        $data = 0;
+
+        $query = "  SELECT sector
+                      FROM cat_comunidad 
+                     WHERE id_comunidad = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $data = $row->sector;
+        }
+        return $data;
+    }
+
+    public function getCatAutoridad(){
+        $query = "  SELECT id_autoridad, descripcion, activo
+                      FROM cat_autoridad_remite
+                     WHERE activo = 1
+                    ORDER BY descripcion ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getCatEstadoFisico(){
+        $query = "  SELECT id_edo_fisico, descripcion, activo
+                      FROM cat_edo_fisico 
+                     WHERE activo = 1
+                    ORDER BY descripcion ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getCatOcupacion(){
+        $query = "  SELECT id_ocupacion, descripcion, activo
+                      FROM cat_ocupacion 
+                     WHERE activo = 1
+                    ORDER BY descripcion ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getCatEstudios(){
+        $query = "  SELECT id_nvl_estudios, descripcion, activo
+                      FROM cat_nivel_estudios 
+                     WHERE activo = 1
+                    ORDER BY id_nvl_estudios ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getCatArticulos(){
+        $query = "  SELECT id_articulo, articulo, descripcion, activo
+                      FROM cat_articulos 
+                     WHERE activo = 1
+                    ORDER BY id_articulo ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
     public function closeOut(){
         $this->conn = null;
     }

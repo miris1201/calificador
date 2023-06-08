@@ -10,18 +10,18 @@ $dir          = dirname($_SERVER['PHP_SELF'])."/".$controller;
 $checkMenu    = $server_name.$dir."/";   
 $param        = "?controller=".$controller."&action=";
 
-$sys_id_men   = 8;
+$sys_id_men   = 9;
 $sys_tipo     = 0; // Nuevo.
 
 $ruta_app     = "";
 $titulo_edi  = "Nueva";
-$titulo_curr  = "UMA";
+$titulo_curr  = "Remisión";
 
 include_once $dir_fc.'data/inicial.class.php';
-include_once $dir_fc.'data/catalogos.class.php';
+include_once $dir_fc.'data/remisiones.class.php';
 
 $cInicial   = new cInicial();
-$cAccion    = new cCatalogos();
+$cAccion    = new cRemision();
 
 include_once 'business/sys/check_session.php'; 
 
@@ -34,13 +34,10 @@ $_SESSION[_type_] = $type;
 
 
 $id = 0;
-$id_smd    = "";
-$ejercicio = "";
-$salario   = "";
 
 $readOnly   = "";
 $showInput  = "";
-$frmName = "frmDataU";
+$frmName = "frmData";
 
 
 $direccion  = 0;
@@ -79,7 +76,7 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
 if ($_SESSION[_is_view_] == 2) {
     $titulo_edi = "Editando";
     $showInput = "style='display: none'";
-    $frmName = "frmUpdateU";
+    $frmName = "frmUpdate";
     $requerido = "required";
 }
 if ($_SESSION[_is_view_] == 3) {
@@ -98,6 +95,7 @@ if ($_SESSION[_is_view_] == 3) {
     <meta content="<?php echo $titulo_curr?>" name="description"/>
     <meta content="" name="author"/>
     <?php include("dist/inc/headercommon.php"); ?>
+    <link rel="stylesheet" type="text/css" href="dist/assets/css/select2.min.css?v=1.001">
 </head>
 <body class="<?php echo _BODY_STYLE_ ?>">
 <?php include ($dir_fc."inc/header.php")?>
@@ -148,42 +146,397 @@ if ($_SESSION[_is_view_] == 3) {
                                 class="form" role="form" 
                                 method="post">
                                 <input type="hidden" name="current_file" id="current_file" value="<?php echo $param."index".$return_paginacion?>"/>                               
-                                <input type="hidden" name="id_smd" id="id_smd" value="<?php echo $id?>">
+                                <input type="hidden" name="id_remision" id="id_remision" value="<?php echo $id?>">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-12 col-sm-12">
                                         <fieldset><legend>Datos de <?php echo $titulo_curr?></legend>                                        
-                                        <div class="row form-group">                                            
-                                            <div class="col-sm-2">
-                                                <div class="form-group floating-label">
-                                                    <input 
-                                                        type="number" 
-                                                        class="form-control"
-                                                        name="ejercicio"
-                                                        id="ejercicio"
-                                                        autocomplete="off"
-                                                        required
-                                                        value="<?php echo $ejercicio?>"
-                                                        <?php echo $readOnly?>>
-                                                    <label
-                                                        for="ejercicio">
-                                                        Ejercicio<span class="text-danger">*</span>
-                                                    </label>
+                                            <div class="row">                                            
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <input 
+                                                            type="text" 
+                                                            class="form-control"
+                                                            name="patrulla"
+                                                            id="patrulla"
+                                                            autocomplete="off"
+                                                            required
+                                                            value=""
+                                                            <?php echo $readOnly?>>
+                                                        <label
+                                                            for="patrulla">
+                                                            Patrulla <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <div class="form-group">
+                                                        <select name="id_patrullero" id="id_patrullero"
+                                                            <?php echo $readOnly?> 
+                                                            class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsP = $cAccion->getCatElementos();
+                                                            while($rwP = $rsP->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwP->id_usuario?>">
+                                                                    <?php echo $rwP->no_empleado .' - ' .$rwP->nm_elemento?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label for="id_patrullero">Patrullero
+                                                            <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <div class="form-group">
+                                                        <select name="id_escolta" id="id_escolta"
+                                                            <?php echo $readOnly?> 
+                                                            class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsE = $cAccion->getCatElementos();
+                                                            while($rwE = $rsE->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwE->id_usuario?>">
+                                                                    <?php echo $rwE->no_empleado .' - ' .$rwE->nm_elemento?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label for="id_escolta">Escolta
+                                                            <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-2">
-                                                <div class="form-group floating-label">
-                                                    <input type="text" class="form-control" 
-                                                        name="salario" id="salario"
-                                                        autocomplete="off"
-                                                        value="<?php echo $salario?>"
-                                                        <?php echo $readOnly?>>
-                                                    <label for="salario">Salario
-                                                        <span class="text-danger">*</span>
-                                                    </label>
+                                            <div class="row">
+                                                <div class="col-sm-5">
+                                                    <div class="form-group">
+                                                        <select name="id_colonia" id="id_colonia"
+                                                            <?php echo $readOnly?> 
+                                                            class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rs = $cAccion->getCatColonias();
+                                                            while($rwC = $rs->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwC->id_comunidad?>">
+                                                                    <?php echo $rwC->colonia. ' ('.$rwC->tipologia .') '?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label
+                                                            for="id_colonia">
+                                                            Colonia <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control"
+                                                            id="sector" name="sector"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="sector">
+                                                            Sector <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group">
+                                                        <input type="number" class="form-control"
+                                                            id="folio_rnd" name="folio_rnd"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="folio_rnd">
+                                                            Folio RND <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <select name="id_autoridad" id="id_autoridad"
+                                                            <?php echo $readOnly?> 
+                                                            class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsA = $cAccion->getCatAutoridad();
+                                                            while($rwA = $rsA->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwA->id_autoridad?>">
+                                                                    <?php echo $rwA->descripcion?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label
+                                                            for="id_autoridad">
+                                                            Autoridad que remite <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="row">                                                
+                                                <div class="col-sm-6">
+                                                    <div class="form-group floating-label">
+                                                        <input type="text" class="form-control"
+                                                            id="calle" name="calle"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="calle">
+                                                            Calle <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group floating-label">
+                                                        <input type="text" class="form-control"
+                                                            id="entre_calle" name="entre_calle"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="entre_calle">
+                                                            Entre calle <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group floating-label">
+                                                        <input type="text" class="form-control"
+                                                            id="y_calle" name="y_calle"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="y_calle">
+                                                            Y calle <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group floating-label">
+                                                        <textarea name="observaciones" id="observaciones" rows="2"
+                                                            <?php echo $readOnly?> 
+                                                            class="form-control"></textarea>
+                                                        <label
+                                                            for="observaciones">
+                                                            Observaciones <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </fieldset>
+                                        <fieldset>
+                                            <legend>Datos del infractor</legend>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group floating-label">
+                                                        <input type="text" class="form-control"
+                                                            id="nombre" name="nombre"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="nombre">
+                                                            Nombre <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group floating-label">
+                                                        <input type="text" class="form-control"
+                                                            id="apepa" name="apepa"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="apepa">
+                                                            Apellido Paterno <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group floating-label">
+                                                        <input type="text" class="form-control"
+                                                            id="apema" name="apema"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="apema">
+                                                            Apellido Materno <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-1">
+                                                    <div class="form-group floating-label">
+                                                        <input type="number" class="form-control"
+                                                            id="edad" name="edad" min="0"
+                                                            <?php echo $readOnly?> 
+                                                            value="">
+                                                        <label
+                                                            for="edad">
+                                                            Edad <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <select name="sexo" id="sexo" class="form-control">
+                                                            <option value=""></option>
+                                                            <option value="1">Femenino</option>
+                                                            <option value="2">Masculino</option>
+                                                        </select>
+                                                        <label
+                                                            for="sexo">
+                                                            Sexo <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <select name="id_edo_fisico" id="id_edo_fisico" class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsF = $cAccion->getCatEstadoFisico();
+                                                            while($rwF = $rsF->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwF->id_edo_fisico?>">
+                                                                    <?php echo $rwF->descripcion?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label
+                                                            for="id_edo_fisico">
+                                                            Estado Físico <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group floating-label">
+                                                        <select name="id_ocupacion" id="id_ocupacion" class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsO = $cAccion->getCatOcupacion();
+                                                            while($rwO = $rsO->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwO->id_ocupacion?>">
+                                                                    <?php echo $rwO->descripcion?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label
+                                                            for="id_ocupacion">
+                                                            Ocupación <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group floating-label">
+                                                        <select name="id_estudios" id="id_estudios" class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsN = $cAccion->getCatEstudios();
+                                                            while($rwN = $rsN->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwN->id_nvl_estudios?>">
+                                                                    <?php echo $rwN->descripcion?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label
+                                                            for="id_estudios">
+                                                            Nivel de Estudios <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group floating-label">
+                                                        <textarea name="domicilio" id="domicilio" rows="2"
+                                                            <?php echo $readOnly?> 
+                                                            class="form-control"></textarea>
+                                                        <label
+                                                            for="domicilio">
+                                                            Domicilio <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>Datos de las faltas</legend>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <span id="faltas_dtl"></span>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <select name="id_articulo" id="id_articulo" class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsArt = $cAccion->getCatArticulos();
+                                                            while($rwArt = $rsArt->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwArt->id_articulo?>">
+                                                                    <?php echo $rwArt->articulo?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label
+                                                            for="id_articulo">
+                                                            Artículo <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <select name="id_falta_a" id="id_falta_a" class="form-control">
+                                                            <option value=""></option>
+                                                            
+                                                        </select>
+                                                        <label
+                                                            for="id_falta_a">
+                                                            Falta Administrativa <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <select name="id_smd" id="id_smd" class="form-control">
+                                                            <option value=""></option>
+                                                            
+                                                        </select>
+                                                        <label
+                                                            for="id_smd">
+                                                            S/M Diarios <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <select name="hr_arresto" id="hr_arresto" class="form-control">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            $rsN = $cAccion->getCatEstudios();
+                                                            while($rwN = $rsN->fetch(PDO::FETCH_OBJ)){ ?>
+                                                                <option value="<?php echo $rwN->id_nvl_estudios?>">
+                                                                    <?php echo $rwN->descripcion?> 
+                                                                </option>
+                                                            <?php
+                                                            } ?>
+                                                        </select>
+                                                        <label
+                                                            for="hr_arresto">
+                                                            Horas de Arresto <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>                                    
                                         <?php 
                                         if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
                                         ?>
@@ -216,6 +569,7 @@ if ($_SESSION[_is_view_] == 3) {
         </section>
     </div><?php include($dir_fc."inc/menucommon.php") ?>
 </div>
-<?php include("dist/components/catalogos.magnament.php"); ?>
+<?php include("dist/components/remision.magnament.php"); ?>
+<script src="dist/assets/js/select2.full.min.js"></script>
 </body>
 </html>
