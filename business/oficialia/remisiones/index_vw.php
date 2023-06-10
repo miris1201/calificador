@@ -192,7 +192,7 @@ $ruta_app = "";
                                                                     title='Ver Ciudadanos'>
                                                                      <i class=\"fa fa-users\" aria-hidden=\"true\"></i> ($count) Ciudadanos
                                                                 </a> ";
-                                            }else{
+                                            } else {
                                                 $snombre = $cLista->getNmCiudadanos( $iId);
                                             }
 

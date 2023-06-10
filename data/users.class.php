@@ -468,8 +468,7 @@ class cUsers extends BD
                                     edit,
                                     elim,
                                     nuev,
-                                    img
-                                    )
+                                    img )
                                     VALUES (
                                     ?,
                                     ?,
@@ -489,8 +488,7 @@ class cUsers extends BD
                                     ?,
                                     ?,
                                     ?,
-                                    ?
-                                    )";
+                                    ? )";
         $result = $this->conn->prepare($insert);
         $exec->beginTransaction();
 

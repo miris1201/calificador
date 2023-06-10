@@ -247,6 +247,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                     <div class="form-group">
                                                         <input type="number" class="form-control"
                                                             id="folio_rnd" name="folio_rnd"
+                                                            min="0"
                                                             <?php echo $readOnly?> 
                                                             value="">
                                                         <label
@@ -373,7 +374,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                 <div class="col-sm-1">
                                                     <div class="form-group floating-label">
                                                         <input type="number" class="form-control"
-                                                            id="edad" name="edad" min="0"
+                                                            id="edad" name="edad" min="0" max="100"
                                                             <?php echo $readOnly?> 
                                                             value="">
                                                         <label
@@ -471,11 +472,24 @@ if ($_SESSION[_is_view_] == 3) {
                                             <legend>Datos de las faltas</legend>
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <span id="faltas_dtl"></span>
+                                                    <h4>
+                                                        <span id="faltas_dtl" class="text-bold"></span>
+                                                        <i id="fracciones_dtl"></i>
+                                                    </h4>
                                                 </div>
+                                                <!-- <div class="col-sm-12">
+                                                   <h4 id="faltas_dtl" class="text-bold"></h4>
+                                                </div> -->
+                                                <!-- <div class="col-sm-12">
+                                                   <i><h6 id="fracciones_dtl" class="text-bold"></h6></i>
+                                                </div> -->
+                                            </div>
+                                            <div class="row">                                                
                                                 <div class="col-sm-2">
                                                     <div class="form-group floating-label">
-                                                        <select name="id_articulo" id="id_articulo" class="form-control">
+                                                        <select name="id_articulo" 
+                                                                id="id_articulo" 
+                                                                class="form-control">
                                                             <option value=""></option>
                                                             <?php
                                                             $rsArt = $cAccion->getCatArticulos();
@@ -494,9 +508,9 @@ if ($_SESSION[_is_view_] == 3) {
                                                 </div>
                                                 <div class="col-sm-2">
                                                     <div class="form-group floating-label">
-                                                        <select name="id_falta_a" id="id_falta_a" class="form-control">
-                                                            <option value=""></option>
-                                                            
+                                                        <select name="id_falta_a" 
+                                                                id="id_falta_a" 
+                                                                class="form-control">                                                            
                                                         </select>
                                                         <label
                                                             for="id_falta_a">
@@ -504,35 +518,14 @@ if ($_SESSION[_is_view_] == 3) {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2">
-                                                    <div class="form-group floating-label">
-                                                        <select name="id_smd" id="id_smd" class="form-control">
-                                                            <option value=""></option>
-                                                            
-                                                        </select>
-                                                        <label
-                                                            for="id_smd">
-                                                            S/M Diarios <span class="text-danger">*</span>
-                                                        </label>
+                                                <div class="col-sm-1">
+                                                    <div class="form-group">
+                                                        <div id="div_smd"></div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2">
-                                                    <div class="form-group floating-label">
-                                                        <select name="hr_arresto" id="hr_arresto" class="form-control">
-                                                            <option value=""></option>
-                                                            <?php
-                                                            $rsN = $cAccion->getCatEstudios();
-                                                            while($rwN = $rsN->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwN->id_nvl_estudios?>">
-                                                                    <?php echo $rwN->descripcion?> 
-                                                                </option>
-                                                            <?php
-                                                            } ?>
-                                                        </select>
-                                                        <label
-                                                            for="hr_arresto">
-                                                            Horas de Arresto <span class="text-danger">*</span>
-                                                        </label>
+                                                <div class="col-sm-1">
+                                                    <div class="form-group">
+                                                        <div id="div_horas"></div>
                                                     </div>
                                                 </div>
                                             </div>

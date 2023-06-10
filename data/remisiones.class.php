@@ -102,8 +102,12 @@ class cRemision extends BD
         //Incio fin son para paginado
         $milimite = "";
         $condition = "";
+        $actual = date('Y');
+        $condition_a = "DATE_FORMAT(fecha_remision, '%Y') = $actual";
+        
         if ($this->getLimite() == 1){ $milimite = "LIMIT ".$this->getInicio().", ".$this->getFin();}
 
+        
         if ($this->getFiltro() != ""){
             $condition = " WHERE ejercicio = ".$this->getFiltro()." ";
         }
@@ -114,6 +118,7 @@ class cRemision extends BD
                             escolta, sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, 
                             manifiestainfractor, manifiestacalificador, sts, patrullero, escoltan, activo
                       FROM tbl_remision 
+                      WHERE $condition_a
                      $condition 
                     ORDER BY año DESC, folio DESC ".$milimite;
         $result = $this->conn->prepare($query);
@@ -236,6 +241,45 @@ class cRemision extends BD
                       FROM cat_articulos 
                      WHERE activo = 1
                     ORDER BY id_articulo ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getDataFaltas( $id ) {
+        $descripcion = "";
+        $query = "  SELECT A.articulo, A.descripcion
+                      FROM cat_articulos A
+                     WHERE A.id_articulo = $id  ";
+        // echo $query;
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $descripcion = $row->descripcion;
+        }
+        return $descripcion;
+    }
+
+    public function getDataFracciones( $id ) {
+
+        $query = "  SELECT id_articulo_dtl, fraccion
+                      FROM cat_articulos_dtl 
+                     WHERE id_articulo = $id  
+                     ORDER BY id_articulo_dtl ASC";
+        // echo $query;
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getDataFaltasDtl( $id ) {
+
+        $query = "  SELECT fraccion, descripcion, 
+                           dias_min, dias_max, 
+                           hr_min, hr_max
+                      FROM cat_articulos_dtl
+                     WHERE id_articulo_dtl = $id  ";
+        // echo $query;
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;

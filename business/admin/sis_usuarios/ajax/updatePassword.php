@@ -28,7 +28,7 @@ if($delista == 1){
     }
 }else{
     $cAccion->setId_usuario($_SESSION[id_usr]);
-    $cAccion->setClave(hash('sha256',$clave));
+    $cAccion->setClave(md5($clave));
     $rows   = $cAccion->getRegbyPW();
 }
 
@@ -37,7 +37,7 @@ if($rows == 1){
     if($nuevaclave == $confclave){
 
         $date = date('Y-m-d H:i:s');
-        $cAccion->setNvaclave(hash('sha256',$nuevaclave));
+        $cAccion->setNvaclave(md5($nuevaclave));
         $update = $cAccion->updateRegPW($date);
         
         if (is_numeric($update)) {
