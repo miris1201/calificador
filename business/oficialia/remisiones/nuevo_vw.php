@@ -584,14 +584,13 @@ if ($_SESSION[_is_view_] == 3) {
                                                         id="bntInfractor"
                                                         style="background-color: #B0C4DE;">
                                                         <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                        Guardar infractor
+                                                        Agregar infractor
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="col-sm-8">
                                                 <table class="table table-bordered" id="tabla_infractores">
                                                     <tr>
-                                                        <th></th>
                                                         <th></th>
                                                         <th>Infractores</th>
                                                     </tr>
@@ -622,16 +621,16 @@ if ($_SESSION[_is_view_] == 3) {
                                                                 onclick='handleDelete(<?php echo $id_ciudadano?>)'>
                                                                 <span class='fa fa-times fa-2x-2x'></span>
                                                             </a>
-                                                        </td>
-                                                        <td id='infractores' width='5%'>
                                                             <a class="btn ink-reaction btn-icon-toggle"
                                                                 onclick='handleUpdate(<?php echo $id_ciudadano?>)'>
                                                                 <span class='fa fa-pencil fa-2x-2x'></span>
                                                             </a>
                                                         </td>
-                                                        <strong><?php echo $nombre?> </strong> / Sexo: <?php echo $genero?> / Edad: <?php echo $edad?><br>
-                                                        <span>| Estado Físico: <?php echo $edofisico?> / Estudios: <?php echo $nvl_estudios?> / Ocupación: <?php echo $ocupacion?>  </span> <br>
-                                                        <span>| Domicilio: <?php echo $domicilio?> </span> <br>                                                                                                                                                               
+                                                        <td>
+                                                            <strong><?php echo $nombre?> </strong> / Sexo: <?php echo $genero?> / Edad: <?php echo $edad?><br>
+                                                            <span>| Estado Físico: <?php echo $edofisico?> / Estudios: <?php echo $nvl_estudios?> / Ocupación: <?php echo $ocupacion?>  </span> <br>
+                                                            <span>| Domicilio: <?php echo $domicilio?> </span> <br>   
+                                                        </td>                                                                                                                                                            
                                                         <?php
                                                     } ?>
                                                 </div>
