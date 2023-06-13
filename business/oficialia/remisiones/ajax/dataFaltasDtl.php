@@ -34,18 +34,27 @@ if(isset($id) && is_numeric($id)){
         $hr_min      = $rw->hr_min;
         $hr_max      = $rw->hr_max;
 
-        $input_smd = "<input type='number' class='form-control' 
-                        id='dias_smd' name='dias_smd'
-                        min='$dias_min' max='$dias_max'>
+        $input_smd = "  <input type='number' class='form-control' 
+                            id='dias_smd' name='dias_smd'
+                            list='lista_dias'
+                            min='$dias_min' max='$dias_max'>
                         <label for='dias_smd'>S/M Diarios
                         </label>
-                        ";
+                        <datalist id='lista_dias'>
+                            <option value='Días mínimo: $dias_min'></option>
+                            <option value='Días máximo: $dias_max'></option>
+                        </datalist>";
 
-        $input_hrs = "<input type='number' class='form-control' 
-                        id='hr_arresto' name='hr_arresto'
-                        min='$hr_min' max='$hr_max'>
+        $input_hrs = "  <input type='number' class='form-control' 
+                            id='hr_arresto' name='hr_arresto'
+                            list='lista_horas'
+                            min='$hr_min' max='$hr_min'>
                         <label for='hr_arresto'>Hr de arresto 
-                        </label>";
+                        </label>
+                        <datalist id='lista_horas'>
+                            <option value='Horas mínimo: $hr_min'></option>
+                            <option value='Horas máximo: $hr_max'></option>
+                        </datalist>";
 
     }
 }

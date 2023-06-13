@@ -34,14 +34,22 @@ $_SESSION[_type_] = $type;
 
 
 $id = 0;
+$fec_remision = $horaActual;
+$patrulla    = "";
+$agente      = "";
+$escolta     = "";
+$id_colonia  = "";
+$sector      = "";
+$calle       = "";
+$entrecalle1 = "";
+$entrecalle2 = "";
+$observaciones = "";
 
 $readOnly   = "";
 $showInput  = "";
 $frmName = "frmData";
 
-
-$direccion  = 0;
-$area       = 0;
+$showInfractor = "";
 $return_paginacion = "";
 $requerido  = "";
 
@@ -53,15 +61,25 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
     } else {
         $id = $_SESSION[_editar_];
 
-        $rsEditar    = $cAccion->getUMAbyid($id);
+        $rsR    = $cAccion->getRemisionbyid($id);
 
-        $rsEditar->rowCount();
-        if ($rsEditar->rowCount() > 0) {
-            $arrEdi = $rsEditar->fetch(PDO::FETCH_OBJ);
+        if ($rsR->rowCount() > 0) {
+            $arrR = $rsR->fetch(PDO::FETCH_OBJ);
 
-            $id_smd      = $arrEdi->id_smd;
-            $ejercicio   = $arrEdi->ejercicio;
-            $salario     = $arrEdi->salario;
+            $id_remision = $arrR->id_remision;
+            $id_turno    = $arrR->id_turno;
+            $folio       = $arrR->folio;
+            $patrulla    = $arrR->patrulla;
+            $agente      = $arrR->agente;
+            $escolta     = $arrR->escolta;
+            $id_colonia  = $arrR->id_colonia;
+            $sector      = $arrR->sector;
+            $calle       = $arrR->calle;
+            $entrecalle1 = $arrR->entrecalle1;
+            $entrecalle2 = $arrR->entrecalle2;
+            $observaciones = $arrR->observaciones;
+            $fec_remision = $arrR->fecha_remision;
+
 
             if(!isset($pag)){ $pag=1;}
             if(!isset($busqueda) || $busqueda == ""){$busqueda = "";}
@@ -70,7 +88,11 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
             $showinfo = false;
         }
     }
-} 
+}
+
+if ($_SESSION[_is_view_] == 1) {
+    $showInfractor = "style='display: none'";
+}
 
 
 if ($_SESSION[_is_view_] == 2) {
@@ -103,7 +125,7 @@ if ($_SESSION[_is_view_] == 3) {
     <div class="offcanvas"></div>
     <div id="content">
         <section>
-            <div class="section-body contain-lg">
+            <div class="section-body">
                 <div class="row">
                     <div class="col-lg-8"></div>
                     <div class="col-lg-4">
@@ -145,11 +167,31 @@ if ($_SESSION[_is_view_] == 3) {
                             <form id="<?php echo $frmName?>" 
                                 class="form" role="form" 
                                 method="post">
-                                <input type="hidden" name="current_file" id="current_file" value="<?php echo $param."index".$return_paginacion?>"/>                               
+                                <input type="hidden" name="current_file" id="current_file" 
+                                    value="<?php echo $param."index".$return_paginacion?>"/>                               
                                 <input type="hidden" name="id_remision" id="id_remision" value="<?php echo $id?>">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-12 col-sm-12">
-                                        <fieldset><legend>Datos de <?php echo $titulo_curr?></legend>                                        
+                                        <fieldset><legend>Datos de <?php echo $titulo_curr?></legend>          
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <div class="form-group">
+                                                        <input 
+                                                            type="datetime-local" 
+                                                            class="form-control"
+                                                            name="fecha_remision"
+                                                            id="fecha_remision"
+                                                            autocomplete="off"
+                                                            required
+                                                            value="<?php echo $fec_remision?>"
+                                                            <?php echo $readOnly?>>
+                                                        <label
+                                                            for="fecha_remision">
+                                                            Fecha Remisión <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>                              
                                             <div class="row">                                            
                                                 <div class="col-sm-2">
                                                     <div class="form-group floating-label">
@@ -160,7 +202,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                             id="patrulla"
                                                             autocomplete="off"
                                                             required
-                                                            value=""
+                                                            value="<?php echo $patrulla?>"
                                                             <?php echo $readOnly?>>
                                                         <label
                                                             for="patrulla">
@@ -176,8 +218,14 @@ if ($_SESSION[_is_view_] == 3) {
                                                             <option value=""></option>
                                                             <?php
                                                             $rsP = $cAccion->getCatElementos();
-                                                            while($rwP = $rsP->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwP->id_usuario?>">
+                                                            while($rwP = $rsP->fetch(PDO::FETCH_OBJ)){ 
+                                                                $selA = "";
+                                                                if ($rwP->no_empleado == $agente) {
+                                                                    $selA = "selected";
+                                                                }
+                                                                
+                                                                ?>
+                                                                <option value="<?php echo $rwP->id_usuario?>" <?php echo $selA?>>
                                                                     <?php echo $rwP->no_empleado .' - ' .$rwP->nm_elemento?> 
                                                                 </option>
                                                             <?php
@@ -196,8 +244,13 @@ if ($_SESSION[_is_view_] == 3) {
                                                             <option value=""></option>
                                                             <?php
                                                             $rsE = $cAccion->getCatElementos();
-                                                            while($rwE = $rsE->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwE->id_usuario?>">
+                                                            while($rwE = $rsE->fetch(PDO::FETCH_OBJ)){ 
+                                                                $selE = "";
+                                                                if ($rwE->no_empleado == $escolta) {
+                                                                    $selE = "selected";
+                                                                }
+                                                                ?>
+                                                                <option value="<?php echo $rwE->id_usuario?>" <?php echo $selE?>>
                                                                     <?php echo $rwE->no_empleado .' - ' .$rwE->nm_elemento?> 
                                                                 </option>
                                                             <?php
@@ -218,8 +271,13 @@ if ($_SESSION[_is_view_] == 3) {
                                                             <option value=""></option>
                                                             <?php
                                                             $rs = $cAccion->getCatColonias();
-                                                            while($rwC = $rs->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwC->id_comunidad?>">
+                                                            while($rwC = $rs->fetch(PDO::FETCH_OBJ)){ 
+                                                                $selC = "";
+                                                                if ($rwC->id_comunidad == $id_colonia) {
+                                                                    $selC = "selected";
+                                                                }
+                                                                ?>
+                                                                <option value="<?php echo $rwC->id_comunidad?>" <?php echo $selC?>>
                                                                     <?php echo $rwC->colonia. ' ('.$rwC->tipologia .') '?> 
                                                                 </option>
                                                             <?php
@@ -236,7 +294,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <input type="text" class="form-control"
                                                             id="sector" name="sector"
                                                             <?php echo $readOnly?> 
-                                                            value="">
+                                                            value=" <?php echo $sector?>">
                                                         <label
                                                             for="sector">
                                                             Sector <span class="text-danger">*</span>
@@ -284,7 +342,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <input type="text" class="form-control"
                                                             id="calle" name="calle"
                                                             <?php echo $readOnly?> 
-                                                            value="">
+                                                            value="<?php echo $calle?> ">
                                                         <label
                                                             for="calle">
                                                             Calle <span class="text-danger">*</span>
@@ -296,7 +354,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <input type="text" class="form-control"
                                                             id="entre_calle" name="entre_calle"
                                                             <?php echo $readOnly?> 
-                                                            value="">
+                                                            value="<?php echo $entrecalle1?> ">
                                                         <label
                                                             for="entre_calle">
                                                             Entre calle <span class="text-danger">*</span>
@@ -308,7 +366,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <input type="text" class="form-control"
                                                             id="y_calle" name="y_calle"
                                                             <?php echo $readOnly?> 
-                                                            value="">
+                                                            value="<?php echo $entrecalle2?> ">
                                                         <label
                                                             for="y_calle">
                                                             Y calle <span class="text-danger">*</span>
@@ -319,9 +377,9 @@ if ($_SESSION[_is_view_] == 3) {
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group floating-label">
-                                                        <textarea name="observaciones" id="observaciones" rows="2"
+                                                        <textarea name="observaciones" id="observaciones" rows="5"
                                                             <?php echo $readOnly?> 
-                                                            class="form-control"></textarea>
+                                                            class="form-control"><?php echo $observaciones?> </textarea>
                                                         <label
                                                             for="observaciones">
                                                             Observaciones <span class="text-danger">*</span>
@@ -330,7 +388,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <fieldset>
+                                        <fieldset id="dataInfractor" <?php echo $showInfractor?>>
                                             <legend>Datos del infractor</legend>
                                             <div class="row">
                                                 <div class="col-sm-4">
@@ -467,35 +525,26 @@ if ($_SESSION[_is_view_] == 3) {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </fieldset>
-                                        <fieldset>
-                                            <legend>Datos de las faltas</legend>
                                             <div class="row">
-                                                <div class="col-sm-12">
+                                                <div class="col-sm-12 form-group">
                                                     <h4>
                                                         <span id="faltas_dtl" class="text-bold"></span>
                                                         <i id="fracciones_dtl"></i>
                                                     </h4>
                                                 </div>
-                                                <!-- <div class="col-sm-12">
-                                                   <h4 id="faltas_dtl" class="text-bold"></h4>
-                                                </div> -->
-                                                <!-- <div class="col-sm-12">
-                                                   <i><h6 id="fracciones_dtl" class="text-bold"></h6></i>
-                                                </div> -->
                                             </div>
                                             <div class="row">                                                
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-1">
                                                     <div class="form-group floating-label">
-                                                        <select name="id_articulo" 
-                                                                id="id_articulo" 
+                                                        <select name="id_articulo"
+                                                                id="id_articulo"
                                                                 class="form-control">
                                                             <option value=""></option>
                                                             <?php
                                                             $rsArt = $cAccion->getCatArticulos();
                                                             while($rwArt = $rsArt->fetch(PDO::FETCH_OBJ)){ ?>
                                                                 <option value="<?php echo $rwArt->id_articulo?>">
-                                                                    <?php echo $rwArt->articulo?> 
+                                                                    <?php echo $rwArt->articulo?>
                                                                 </option>
                                                             <?php
                                                             } ?>
@@ -514,7 +563,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                         </select>
                                                         <label
                                                             for="id_falta_a">
-                                                            Falta Administrativa <span class="text-danger">*</span>
+                                                            Falta Administrativa
+                                                            <span class="text-danger">*</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -528,8 +578,65 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <div id="div_horas"></div>
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-2">
+                                                    <a  title="Regresar a la lista"
+                                                        class="btn ink-reaction"
+                                                        id="bntInfractor"
+                                                        style="background-color: #B0C4DE;">
+                                                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                                        Guardar infractor
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </fieldset>                                    
+                                            <div class="col-sm-8">
+                                                <table class="table table-bordered" id="tabla_infractores">
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Infractores</th>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-10">
+                                                    <legend>Infractores</legend>
+                                                    <?php
+                                                    $rs_Em = $cAccion->getInfractoresById( $id_remision );
+
+                                                    while($row = $rs_Em->fetch(PDO::FETCH_OBJ) ){
+                                                        $id_ciudadano = $row->id_ciudadano;
+                                                        $id_turno     = $row->id_turno;
+                                                        $nombre       = $row->nm_ciudadano;
+                                                        $sexo = $row->sexo;
+                                                        $edad = $row->edad;
+                                                        $domicilio = $row->domicilio;
+                                                        $edofisico = $row->edofisico;
+                                                        $nvl_estudios = $row->nvl_estudios;
+                                                        $ocupacion = $row->ocupacion;
+
+                                                        $genero = ($sexo == 1) ? 'Femenino' : 'Masculino';
+
+                                                        ?>
+                                                        <td id='infractores' width='5%'>
+                                                            <a class="btn ink-reaction btn-icon-toggle"
+                                                                onclick='handleDelete(<?php echo $id_ciudadano?>)'>
+                                                                <span class='fa fa-times fa-2x-2x'></span>
+                                                            </a>
+                                                        </td>
+                                                        <td id='infractores' width='5%'>
+                                                            <a class="btn ink-reaction btn-icon-toggle"
+                                                                onclick='handleUpdate(<?php echo $id_ciudadano?>)'>
+                                                                <span class='fa fa-pencil fa-2x-2x'></span>
+                                                            </a>
+                                                        </td>
+                                                        <strong><?php echo $nombre?> </strong> / Sexo: <?php echo $genero?> / Edad: <?php echo $edad?><br>
+                                                        <span>| Estado Físico: <?php echo $edofisico?> / Estudios: <?php echo $nvl_estudios?> / Ocupación: <?php echo $ocupacion?>  </span> <br>
+                                                        <span>| Domicilio: <?php echo $domicilio?> </span> <br>                                                                                                                                                               
+                                                        <?php
+                                                    } ?>
+                                                </div>
+                                            </div><br>
+                                        </fieldset>                                                                            
                                         <?php 
                                         if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
                                         ?>

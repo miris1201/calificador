@@ -1,11 +1,13 @@
 <?php
 $dir_fc = "../../../../";
 
-include_once $dir_fc.'data/catalogos.class.php';
+include_once $dir_fc.'data/remisiones.class.php';
+include_once $dir_fc.'common/function.class.php';
 include_once $dir_fc.'connections/trop.php'; 
 include_once $dir_fc.'connections/php_config.php'; 
 
-$cAccion  = new cCatalogos();
+$cAccion  = new cRemision();
+$cFn      = new cFunction();
 
 $nombre         = "";
 $descripcion    = "";

@@ -285,6 +285,33 @@ class cRemision extends BD
         return $result;
     }
 
+    public function getRemisionbyid( $id ) {
+
+        $query = "  SELECT id_remision, id_usr_captura, fecha_captura, fecha_remision, id_ciudadano, 
+                           id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, agente, escolta, 
+                           sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, manifiestainfractor, 
+                           manifiestacalificador, sts, patrullero, escoltan, activo
+                      FROM tbl_remision
+                     WHERE id_remision = $id  ";
+        // echo $query;
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getInfractoresById( $id ) {
+
+        $query = "  SELECT id_ciudadano, id_remision, folio, subfolio, ejercicio, id_turno, turno, 
+                           CONCAT_WS(' ', nombre, apepa, apema) AS nm_ciudadano,
+                           genero, sexo, edad, domicilio, edofisico, 
+                           nvl_estudios, ocupacion
+                      FROM tbl_ciudadanos
+                     WHERE id_remision = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
     public function closeOut(){
         $this->conn = null;
     }
