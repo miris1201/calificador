@@ -90,9 +90,9 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
     }
 }
 
-if ($_SESSION[_is_view_] == 1) {
-    $showInfractor = "style='display: none'";
-}
+// if ($_SESSION[_is_view_] == 1) {
+//     $showInfractor = "style='display: none'";
+// }
 
 
 if ($_SESSION[_is_view_] == 2) {
@@ -150,11 +150,11 @@ if ($_SESSION[_is_view_] == 3) {
                 if($_SESSION[nuev] == "1") {
                     ?>
                     <div class="card">
-                        <div class="card-head" style="background-color: #5F9EA0;">
+                        <div class="card-head" style="background-color: #17A589;">
                             <div class="tools pull-left">
                                 <a  title="Regresar a la lista"
                                     class="btn ink-reaction btn-floating-action" 
-                                    style="background-color: #B0C4DE;"
+                                    style="background-color: #5499C7;"
                                     href='<?php echo $param."index".$return_paginacion?>'>
                                     <i class="fa fa-arrow-left"></i>
                                 </a>  
@@ -162,6 +162,17 @@ if ($_SESSION[_is_view_] == 3) {
                             <strong class="text-uppercase">
                                 <?php echo $titulo_edi. " " .$titulo_curr?>
                             </strong>
+                            <div class="tools pull-right">
+                                <div class="col-sm-2">
+                                    <a  title="Regresar a la lista"
+                                        class="btn ink-reaction"
+                                        id="bntInfractor"
+                                        style="background-color: #0099CC; " >
+                                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                        Agregar infractor
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <form id="<?php echo $frmName?>" 
@@ -191,8 +202,8 @@ if ($_SESSION[_is_view_] == 3) {
                                                         </label>
                                                     </div>
                                                 </div>
-                                            </div>                              
-                                            <div class="row">                                            
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-sm-2">
                                                     <div class="form-group floating-label">
                                                         <input 
@@ -388,270 +399,22 @@ if ($_SESSION[_is_view_] == 3) {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <fieldset id="dataInfractor" <?php echo $showInfractor?>>
-                                            <legend>Datos del infractor</legend>
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <div class="form-group floating-label">
-                                                        <input type="text" class="form-control"
-                                                            id="nombre" name="nombre"
-                                                            <?php echo $readOnly?> 
-                                                            value="">
-                                                        <label
-                                                            for="nombre">
-                                                            Nombre <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group floating-label">
-                                                        <input type="text" class="form-control"
-                                                            id="apepa" name="apepa"
-                                                            <?php echo $readOnly?> 
-                                                            value="">
-                                                        <label
-                                                            for="apepa">
-                                                            Apellido Paterno <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group floating-label">
-                                                        <input type="text" class="form-control"
-                                                            id="apema" name="apema"
-                                                            <?php echo $readOnly?> 
-                                                            value="">
-                                                        <label
-                                                            for="apema">
-                                                            Apellido Materno <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-1">
-                                                    <div class="form-group floating-label">
-                                                        <input type="number" class="form-control"
-                                                            id="edad" name="edad" min="0" max="100"
-                                                            <?php echo $readOnly?> 
-                                                            value="">
-                                                        <label
-                                                            for="edad">
-                                                            Edad <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <div class="form-group floating-label">
-                                                        <select name="sexo" id="sexo" class="form-control">
-                                                            <option value=""></option>
-                                                            <option value="1">Femenino</option>
-                                                            <option value="2">Masculino</option>
-                                                        </select>
-                                                        <label
-                                                            for="sexo">
-                                                            Sexo <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <div class="form-group floating-label">
-                                                        <select name="id_edo_fisico" id="id_edo_fisico" class="form-control">
-                                                            <option value=""></option>
-                                                            <?php
-                                                            $rsF = $cAccion->getCatEstadoFisico();
-                                                            while($rwF = $rsF->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwF->id_edo_fisico?>">
-                                                                    <?php echo $rwF->descripcion?> 
-                                                                </option>
-                                                            <?php
-                                                            } ?>
-                                                        </select>
-                                                        <label
-                                                            for="id_edo_fisico">
-                                                            Estado Físico <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group floating-label">
-                                                        <select name="id_ocupacion" id="id_ocupacion" class="form-control">
-                                                            <option value=""></option>
-                                                            <?php
-                                                            $rsO = $cAccion->getCatOcupacion();
-                                                            while($rwO = $rsO->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwO->id_ocupacion?>">
-                                                                    <?php echo $rwO->descripcion?> 
-                                                                </option>
-                                                            <?php
-                                                            } ?>
-                                                        </select>
-                                                        <label
-                                                            for="id_ocupacion">
-                                                            Ocupación <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group floating-label">
-                                                        <select name="id_estudios" id="id_estudios" class="form-control">
-                                                            <option value=""></option>
-                                                            <?php
-                                                            $rsN = $cAccion->getCatEstudios();
-                                                            while($rwN = $rsN->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwN->id_nvl_estudios?>">
-                                                                    <?php echo $rwN->descripcion?> 
-                                                                </option>
-                                                            <?php
-                                                            } ?>
-                                                        </select>
-                                                        <label
-                                                            for="id_estudios">
-                                                            Nivel de Estudios <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="form-group floating-label">
-                                                        <textarea name="domicilio" id="domicilio" rows="2"
-                                                            <?php echo $readOnly?> 
-                                                            class="form-control"></textarea>
-                                                        <label
-                                                            for="domicilio">
-                                                            Domicilio <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 form-group">
-                                                    <h4>
-                                                        <span id="faltas_dtl" class="text-bold"></span>
-                                                        <i id="fracciones_dtl"></i>
-                                                    </h4>
-                                                </div>
-                                            </div>
-                                            <div class="row">                                                
-                                                <div class="col-sm-1">
-                                                    <div class="form-group floating-label">
-                                                        <select name="id_articulo"
-                                                                id="id_articulo"
-                                                                class="form-control">
-                                                            <option value=""></option>
-                                                            <?php
-                                                            $rsArt = $cAccion->getCatArticulos();
-                                                            while($rwArt = $rsArt->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwArt->id_articulo?>">
-                                                                    <?php echo $rwArt->articulo?>
-                                                                </option>
-                                                            <?php
-                                                            } ?>
-                                                        </select>
-                                                        <label
-                                                            for="id_articulo">
-                                                            Artículo <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <div class="form-group floating-label">
-                                                        <select name="id_falta_a" 
-                                                                id="id_falta_a" 
-                                                                class="form-control">                                                            
-                                                        </select>
-                                                        <label
-                                                            for="id_falta_a">
-                                                            Falta Administrativa
-                                                            <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-1">
-                                                    <div class="form-group">
-                                                        <div id="div_smd"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-1">
-                                                    <div class="form-group">
-                                                        <div id="div_horas"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <a  title="Regresar a la lista"
-                                                        class="btn ink-reaction"
-                                                        id="bntInfractor"
-                                                        style="background-color: #B0C4DE;">
-                                                        <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                                        Agregar infractor
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <table class="table table-bordered" id="tabla_infractores">
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Infractores</th>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-10">
-                                                    <legend>Infractores</legend>
-                                                    <?php
-                                                    $rs_Em = $cAccion->getInfractoresById( $id_remision );
-
-                                                    while($row = $rs_Em->fetch(PDO::FETCH_OBJ) ){
-                                                        $id_ciudadano = $row->id_ciudadano;
-                                                        $id_turno     = $row->id_turno;
-                                                        $nombre       = $row->nm_ciudadano;
-                                                        $sexo = $row->sexo;
-                                                        $edad = $row->edad;
-                                                        $domicilio = $row->domicilio;
-                                                        $edofisico = $row->edofisico;
-                                                        $nvl_estudios = $row->nvl_estudios;
-                                                        $ocupacion = $row->ocupacion;
-
-                                                        $genero = ($sexo == 1) ? 'Femenino' : 'Masculino';
-
-                                                        ?>
-                                                        <td id='infractores' width='5%'>
-                                                            <a class="btn ink-reaction btn-icon-toggle"
-                                                                onclick='handleDelete(<?php echo $id_ciudadano?>)'>
-                                                                <span class='fa fa-times fa-2x-2x'></span>
-                                                            </a>
-                                                            <a class="btn ink-reaction btn-icon-toggle"
-                                                                onclick='handleUpdate(<?php echo $id_ciudadano?>)'>
-                                                                <span class='fa fa-pencil fa-2x-2x'></span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <strong><?php echo $nombre?> </strong> / Sexo: <?php echo $genero?> / Edad: <?php echo $edad?><br>
-                                                            <span>| Estado Físico: <?php echo $edofisico?> / Estudios: <?php echo $nvl_estudios?> / Ocupación: <?php echo $ocupacion?>  </span> <br>
-                                                            <span>| Domicilio: <?php echo $domicilio?> </span> <br>   
-                                                        </td>                                                                                                                                                            
-                                                        <?php
-                                                    } ?>
-                                                </div>
-                                            </div><br>
-                                        </fieldset>                                                                            
-                                        <?php 
+                                        <?php                                             
                                         if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
                                         ?>
-                                        <fieldset>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
-                                                    <button 
-                                                        type="submit" 
-                                                        class="btn ink-reaction btn-block"
-                                                        style="background-color: #B0C4DE;"  
-                                                        id="btn_guardar">
-                                                        <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
-                                                    </button>
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
+                                                        <button
+                                                            type="submit"
+                                                            class="btn ink-reaction btn-block"
+                                                            style="background-color: #0099CC;"  
+                                                            id="btn_guardar">
+                                                            <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </fieldset>
+                                            </fieldset>
                                         <?php 
                                         }
                                         ?>
@@ -661,7 +424,7 @@ if ($_SESSION[_is_view_] == 3) {
                         </div>
                     </div>
                 <?php
-                }else{
+                } else {
                     include("../../sys/permissions_d.php");
                 }?>
             </div>
@@ -670,5 +433,29 @@ if ($_SESSION[_is_view_] == 3) {
 </div>
 <?php include("dist/components/remision.magnament.php"); ?>
 <script src="dist/assets/js/select2.full.min.js"></script>
+<div class="modal small fade" id="id_modal_infractor"
+    tabindex="-1" role="dialog" 
+    aria-labelledby="myModalLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="modal">×</button>
+                <h5 class="modal-title">Datos del Infractor </h5>
+            </div> 
+            <div class="modal-footer">
+                <button 
+                    type="button" 
+                    class="btn btn-link btn-danger" 
+                    data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

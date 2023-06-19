@@ -131,6 +131,7 @@ const handleSubmitUpdate = (form) => {
         });
 }
 
+
 $('#id_colonia').on('change', function(e) {
     const id = sel('#id_colonia').value;
     const url = `business/oficialia/remisiones/ajax/dataSector.php?id_colonia=${ id }`;
@@ -144,56 +145,64 @@ $('#id_colonia').on('change', function(e) {
         });
 });
 
-$('#id_articulo').on('change', function(e) {
-    const id = sel('#id_articulo').value;
-    const url = `business/oficialia/remisiones/ajax/dataFaltas.php?id=${ id }`;
-    fetch(url)
-            .then((resp) => resp.json())
-            .then(function({ done, resp, alert, descripcion, fracciones }) {
-            if (done == 1) {
-                sel('#faltas_dtl').innerHTML = descripcion;
-                sel('#fracciones_dtl').innerHTML = '';
-                sel('#id_falta_a').innerHTML = fracciones;
+let articulo = sel('#id_articulo');
+if (articulo != null) {
 
-            } else {
-                Swal.fire({
-                        icon: alert,
-                        title: 'Oops...',
-                        text: resp
-                    })
-                    .then(() => {
-                        sel("#id_articulo").focus();
-                    });
-            }
-        })
-        .catch(function(error) {
-            console.log('Hubo un problema con la petición');
-        });
-});
+    console.log('hola');
+    $('#id_articulo').on('change', function(e) {
+        const id = sel('#id_articulo').value;
+        const url = `business/oficialia/remisiones/ajax/dataFaltas.php?id=${ id }`;
+        fetch(url)
+                .then((resp) => resp.json())
+                .then(function({ done, resp, alert, descripcion, fracciones }) {
+                if (done == 1) {
+                    sel('#faltas_dtl').innerHTML = descripcion;
+                    sel('#fracciones_dtl').innerHTML = '';
+                    sel('#id_falta_a').innerHTML = fracciones;
 
-$('#id_falta_a').on('change', function(e) {
-    const id = sel('#id_falta_a').value;
-    const url = `business/oficialia/remisiones/ajax/dataFaltasDtl.php?id=${ id }`;
-    fetch(url)
-            .then((resp) => resp.json())
-            .then(function({ done, resp, alert, descripcion, input_smd, input_hrs }) {
-            if (done == 1) {
-                sel('#fracciones_dtl').innerHTML = descripcion;
-                sel('#div_smd').innerHTML = input_smd;
-                sel('#div_horas').innerHTML = input_hrs;
+                } else {
+                    Swal.fire({
+                            icon: alert,
+                            title: 'Oops...',
+                            text: resp
+                        })
+                        .then(() => {
+                            sel("#id_articulo").focus();
+                        });
+                }
+            })
+            .catch(function(error) {
+                console.log('Hubo un problema con la petición');
+            });
+    });
+}
 
-            } else {
-                Swal.fire({
-                        icon: alert,
-                        title: 'Oops...',
-                        text: resp
-                    })
-                    .then(() => {
-                        sel("#id_articulo").focus();
-                    });
-            }
-        })
-        .catch(function(error) {
-            console.log('Hubo un problema con la petición');
-        });
-});
+let falta = sel('#id_falta_a');
+if (falta != null) {
+    $('#id_falta_a').on('change', function(e) {
+        const id = sel('#id_falta_a').value;
+        const url = `business/oficialia/remisiones/ajax/dataFaltasDtl.php?id=${ id }`;
+        fetch(url)
+                .then((resp) => resp.json())
+                .then(function({ done, resp, alert, descripcion, input_smd, input_hrs }) {
+                if (done == 1) {
+                    sel('#fracciones_dtl').innerHTML = descripcion;
+                    sel('#div_smd').innerHTML = input_smd;
+                    sel('#div_horas').innerHTML = input_hrs;
+
+                } else {
+                    Swal.fire({
+                            icon: alert,
+                            title: 'Oops...',
+                            text: resp
+                        })
+                        .then(() => {
+                            sel("#id_articulo").focus();
+                        });
+                }
+            })
+            .catch(function(error) {
+                console.log('Hubo un problema con la petición');
+            });
+    });
+}

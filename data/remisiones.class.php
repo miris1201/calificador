@@ -303,13 +303,39 @@ class cRemision extends BD
 
         $query = "  SELECT id_ciudadano, id_remision, folio, subfolio, ejercicio, id_turno, turno, 
                            CONCAT_WS(' ', nombre, apepa, apema) AS nm_ciudadano,
-                           genero, sexo, edad, domicilio, edofisico, 
+                           genero, sexo, edad, domicilio, id_edo_fisico, id_nvl_estudios,
                            nvl_estudios, ocupacion
                       FROM tbl_ciudadanos
                      WHERE id_remision = $id  ";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
+    }
+
+    public function getEdoFisicoById( $id ) {
+        $descripcion = "";
+        $query = "  SELECT id_edo_fisico, descripcion
+                      FROM cat_edo_fisico 
+                     WHERE id_edo_fisico = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $descripcion = $row->descripcion;
+        }
+        return $descripcion;
+    }
+
+    public function getEstudiosById( $id ) {
+        $descripcion = "";
+        $query = "  SELECT id_nvl_estudios, descripcion
+                      FROM cat_nivel_estudios 
+                     WHERE id_nvl_estudios = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $descripcion = $row->descripcion;
+        }
+        return $descripcion;
     }
 
     public function closeOut(){
