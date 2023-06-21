@@ -80,7 +80,6 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
             $observaciones = $arrR->observaciones;
             $fec_remision = $arrR->fecha_remision;
 
-
             if(!isset($pag)){ $pag=1;}
             if(!isset($busqueda) || $busqueda == ""){$busqueda = "";}
             $return_paginacion = "&pag=".$pag."&busqueda=".$busqueda;
@@ -150,11 +149,11 @@ if ($_SESSION[_is_view_] == 3) {
                 if($_SESSION[nuev] == "1") {
                     ?>
                     <div class="card">
-                        <div class="card-head" style="background-color: #17A589;">
+                        <div class="card-head" style="background-color: #5A96E3;">
                             <div class="tools pull-left">
                                 <a  title="Regresar a la lista"
                                     class="btn ink-reaction btn-floating-action" 
-                                    style="background-color: #5499C7;"
+                                    style="background-color: #E7CEA6;"
                                     href='<?php echo $param."index".$return_paginacion?>'>
                                     <i class="fa fa-arrow-left"></i>
                                 </a>  
@@ -167,7 +166,7 @@ if ($_SESSION[_is_view_] == 3) {
                                     <a  title="Regresar a la lista"
                                         class="btn ink-reaction"
                                         id="bntInfractor"
-                                        style="background-color: #0099CC; " >
+                                        style="background-color: #E7CEA6; " >
                                         <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         Agregar infractor
                                     </a>
@@ -408,7 +407,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <button
                                                             type="submit"
                                                             class="btn ink-reaction btn-block"
-                                                            style="background-color: #0099CC;"  
+                                                            style="background-color: #E7CEA6;"  
                                                             id="btn_guardar">
                                                             <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
                                                         </button>

@@ -48,7 +48,7 @@ if ($busqueda == "") {
     $fPaginacion = "&busqueda=".$busqueda;
     
     $back = "<a type='button' class='btn btn-floating-action ink-reaction' 
-                style='background-color: #B0C4DE;' 
+                style='background-color: #E7CEA6;' 
                 href='".$param."index' title='(Eliminar filtro de búsqueda)'>
                 <span class='fa fa-filter'></span>
             </a>";
@@ -108,12 +108,12 @@ $ruta_app = "";
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-head" style="background-color: #5F9EA0;">
+                    <div class="card-head" style="background-color: #5A96E3;">
                         <div class="tools pull-left">
                             <?php
                             if($_SESSION[nuev] == 1) { ?>
                                 <a class="btn ink-reaction btn-floating-action"
-                                    style="background-color: #B0C4DE;" 
+                                    style="background-color: #E7CEA6;" 
                                    onclick="openMyLink(1,0, '<?php echo $param?>nuevo');"
                                    title="Agregar un nuevo Registro">
                                     <i class="fa fa-plus"></i>

@@ -99,13 +99,13 @@ $cLista->closeOut();
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-head" style="background-color: #5F9EA0;">
+                    <div class="card-head" style="background-color: #5A96E3;">
                         <div class="tools pull-left">
                             <?php
                             if($_SESSION[nuev] == "1") {
                                 ?>
                                 <a class="btn ink-reaction btn-floating-action"
-                                    style="background-color: #B0C4DE;" 
+                                    style="background-color: #E7CEA6;" 
                                     onclick="openMyLink(1,0, '<?php echo $param?>nuevo');"
                                     title="Agregar un nuevo Registro">
                                     <i class="fa fa-plus text-light"></i>
@@ -253,7 +253,7 @@ $cLista->closeOut();
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #5F9EA0;">
+            <div class="modal-header" style="background-color: #5A96E3;">
                 <button 
                     type="button" 
                     class="close" 
@@ -299,7 +299,7 @@ $cLista->closeOut();
                         type="submit" 
                         id="btnHandleSubmitSearch" 
                         class="btn ink-reaction" 
-                        style="background-color: #B0C4DE;">
+                        style="background-color: #E7CEA6;">
                         Realizar Búsqueda
                     </button>
                 </div>

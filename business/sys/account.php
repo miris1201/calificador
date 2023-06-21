@@ -102,10 +102,10 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
                             $card_style   = "style-gray-light";
                         }
                         ?>
-                        <div class="card-head" style="background-color: #5F9EA0;">
+                        <div class="card-head" style="background-color: #5A96E3;">
                             <div class="tools pull-left">
                                 <a class="btn ink-reaction btn-floating-action"
-                                    style="background-color: #B0C4DE;"
+                                    style="background-color: #E7CEA6;"
                                    href='<?php echo $raiz?>?controller=business&action=show' 
                                    title="Regresar al inicio">
                                    <i class="fa fa-arrow-left"></i>
@@ -173,7 +173,7 @@ if(!isset($id) || !is_numeric($id) || $id<= 0){
                                                 <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
                                                     <button type="button" 
                                                         class="btn ink-reaction btn-block"
-                                                        style="background-color: #B0C4DE;"  
+                                                        style="background-color: #E7CEA6;"  
                                                         id="btn_cp"
                                                         onclick="cpwModal()">
                                                         <i class="fa fa-key"></i> 

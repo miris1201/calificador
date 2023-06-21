@@ -126,10 +126,10 @@ if ($_SESSION[_is_view_] == 3) {
                 if($_SESSION[nuev] == "1") {
                     ?>
                     <div class="card">
-                        <div class="card-head" style="background-color: #5F9EA0;">
+                        <div class="card-head" style="background-color: #5A96E3;">
                             <div class="tools pull-left">
                                 <a class="btn ink-reaction btn-floating-action"
-                                    style="background-color: #B0C4DE;" 
+                                    style="background-color: #E7CEA6;" 
                                     href='<?php echo $param."index".$return_paginacion?>'
                                     title="Regresar a la lista">
                                     <i class="fa fa-arrow-left"></i>
@@ -336,7 +336,7 @@ if ($_SESSION[_is_view_] == 3) {
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
                                                     <button type="submit" id="btn_guardar"
-                                                        style="background-color: #B0C4DE;" 
+                                                        style="background-color: #E7CEA6;" 
                                                         class="btn ink-reaction btn-block">
                                                         <span class="glyphicon glyphicon-floppy-disk"></span> 
                                                         Guardar Cambios
