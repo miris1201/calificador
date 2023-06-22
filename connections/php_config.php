@@ -33,6 +33,10 @@ define('_editar_master_', 's_peditar_master_tram_'.$proyId);
 define('_type_', 's_is_type_'.$proyId);
 define('_menu_', 'id_menu_navega_'.$proyId);
 
+define('id_turno', 'id_turno_'.$proyId);
+define('id_juez', 'id_juez'.$proyId);
+define('id_secretario', 'id_secretario'.$proyId);
+
 //Sesiones busqueda Reportes
 define('array_filtros', 'array_filtros'.$proyId );
 define('descripcion_filtros', 'descripcion_filtros'.$proyId );

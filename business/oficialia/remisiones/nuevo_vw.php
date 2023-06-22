@@ -166,7 +166,7 @@ if ($_SESSION[_is_view_] == 3) {
                                     <a  title="Regresar a la lista"
                                         class="btn ink-reaction"
                                         id="bntInfractor"
-                                        style="background-color: #E7CEA6; " >
+                                        style="background-color: #E7CEA6;">
                                         <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         Agregar infractor
                                     </a>

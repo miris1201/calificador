@@ -74,6 +74,8 @@ $cLista->setLimite(1);
 $rsRegShow = $cLista->getAllReg(); //Trae todos los registros (ya le puse limite)
 
 $ruta_app = "";
+
+echo $_SESSION[id_secretario];
 ?>
 <!DOCTYPE html>
 <html>

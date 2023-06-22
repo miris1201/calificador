@@ -1,4 +1,5 @@
 <?php
+session_start();
 $dir_fc = "../../../../";
 
 include_once $dir_fc.'connections/trop.php'; 
@@ -29,7 +30,8 @@ $alert = "warning";
 
 extract($_REQUEST);
 
-if(  $patrulla = ""
+if( isset($_SESSION[id_usr])
+    || $patrulla = ""
     || !is_numeric($id_patrullero) || $id_patrullero == 0
     || !is_numeric($id_escolta) || $id_escolta == 0
     || !is_numeric($id_colonia) || $id_colonia == 0
@@ -37,14 +39,13 @@ if(  $patrulla = ""
     || !is_numeric($folio_rnd)
     || !is_numeric($id_autoridad) || $id_autoridad == 0  
     || $calle == "" || $entre_calle == ""
-    || $observaciones == "" 
-
+    || $observaciones == ""
     ){ //Verficando datos vacios
     $resp = "Debes de ingresar correctamente los datos";
 
 }else{    
     //buscar si existe un registro en el mismo año
-    $umaFound = $cAccion->foundUMA( $ejercicio );
+    $umaFound = $cAccion->foundFolio( $ejercicio );
 
     if ($umaFound > 0) {
         $resp = "El ejercicio seleccionado ya existe en la base de datos, favor de revisar el catálogo.";

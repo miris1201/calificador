@@ -35,10 +35,7 @@ echo json_encode(array( "done" => $done,
                         "resp" => $resp, 
                         "alert" => $alert,
                         "descripcion" => $descripcion,
-                        "fracciones" => $fracciones
-
-                    
-                    
+                        "fracciones" => $fracciones                 
                     ));
 
 ?>

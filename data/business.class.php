@@ -12,128 +12,68 @@ class cBusiness extends BD
         $this->conn = new BD();
     }
 
-    function getCountPromociones( $date_ini, $date_end, $searchTerm = null){
+    function getDataTurno(){
 
-        $count = 0;
-
-        $condition = "";
-        
-        if($date_ini != "" && $date_end != "" ){
-            $condition.= " AND DATE_FORMAT (v.fecha_captura, '%Y-%m-%d') 
-                                between '".$date_ini."' AND '".$date_end."'";
-        }
-
-        $query = "SELECT
-                    COUNT(v.id_visita) as countVisitas
-                  FROM tbl_visitas as v
-                  WHERE v.promocion = 1 $condition ";
-                  
-        $result = $this->conn->prepare($query);
-        $result->execute();
-
-        if($result->rowCount() > 0){
-            $rw = $result->fetch(PDO::FETCH_OBJ);
-
-            $count = $rw->countVisitas;
-        }
-        return $count;
-    }
-
-    function getTopClients( $numberTop ){
-        
-        $query = "SELECT
-                    c.id_cliente,
-                    c.id_membresia,
-                    c.id_usuario_captura,
-                    c.id_usuario_modifica,
-                    c.fecha_captura,
-                    c.fecha_modifica,
-                    CONCAT_WS( ' ', c.nombre, c.apellidop, c.apellidom) as nombrecompleto,
-                    c.tel,
-                    c.calle,
-                    c.no_ext,
-                    c.no_int,
-                    c.colonia,
-                    c.cp,
-                    c.mun,
-                    c.estado,
-                    c.rfc,
-                    c.debe,
-                    c.abono,
-                    c.saldo,
-                    c.email,
-                    c.descuento,
-                    c.comentarios,
-                    c.visitas_limitadas,
-                    m.no_membersia,
-                    c.count_promos,
-                    c.visitas_totales,
-                    c.active
-                  FROM cat_cliente as c
-                  LEFT JOIN cat_membresia as m on m.id_cliente = c.id_cliente
-                 ORDER BY c.visitas_totales DESC LIMIT $numberTop";
-                  
+        $query = "  SELECT id_turno, descripcion, activo
+                      FROM cat_turno 
+                     WHERE activo = 1
+                    ORDER BY id_turno ASC ";
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
     }
 
-    public function getMainImgById($id)
-    {
-        $name = "avatar1.png";
-
-        try {
-            $queryUser = "SELECT
-                                img_name
-                            FROM cat_clientes_img as  a
-                           WHERE id_cliente = $id 
-                           ORDER by principal desc
-                           LIMIT 1 ";
-
-            $result = $this->conn->prepare($queryUser);
-            $result->execute();
-
-            if ($result->rowCount() > 0) {
-                $rw = $result->fetch(PDO::FETCH_OBJ);
-                $name = $rw->img_name;
-            }
-
-            return $name;
-        } catch (\PDOException $e) {
-            return "Error!: " . $e->getMessage();
-        }
-    }
-
-    function getCountVisitas( $date_ini, $date_end, $searchTerm = null){
-
-        $count = 0;
-
-        $condition = "";
-
-        if($date_ini != "" && $date_end != "" ){
-            $condition.= " AND DATE_FORMAT (v.fecha_captura, '%Y-%m-%d') 
-                                between '".$date_ini."' AND '".$date_end."'";
-        }
-
-        $query = "SELECT
-                    COUNT(v.id_visita) as countvisita
-                  FROM tbl_visitas as v
-                  WHERE 1 $condition";
-                  
+    function getDataJuez() {
+        $query = "  SELECT id_jueces_dtl, D.id_zona, D.id_turno, id_juez, 
+                            CONCAT_WS(' ', J.nombre, J.apepa, J.apema) as nm_juez,
+                            id_secretario, CONCAT_WS(' ', S.nombre, S.apepa, S.apema) as nm_secretario
+                      FROM tbl_jueces_dtl D
+                    LEFT JOIN ws_usuario J ON id_juez = J.id_usuario
+                    LEFT JOIN ws_usuario S ON id_secretario = S.id_usuario
+                    ORDER BY id_turno ASC ";
         $result = $this->conn->prepare($query);
         $result->execute();
-
-        if( $result->rowCount() > 0){
-            $rw = $result->fetch(PDO::FETCH_OBJ);
-
-            $count = $rw->countvisita;
-        }
-        return $count;
+        return $result;
     }
-  
+
+    function getDataSecretario() {
+        $query = "  SELECT id_jueces_dtl, D.id_zona, D.id_turno, id_juez,
+                            id_secretario, CONCAT_WS(' ', S.nombre, S.apepa, S.apema) as nm_secretario
+                      FROM tbl_jueces_dtl D
+                    LEFT JOIN ws_usuario S ON id_secretario = S.id_usuario
+                    ORDER BY id_turno ASC ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        return $result;
+    }
+
+    public function getTurnoById( $id ) {
+        $turno = "";
+        $query = "  SELECT descripcion
+                      FROM cat_turno 
+                     WHERE id_turno = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $turno = $row->descripcion;
+        }
+        return $turno;
+    }
+
+    public function getUsuarioById($id) {
+        $name = "";
+        $query = "  SELECT CONCAT_WS(' ', nombre, apepa, apema) as nm_completo
+                      FROM ws_usuario 
+                     WHERE id_usuario = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $name = $row->nm_completo;
+        }
+        return $name;
+    }
+      
     public function closeOut(){
         $this->conn = null;
     }
-  
-
 }
