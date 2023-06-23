@@ -114,8 +114,8 @@ class cRemision extends BD
 
         $query = "  SELECT id_remision, id_usr_captura, fecha_captura, id_ciudadano, 
                              DATE_FORMAT(fecha_remision, '%d-%m-%Y %H:%I') as fecha_remision, 
-                            id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, agente, 
-                            escolta, sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, 
+                            id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, id_agente, 
+                            id_escolta, sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, 
                             manifiestainfractor, manifiestacalificador, sts, patrullero, escoltan, activo
                       FROM tbl_remision 
                       WHERE $condition_a
@@ -336,6 +336,89 @@ class cRemision extends BD
             $descripcion = $row->descripcion;
         }
         return $descripcion;
+    }
+
+    public function getTurnoById( $id ) {
+        $turno = "";
+        $query = "  SELECT descripcion
+                      FROM cat_turno 
+                     WHERE id_turno = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $turno = $row->descripcion;
+        }
+        return $turno;
+    }
+
+    public function getUsuarioById($id) {
+        $name = "";
+        $query = "  SELECT CONCAT_WS(' ', nombre, apepa, apema) as nm_completo
+                      FROM ws_usuario 
+                     WHERE id_usuario = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $name = $row->nm_completo;
+        }
+        return $name;
+    }
+
+    public function getFoundFolio($id) {
+        $name = "";
+        $query = "  SELECT CONCAT_WS(' ', nombre, apepa, apema) as nm_completo
+                      FROM ws_usuario 
+                     WHERE id_usuario = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while ($row = $result->fetch(PDO::FETCH_OBJ)) {
+            $name = $row->nm_completo;
+        }
+        return $name;
+    }
+
+    public function insertRemision( $data ){
+        $correcto= 1;
+        $exec = $this->conn->conexion();
+
+        $insert = "INSERT INTO tbl_remision( id_usr_captura, 
+                                             fecha_captura, 
+                                             fecha_remision, 
+                                             id_turno, 
+                                             folio, 
+                                             patrulla, 
+                                             id_agente, 
+                                             id_escolta, 
+                                             id_colonia, 
+                                             sector, 
+                                             calle, 
+                                             entrecalle1, 
+                                             entrecalle2, 
+                                             observaciones )
+                    VALUES (  ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?  )";
+
+        $result = $this->conn->prepare($insert);
+        $exec->beginTransaction();
+        $result->execute($data);
+        if ($correcto == 1){
+            $correcto= $exec->lastInsertId();
+        }
+        $exec->commit();
+        return $correcto;
     }
 
     public function closeOut(){

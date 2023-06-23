@@ -19,38 +19,42 @@ $cAccion  = new cBusiness();
 
 include_once 'sys/check_session.php'; 
 
-$id_turno = "";
-$id_juez = "";
+$id_turno      = "";
+$id_juez       = "";
 $id_secretario = "";
-$turno = "";
-$juez = "";
-$secretario = "";
+$turno         = "";
+$juez          = "";
+$secretario    = "";
+$show          = "";
+$showM         = "style='display: none'";
+$id_turno      = 0; 
 
-extract($_REQUEST);
-
-$ruta_app = "";
-
-if( !isset($_SESSION[id_turno] )){
-    $id_turno = 0;
+if(!isset($_SESSION[id_turno])){
+    $_SESSION[id_turno] = 0;
 }
 
 if( !isset($_SESSION[id_juez] )){
-    $id_juez = 0;
+    $_SESSION[id_juez]  = 0;
 }
 
 if( !isset($_SESSION[id_secretario] )){
-    $id_secretario = 0;
+    $_SESSION[id_secretario]  = 0;
 }
 
-$show = "";
+extract($_REQUEST);
+
+$id_turno = $_SESSION[id_turno];
+
 if ($id_turno > 0) {
-    $show = "style='display: none";
+    $show = "style='display: none'";
+    $showM = "";
 
-    $turno = $cAccion->getTurnoById($id_turno);
-    $juez = $cAccion->getUsuarioById($id_juez);
-    $secretario = $cAccion->getUsuarioById($id_secretario);
+    $turno = $cAccion->getTurnoById($_SESSION[id_turno]);
+    $juez = $cAccion->getUsuarioById($_SESSION[id_juez]);
+    $secretario = $cAccion->getUsuarioById($_SESSION[id_secretario]);
 }
 
+$ruta_app = "";
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -71,25 +75,26 @@ if ($id_turno > 0) {
                     <div class="col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-body no-padding">
-                                <div class="alert alert-callout alert-info no-margin">
-                                    <div <?php echo $show?>>
-                                        <form 
-                                            role="form" 
-                                            id="frmData" 
-                                            class="form" >
-                                            <div class="row">
-                                                <strong><i class="text-danger fa fa-bullhorn fa-2x"></i>
-                                                    Llena la información         
-                                                </strong>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-2">
-                                                    <div class="form-group floating-label">
-                                                        <select class="form-control" name="id_turno" id="id_turno">
-                                                            <option></option>
-                                                            <?php
+                                <div class="alert alert-callout alert-info no-margin">                                    
+                                    <form 
+                                        role="form"
+                                        id="frmData"
+                                        class="form">
+                                        <fieldset>
+                                            <div <?php echo $show?>>
+                                                <div class="row">
+                                                    <strong><i class="text-danger fa fa-bullhorn fa-2x"></i>
+                                                        Llena la información
+                                                    </strong>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group floating-label">
+                                                            <select class="form-control" name="id_turno" id="id_turno">
+                                                                <option></option>
+                                                                <?php
                                                                 $rsT = $cAccion->getDataTurno();
-                                                                while($rwT = $rsT->fetch(PDO::FETCH_OBJ)){
+                                                                while($rwT = $rsT->fetch(PDO::FETCH_OBJ)) {
                                                                     ?>
                                                                     <option value="<?php echo $rwT->id_turno?>">
                                                                         <?php echo $rwT->descripcion?>
@@ -97,54 +102,71 @@ if ($id_turno > 0) {
                                                                     <?php
                                                                 }
                                                                 ?>
-                                                        </select>
-                                                        <label for="id_turno">Turno 
-                                                                <span class="text-danger">*</span>
-                                                        </label>
-                                                    </div>
-                                                </div> 
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <select class="form-control" name="id_juez" id="id_juez">
-                                                            <option></option>
+                                                            </select>
+                                                            <label for="id_turno">Turno 
+                                                                    <span class="text-danger">*</span>
+                                                            </label>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <select class="form-control" name="id_juez" id="id_juez">
+                                                                <option></option>
+                                                                
+                                                                </select>
+                                                            <label for="id_juez">Juez</label>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <select class="form-control" name="id_secretario" id="id_secretario">
+                                                                <option></option>
                                                             
-                                                            </select>
-                                                        <label for="id_juez">Juez</label>
+                                                                </select>
+                                                            <label for="id_secretario">Secretario</label>
+                                                        </div>
                                                     </div>
-                                                </div> 
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <select class="form-control" name="id_secretario" id="id_secretario">
-                                                            <option></option>
-                                                        
-                                                            </select>
-                                                        <label for="id_secretario">Secretario</label>
-                                                    </div>
-                                                </div> 
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
-                                                    <button
-                                                        type="submit"
-                                                        class="btn ink-reaction btn-block"
-                                                        style="background-color: #E7CEA6;"  
-                                                        id="btn_guardar">
-                                                        <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
-                                                    </button>
                                                 </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-4 col-xs-12 col-lg-4">
+                                                        <button
+                                                            type="submit"
+                                                            class="btn ink-reaction btn-block"
+                                                            style="background-color: #E7CEA6;"
+                                                            id="btn_guardar">
+                                                            <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>                                        
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <span id="dataDetalles">
-                                            <h4><strong>Turno: <?php echo $turno ?> <br>
-                                                        | Juez: <?php echo $juez ?> <br>
-                                                        | Secretario: <?php echo $secretario ?> </strong></h4>     
-
-                                            </span>
+                                        </fieldset>
+                                    </form>                                    
+                                </div>
+                                <div class="alert alert-callout alert-info no-margin">                                    
+                                    <fieldset <?php echo $showM?>>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <span id="dataDetalles" >
+                                                    <div class="col-xs-3">
+                                                        <div class="well">
+                                                            <div class="clearfix">
+                                                                <div class="pull-left"> Turno: </div>
+                                                                <div class="pull-right"> <?php echo $turno; ?></div>
+                                                            </div>
+                                                            <div class="clearfix">
+                                                                <div class="pull-left"> Juez : </div>
+                                                                <div class="pull-right"> <?php echo $juez ?></div>
+                                                            </div>
+                                                            <div class="clearfix">
+                                                                <div class="pull-left"> Secretario : </div>
+                                                                <div class="pull-right"><?php echo $secretario?> </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </fieldset>                                 
                                 </div>
                             </div>
                         </div>

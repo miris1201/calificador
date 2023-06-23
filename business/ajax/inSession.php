@@ -31,9 +31,6 @@ if(isset($id_turno) && is_numeric($id_turno)
 
     
 
-
-    
-
 } else {
     $resp = "Debes seleccionar correctamente.";
 }

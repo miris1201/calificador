@@ -53,6 +53,18 @@ $showInfractor = "";
 $return_paginacion = "";
 $requerido  = "";
 
+if($_SESSION[id_turno] == ""){
+    $_SESSION[id_turno] = 0;
+}
+
+if( !isset($_SESSION[id_juez] )){
+    $_SESSION[id_juez]  = 0;
+}
+
+if( !isset($_SESSION[id_secretario] )){
+    $_SESSION[id_secretario]  = 0;
+}
+
 
 if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
     if (!isset($_SESSION[_editar_]) || !is_numeric($_SESSION[_editar_]) || $_SESSION[_editar_] <= 0) {
@@ -89,9 +101,9 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
     }
 }
 
-// if ($_SESSION[_is_view_] == 1) {
-//     $showInfractor = "style='display: none'";
-// }
+$id_turno_s = $_SESSION[id_turno];
+$id_juez_s = $_SESSION[id_juez];
+$id_secrectario_s = $_SESSION[id_secretario];
 
 
 if ($_SESSION[_is_view_] == 2) {
@@ -184,6 +196,40 @@ if ($_SESSION[_is_view_] == 3) {
                                     <div class="col-xs-12 col-md-12 col-sm-12">
                                         <fieldset><legend>Datos de <?php echo $titulo_curr?></legend>          
                                             <div class="row">
+                                                <?php 
+                                                if ($id_turno_s > 0) {
+                                                ?>
+                                                <div class="col-xs-3">
+                                                    <div class="well">
+                                                        <div class="clearfix">
+                                                            <div class="pull-left"> Turno: </div>
+                                                            <div class="pull-right"> <?php echo $cAccion->getTurnoById($id_turno_s); ?></div>
+                                                        </div>
+                                                        <div class="clearfix">
+                                                            <div class="pull-left"> Juez : </div>
+                                                            <div class="pull-right"> <?php echo $cAccion->getUsuarioById($id_juez_s) ?></div>
+                                                        </div>
+                                                        <div class="clearfix">
+                                                            <div class="pull-left"> Secretario : </div>
+                                                            <div class="pull-right"><?php echo $cAccion->getUsuarioById($id_secrectario_s) ?> </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php 
+                                                }else  {
+                                                ?>
+                                                <div class="col-xs-6">
+                                                    <div class="well">
+                                                        <div class="clearfix">
+                                                            <div class="pull-left">
+                                                                <h4>No se ha seleccionado turno, juez y secretario. </h4>
+                                                            </div>                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php 
+                                                }
+                                                ?>
                                                 <div class="col-sm-2">
                                                     <div class="form-group">
                                                         <input 
@@ -200,7 +246,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                             Fecha Remisión <span class="text-danger">*</span>
                                                         </label>
                                                     </div>
-                                                </div>
+                                                </div>        
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-2">
@@ -235,7 +281,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                                 }
                                                                 
                                                                 ?>
-                                                                <option value="<?php echo $rwP->id_usuario?>" <?php echo $selA?>>
+                                                                <option value="<?php echo $rwP->no_empleado?>" <?php echo $selA?>>
                                                                     <?php echo $rwP->no_empleado .' - ' .$rwP->nm_elemento?> 
                                                                 </option>
                                                             <?php
@@ -260,7 +306,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                                     $selE = "selected";
                                                                 }
                                                                 ?>
-                                                                <option value="<?php echo $rwE->id_usuario?>" <?php echo $selE?>>
+                                                                <option value="<?php echo $rwE->no_empleado?>" <?php echo $selE?>>
                                                                     <?php echo $rwE->no_empleado .' - ' .$rwE->nm_elemento?> 
                                                                 </option>
                                                             <?php

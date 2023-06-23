@@ -23,6 +23,7 @@ $calle          = "";
 $entre_calle    = "";
 $y_calle        = "";
 $observaciones  = "";
+$folio          = 0;
 
 $done  = 0;
 $resp  = "";
@@ -30,8 +31,8 @@ $alert = "warning";
 
 extract($_REQUEST);
 
-if( isset($_SESSION[id_usr])
-    || $patrulla = ""
+if( !isset($_SESSION[id_usr])
+    || $patrulla == ""
     || !is_numeric($id_patrullero) || $id_patrullero == 0
     || !is_numeric($id_escolta) || $id_escolta == 0
     || !is_numeric($id_colonia) || $id_colonia == 0
@@ -43,32 +44,40 @@ if( isset($_SESSION[id_usr])
     ){ //Verficando datos vacios
     $resp = "Debes de ingresar correctamente los datos";
 
-}else{    
-    //buscar si existe un registro en el mismo año
-    $umaFound = $cAccion->foundFolio( $ejercicio );
+}else{          
+    $data = array(
+        $_SESSION[id_usr],
+        date('Y-m-d H:i'),
+        $fecha_remision,
+        $_SESSION[id_turno],
+        $folio,
+        $patrulla,
+        $id_patrullero,
+        $id_escolta,
+        $id_colonia,
+        $sector, 
+        $calle,
+        $entre_calle,
+        $y_calle,
+        $observaciones
 
-    if ($umaFound > 0) {
-        $resp = "El ejercicio seleccionado ya existe en la base de datos, favor de revisar el catálogo.";
+    );
+
+    var_dump( $data );
+
+    $inserted = $cAccion->insertRemision( $data );
+
+    if(is_numeric($inserted) AND $inserted > 0){
+        $done  = 1;
+        $resp  = "Registro agregado correctamente.";
+        $alert = "success";
+    
     } else {
-        
-        $data = array(
-            $ejercicio, 
-            $salario
-        );
+        $done  = 0;
+        $resp  = "Ocurrió un incoveniente con la base de datos: -- ".$inserted;
 
-        $inserted = $cAccion->insertUMA( $data );
-
-        if(is_numeric($inserted) AND $inserted > 0){
-            $done  = 1;
-            $resp  = "Registro agregado correctamente.";
-            $alert = "success";
-        
-        } else {
-            $done  = 0;
-            $resp  = "Ocurrió un incoveniente con la base de datos: -- ".$inserted;
-
-        }
     }
+    
 }
 echo json_encode(array("done" => $done, "resp" => $resp, "alert" => $alert));
 

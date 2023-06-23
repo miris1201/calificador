@@ -83,7 +83,7 @@ const handleSubmitSession = (form) => {
         .then((resp) => resp.json())
         .then(function({ done, resp, alert, dataD }) {
             if (done == 1) {
-                sel('#dataDetalles').innerHTML = dataD;
+                location.reload()
 
             } else {
                 Swal.fire({
