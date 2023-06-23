@@ -34,7 +34,7 @@ $_SESSION[_type_] = $type;
 
 
 $id = 0;
-$fec_remision = $horaActual;
+$fec_remision = "";
 $patrulla    = "";
 $agente      = "";
 $escolta     = "";
@@ -65,6 +65,9 @@ if( !isset($_SESSION[id_secretario] )){
     $_SESSION[id_secretario]  = 0;
 }
 
+$id_turno = $_SESSION[id_turno];
+$id_juez = $_SESSION[id_juez];
+$id_secrectario = $_SESSION[id_secretario];
 
 if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
     if (!isset($_SESSION[_editar_]) || !is_numeric($_SESSION[_editar_]) || $_SESSION[_editar_] <= 0) {
@@ -82,8 +85,8 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
             $id_turno    = $arrR->id_turno;
             $folio       = $arrR->folio;
             $patrulla    = $arrR->patrulla;
-            $agente      = $arrR->agente;
-            $escolta     = $arrR->escolta;
+            $agente      = $arrR->id_agente;
+            $escolta     = $arrR->id_escolta;
             $id_colonia  = $arrR->id_colonia;
             $sector      = $arrR->sector;
             $calle       = $arrR->calle;
@@ -101,9 +104,7 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
     }
 }
 
-$id_turno_s = $_SESSION[id_turno];
-$id_juez_s = $_SESSION[id_juez];
-$id_secrectario_s = $_SESSION[id_secretario];
+
 
 
 if ($_SESSION[_is_view_] == 2) {
@@ -129,6 +130,7 @@ if ($_SESSION[_is_view_] == 3) {
     <meta content="" name="author"/>
     <?php include("dist/inc/headercommon.php"); ?>
     <link rel="stylesheet" type="text/css" href="dist/assets/css/select2.min.css?v=1.001">
+    <link rel="stylesheet" type="text/css" href="dist/assets/libs/datetimepicker/bootstrap.datetime.css?v=1.001">
 </head>
 <body class="<?php echo _BODY_STYLE_ ?>">
 <?php include ($dir_fc."inc/header.php")?>
@@ -197,26 +199,26 @@ if ($_SESSION[_is_view_] == 3) {
                                         <fieldset><legend>Datos de <?php echo $titulo_curr?></legend>          
                                             <div class="row">
                                                 <?php 
-                                                if ($id_turno_s > 0) {
+                                                if ($id_turno > 0 ) {
                                                 ?>
                                                 <div class="col-xs-3">
                                                     <div class="well">
                                                         <div class="clearfix">
                                                             <div class="pull-left"> Turno: </div>
-                                                            <div class="pull-right"> <?php echo $cAccion->getTurnoById($id_turno_s); ?></div>
+                                                            <div class="pull-right"> <?php echo $cAccion->getTurnoById($id_turno); ?></div>
                                                         </div>
                                                         <div class="clearfix">
                                                             <div class="pull-left"> Juez : </div>
-                                                            <div class="pull-right"> <?php echo $cAccion->getUsuarioById($id_juez_s) ?></div>
+                                                            <div class="pull-right"> <?php echo $cAccion->getUsuarioById($id_juez) ?></div>
                                                         </div>
                                                         <div class="clearfix">
                                                             <div class="pull-left"> Secretario : </div>
-                                                            <div class="pull-right"><?php echo $cAccion->getUsuarioById($id_secrectario_s) ?> </div>
+                                                            <div class="pull-right"><?php echo $cAccion->getUsuarioById($id_secrectario) ?> </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <?php 
-                                                }else  {
+                                                } else {
                                                 ?>
                                                 <div class="col-xs-6">
                                                     <div class="well">
@@ -231,22 +233,20 @@ if ($_SESSION[_is_view_] == 3) {
                                                 }
                                                 ?>
                                                 <div class="col-sm-2">
-                                                    <div class="form-group">
-                                                        <input 
-                                                            type="datetime-local" 
-                                                            class="form-control"
-                                                            name="fecha_remision"
-                                                            id="fecha_remision"
-                                                            autocomplete="off"
-                                                            required
-                                                            value="<?php echo $fec_remision?>"
-                                                            <?php echo $readOnly?>>
-                                                        <label
-                                                            for="fecha_remision">
-                                                            Fecha Remisión <span class="text-danger">*</span>
-                                                        </label>
+                                                    <div class="form-group ">
+                                                        <div class='input-group date datepicker' name="datepicker">
+                                                            <input type='text'  <?php echo $readOnly?>
+                                                                class="form-control input-group-addon" 
+                                                                value="<?php echo $fec_remision?>"
+                                                                id="fecha_remision" name="fecha_remision">
+                                                            <label
+                                                                for="fecha_remision">
+                                                                Fecha Remisión <span class="text-danger">*</span>
+                                                            </label>    
+                                                        </div>   
+                                                                                                         
                                                     </div>
-                                                </div>        
+                                                </div>    
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-2">
@@ -478,6 +478,9 @@ if ($_SESSION[_is_view_] == 3) {
 </div>
 <?php include("dist/components/remision.magnament.php"); ?>
 <script src="dist/assets/js/select2.full.min.js"></script>
+<script src="dist/assets/libs/moment/moment.min.js"></script>
+<script src="dist/assets/libs/moment/locale/es.js"></script>
+<script src="dist/assets/libs/datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <div class="modal small fade" id="id_modal_infractor"
     tabindex="-1" role="dialog" 
     aria-labelledby="myModalLabel" 

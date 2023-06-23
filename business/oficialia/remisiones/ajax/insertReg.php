@@ -45,10 +45,14 @@ if( !isset($_SESSION[id_usr])
     $resp = "Debes de ingresar correctamente los datos";
 
 }else{          
+
+
+    $date = $cFn->formatearFecha($fecha_remision);
+
     $data = array(
         $_SESSION[id_usr],
         date('Y-m-d H:i'),
-        $fecha_remision,
+        $date,
         $_SESSION[id_turno],
         $folio,
         $patrulla,

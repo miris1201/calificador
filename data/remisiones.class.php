@@ -113,14 +113,14 @@ class cRemision extends BD
         }
 
         $query = "  SELECT id_remision, id_usr_captura, fecha_captura, id_ciudadano, 
-                             DATE_FORMAT(fecha_remision, '%d-%m-%Y %H:%I') as fecha_remision, 
+                             DATE_FORMAT(fecha_remision, '%d-%m-%Y %H:%i') as fecha_remision, 
                             id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, id_agente, 
                             id_escolta, sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, 
-                            manifiestainfractor, manifiestacalificador, sts, patrullero, escoltan, activo
+                            manifiestainfractor, manifiestacalificador, sts, activo
                       FROM tbl_remision 
                       WHERE $condition_a
                      $condition 
-                    ORDER BY año DESC, folio DESC ".$milimite;
+                    ORDER BY año DESC, folio DESC, id_turno ASC  ".$milimite;
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
@@ -266,7 +266,6 @@ class cRemision extends BD
                       FROM cat_articulos_dtl 
                      WHERE id_articulo = $id  
                      ORDER BY id_articulo_dtl ASC";
-        // echo $query;
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
@@ -279,7 +278,6 @@ class cRemision extends BD
                            hr_min, hr_max
                       FROM cat_articulos_dtl
                      WHERE id_articulo_dtl = $id  ";
-        // echo $query;
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
@@ -287,13 +285,13 @@ class cRemision extends BD
 
     public function getRemisionbyid( $id ) {
 
-        $query = "  SELECT id_remision, id_usr_captura, fecha_captura, fecha_remision, id_ciudadano, 
-                           id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, agente, escolta, 
+        $query = "  SELECT id_remision, id_usr_captura, fecha_captura, 
+                           DATE_FORMAT(fecha_remision, '%d-%m-%Y %H:%i') as fecha_remision, id_ciudadano, 
+                           id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, id_agente, id_escolta, 
                            sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, manifiestainfractor, 
-                           manifiestacalificador, sts, patrullero, escoltan, activo
+                           manifiestacalificador, sts, activo
                       FROM tbl_remision
                      WHERE id_remision = $id  ";
-        // echo $query;
         $result = $this->conn->prepare($query);
         $result->execute();
         return $result;
@@ -396,7 +394,6 @@ class cRemision extends BD
                                              entrecalle2, 
                                              observaciones )
                     VALUES (  ?,
-                              ?,
                               ?,
                               ?,
                               ?,

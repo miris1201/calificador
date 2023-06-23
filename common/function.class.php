@@ -290,9 +290,9 @@ class cFunction
     function formatearFecha($fecha){   // formatear fecha y hora
         if (strpos($fecha,'/') !== false) {
             $fecha = str_replace('/', '-', $fecha);
-            $fecha = date('Y-m-d H:i:s', strtotime($fecha));
+            $fecha = date('Y-m-d H:i', strtotime($fecha));
         } else {
-            $fecha = date('d-m-Y H:i:s', strtotime($fecha));
+            $fecha = date('d-m-Y H:i', strtotime($fecha));
             $fecha = str_replace('-', '/', $fecha);
         }
 
@@ -312,4 +312,6 @@ class cFunction
         $this->guardarImagen($new, $ruta, $tipo);
         //return $new;
     }
+
+
 }

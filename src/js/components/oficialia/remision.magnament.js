@@ -21,6 +21,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+$('.input-group.date').datetimepicker({
+    format: 'DD/MM/YYYY H:mm',
+    locale: 'es',
+    defaultDate: new Date()
+});
+
 const frmData = sel('#frmData');
 const frmUpdate = sel('#frmUpdate');
 
@@ -148,7 +154,6 @@ $('#id_colonia').on('change', function(e) {
 let articulo = sel('#id_articulo');
 if (articulo != null) {
 
-    console.log('hola');
     $('#id_articulo').on('change', function(e) {
         const id = sel('#id_articulo').value;
         const url = `business/oficialia/remisiones/ajax/dataFaltas.php?id=${ id }`;

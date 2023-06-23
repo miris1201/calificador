@@ -75,7 +75,6 @@ $rsRegShow = $cLista->getAllReg(); //Trae todos los registros (ya le puse limite
 
 $ruta_app = "";
 
-echo $_SESSION[id_secretario];
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,6 +84,7 @@ echo $_SESSION[id_secretario];
     <meta content="" name="author"/>
     <?php include("dist/inc/headercommon.php"); ?>
     <link rel="stylesheet" type="text/css" href="dist/assets/css/select2.min.css?v=1.001">
+    <link rel="stylesheet" type="text/css" href="dist/assets/libs/datetimepicker/bootstrap.datetime.css?v=1.001">
 </head>
 <body class="<?php echo _BODY_STYLE_ ?> ">
 <?php include ($dir_fc."inc/header.php")?>
@@ -276,6 +276,10 @@ echo $_SESSION[id_secretario];
     <?php include($dir_fc."inc/menucommon.php") ?>
 </div>
 <?php include("dist/components/remision.php"); ?>
+<script src="dist/assets/js/select2.full.min.js"></script>
+<script src="dist/assets/libs/moment/moment.min.js"></script>
+<script src="dist/assets/libs/moment/locale/es.js"></script>
+<script src="dist/assets/libs/datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <div 
     class="modal small fade" 
     id="idModalSearch" 
