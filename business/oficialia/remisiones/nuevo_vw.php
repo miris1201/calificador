@@ -433,7 +433,7 @@ if ($_SESSION[_is_view_] == 3) {
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group floating-label">
-                                                        <textarea name="observaciones" id="observaciones" rows="5"
+                                                        <textarea name="observaciones" id="observaciones" rows="7"
                                                             <?php echo $readOnly?> 
                                                             class="form-control"><?php echo $observaciones?> </textarea>
                                                         <label
@@ -443,6 +443,11 @@ if ($_SESSION[_is_view_] == 3) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <hr>
+                                        </fieldset>
+                                        <fieldset>                                            
+                                            <legend>Datos de Infractor</legend>          
+                                            
                                         </fieldset>
                                         <?php                                             
                                         if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {
@@ -453,7 +458,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <button
                                                             type="submit"
                                                             class="btn ink-reaction btn-block"
-                                                            style="background-color: #E7CEA6;"  
+                                                            style="background-color: #E7CEA6;"
                                                             id="btn_guardar">
                                                             <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
                                                         </button>
