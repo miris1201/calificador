@@ -445,9 +445,16 @@ if ($_SESSION[_is_view_] == 3) {
                                             </div>
                                             <hr>
                                         </fieldset>
-                                        <fieldset>                                            
-                                            <legend>Datos de Infractor</legend>          
-                                            
+                                        <fieldset>                               
+                                            <div class="card-body">
+                                                <div class="card border-danger">  
+                                                    <div class="col-xs-10">                                                              
+                                                        <legend>Datos de Infractor</legend>          
+                                                        <div id="divdtl">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </fieldset>
                                         <?php                                             
                                         if ($_SESSION[_is_view_] == 1 || $_SESSION[_is_view_] == 2) {

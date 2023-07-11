@@ -418,6 +418,61 @@ class cRemision extends BD
         return $correcto;
     }
 
+    public function getCiudadanoByRem($id) {
+        $query = "  SELECT id_ciudadano, id_remision, folio, subfolio, 
+                            ejercicio, id_turno, turno,
+                            CONCAT_WS(' ', nombre, apepa, apema) as nm_remisor,  
+                            sexo, edad, domicilio, id_ocupacion, ocupacion, id_nvl_estudios, 
+                            nvl_estudios, id_edo_fisico
+                      FROM tbl_ciudadanos 
+                     WHERE id_remision = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+       
+        return $result;
+    }
+
+
+    public function getArrayEdoFisico(){
+        $data = array();
+        $query = "SELECT id_edo_fisico, descripcion
+                    FROM cat_edo_fisico ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while($row = $result->fetch(PDO::FETCH_OBJ)){
+                $data[$row->id_edo_fisico] = $row->descripcion;
+        }
+        return $data;
+        
+    }
+
+    public function getArrayEstudios(){
+        $data = array();
+        $query = "SELECT id_nvl_estudios, descripcion
+                    FROM cat_nivel_estudios ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while($row = $result->fetch(PDO::FETCH_OBJ)){
+                $data[$row->id_nvl_estudios] = $row->descripcion;
+        }
+        return $data;
+        
+    }
+
+    public function getArrayOcupacion(){
+        $data = array();
+        $query = "SELECT id_ocupacion, descripcion
+                    FROM cat_ocupacion ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while($row = $result->fetch(PDO::FETCH_OBJ)){
+                $data[$row->id_ocupacion] = $row->descripcion;
+        }
+        return $data;
+        
+    }
+
+
     public function closeOut(){
         $this->conn = null;
     }

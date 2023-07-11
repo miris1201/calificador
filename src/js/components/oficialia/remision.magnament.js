@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
     $('#id_escolta').select2({
         placeholder: 'Seleccione una colonia'
     });
+
+    showRemisionDtl();
 });
 
 $('.input-group.date').datetimepicker({
@@ -210,4 +212,35 @@ if (falta != null) {
                 console.log('Hubo un problema con la petición');
             });
     });
+}
+
+const showRemisionDtl = () => {
+
+    let master = sel('#id_remision').value;
+   
+    if(master != ""){
+
+        fetch(`business/oficialia/remisiones/ajax/get_info_dtl.php?master=${ master }`)
+        .then((respuesta) => respuesta.json())
+        .then(function({ done, resp }){
+            if(done){
+                sel('#divdtl').innerHTML = resp;
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: resp,
+                    allowOutsideClick: false
+                });
+            }
+        })
+        .catch(function( error ) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error
+            });
+        });
+    }
+
 }
