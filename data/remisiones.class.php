@@ -109,16 +109,15 @@ class cRemision extends BD
 
         
         if ($this->getFiltro() != ""){
-            $condition = " WHERE ejercicio = ".$this->getFiltro()." ";
+            $condition = " WHERE folio = ".$this->getFiltro()." ";
         }
 
         $query = "  SELECT id_remision, id_usr_captura, fecha_captura, id_ciudadano, 
                              DATE_FORMAT(fecha_remision, '%d-%m-%Y %H:%i') as fecha_remision, 
-                            id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, id_agente, 
+                            id_turno, folio, subfolio, año, patrulla, id_agente, 
                             id_escolta, sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, 
                             manifiestainfractor, manifiestacalificador, sts, activo
                       FROM tbl_remision 
-                      WHERE $condition_a
                      $condition 
                     ORDER BY año DESC, folio DESC, id_turno ASC  ".$milimite;
         $result = $this->conn->prepare($query);
@@ -285,9 +284,9 @@ class cRemision extends BD
 
     public function getRemisionbyid( $id ) {
 
-        $query = "  SELECT id_remision, id_usr_captura, fecha_captura, 
+        $query = "  SELECT id_remision, id_usr_captura, fecha_captura, id_autoridad, folio_rnd,
                            DATE_FORMAT(fecha_remision, '%d-%m-%Y %H:%i') as fecha_remision, id_ciudadano, 
-                           id_turno, folio, subfolio, año, falta1, falta2, falta3, patrulla, id_agente, id_escolta, 
+                           id_turno, folio, subfolio, año, patrulla, id_agente, id_escolta, 
                            sector, id_colonia, calle, entrecalle1, entrecalle2, observaciones, manifiestainfractor, 
                            manifiestacalificador, sts, activo
                       FROM tbl_remision
@@ -379,10 +378,10 @@ class cRemision extends BD
         $correcto= 1;
         $exec = $this->conn->conexion();
 
-        $insert = "INSERT INTO tbl_remision( id_usr_captura, 
-                                             fecha_captura, 
-                                             fecha_remision, 
-                                             id_turno, 
+        $insert = "INSERT INTO tbl_remision( id_usr_captura,
+                                             fecha_captura,
+                                             fecha_remision,
+                                             id_turno,
                                              folio, 
                                              patrulla, 
                                              id_agente, 
@@ -470,6 +469,69 @@ class cRemision extends BD
         }
         return $data;
         
+    }
+
+    public function getFaltasByCiudadano( $id ) {
+        $query = "  SELECT id_rem_falta, id_remision, falta, fraccion, smd, 
+                            hr_arresto
+                      FROM tbl_rem_faltas 
+                     WHERE id_ciudadano = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+       
+        return $result;
+    }
+
+    public function getFechaRem($id) {
+        $anio = "";
+        $query = "  SELECT DATE_FORMAT(fecha_remision, '%Y') as anio
+                      FROM tbl_remision 
+                     WHERE id_remision = $id  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+       while($row = $result->fetch(PDO::FETCH_OBJ)){
+            $anio = $row->anio;
+        }
+        return $anio;
+    }
+
+
+    public function getCalculoTotalSMD( $y ) {
+        $salario = 0;
+        $query = "  SELECT salario
+                      FROM tbl_smd 
+                     WHERE ejercicio = $y  ";
+        $result = $this->conn->prepare($query);
+        $result->execute();
+        while($row = $result->fetch(PDO::FETCH_OBJ)){
+            $salario = $row->salario;
+        }
+        return $salario;
+    }
+
+
+    public function updateRemision( $data ){
+        $correcto   = 1;
+        $exec       = $this->conn->conexion();
+        $update = " UPDATE  tbl_remision
+                       SET  fecha_remision  = ?,
+                            id_autoridad    = ?,
+                            folio_rnd       = ?,
+                            patrulla        = ?,
+                            id_agente       = ?,
+                            id_escolta      = ?,
+                            id_colonia      = ?,
+                            sector          = ?,
+                            calle           = ?,
+                            entrecalle1     = ?,
+                            entrecalle2     = ?,
+                            observaciones   = ?
+                     WHERE  id_remision     = ?";
+        $result = $this->conn->prepare($update);
+        $exec->beginTransaction();
+        $result->execute( $data );
+        $exec->commit();
+        return $correcto;
     }
 
 

@@ -44,7 +44,7 @@ if(isset($id) && is_numeric($id)){
                             <option value='Días mínimo: $dias_min'></option>
                             <option value='Días máximo: $dias_max'></option>
                         </datalist>";
-
+           
         $input_hrs = "  <input type='number' class='form-control' 
                             id='hr_arresto' name='hr_arresto'
                             list='lista_horas'

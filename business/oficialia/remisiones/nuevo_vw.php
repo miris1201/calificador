@@ -82,8 +82,10 @@ if ($_SESSION[_type_] == 2 || $_SESSION[_type_] == 3) {
             $arrR = $rsR->fetch(PDO::FETCH_OBJ);
 
             $id_remision = $arrR->id_remision;
+            $id_autoridad= $arrR->id_autoridad;
             $id_turno    = $arrR->id_turno;
             $folio       = $arrR->folio;
+            $folio_rnd   = $arrR->folio_rnd;
             $patrulla    = $arrR->patrulla;
             $agente      = $arrR->id_agente;
             $escolta     = $arrR->id_escolta;
@@ -198,6 +200,23 @@ if ($_SESSION[_is_view_] == 3) {
                                     <div class="col-xs-12 col-md-12 col-sm-12">
                                         <fieldset><legend>Datos de <?php echo $titulo_curr?></legend>          
                                             <div class="row">
+                                                <div class="col-sm-2">
+                                                    <div class="form-group floating-label">
+                                                        <input 
+                                                            type="text" 
+                                                            class="form-control"
+                                                            name="folio"
+                                                            id="folio"
+                                                            autocomplete="off"
+                                                            required
+                                                            value="<?php echo $folio?>"
+                                                            <?php echo $readOnly?>>
+                                                        <label
+                                                            for="folio">
+                                                            Folio <span class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                                 <?php 
                                                 if ($id_turno > 0 ) {
                                                 ?>
@@ -362,6 +381,7 @@ if ($_SESSION[_is_view_] == 3) {
                                                         <input type="number" class="form-control"
                                                             id="folio_rnd" name="folio_rnd"
                                                             min="0"
+                                                            value="<?php echo $folio_rnd?>"
                                                             <?php echo $readOnly?> 
                                                             value="">
                                                         <label
@@ -378,8 +398,13 @@ if ($_SESSION[_is_view_] == 3) {
                                                             <option value=""></option>
                                                             <?php
                                                             $rsA = $cAccion->getCatAutoridad();
-                                                            while($rwA = $rsA->fetch(PDO::FETCH_OBJ)){ ?>
-                                                                <option value="<?php echo $rwA->id_autoridad?>">
+                                                            while($rwA = $rsA->fetch(PDO::FETCH_OBJ)){ 
+                                                                $selA = "";
+                                                                if ($rwA->id_autoridad == $id_autoridad) {
+                                                                    $selA = "selected";
+                                                                }
+                                                                ?>
+                                                                <option value="<?php echo $rwA->id_autoridad?>" <?php echo $selA?>>
                                                                     <?php echo $rwA->descripcion?> 
                                                                 </option>
                                                             <?php
@@ -448,7 +473,7 @@ if ($_SESSION[_is_view_] == 3) {
                                         <fieldset>                               
                                             <div class="card-body">
                                                 <div class="card border-danger">  
-                                                    <div class="col-xs-10">                                                              
+                                                    <div class="col-xs-12">                                                              
                                                         <legend>Datos de Infractor</legend>          
                                                         <div id="divdtl">
                                                         </div>
@@ -514,6 +539,81 @@ if ($_SESSION[_is_view_] == 3) {
                     Cerrar
                 </button>
             </div>
+        </div>
+    </div>
+</div>
+<div 
+    class="modal small fade" 
+    id="modalInfractor" 
+    tabindex="-1" 
+    role="dialog" 
+    aria-labelledby="myModalLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h5 class="modal-title">Datos del Infractor</h5>
+            </div>              
+            <form role="form" id="idCPW" class="form">
+                <div class="modal-body">
+                    <div class="row">
+                        <input 
+                            type="hidden" 
+                            id="id_r" 
+                            name="id_r"/>
+                        <input 
+                            type="hidden" 
+                            id="id_c" 
+                            name="id_c"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group floating-label">
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    name="nuevaclave" 
+                                    id="nuevaclave"
+                                    required 
+                                    autocomplete="off" 
+                                    maxlength="16">
+                                <label for="nuevaclave">
+                                    Contraseña Nueva <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group floating-label">
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="confclave" 
+                                    name="confclave" 
+                                    required
+                                    autocomplete="off" 
+                                    maxlength="16">
+                                <label for="confclave">
+                                    Confirmar Contraseña <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button 
+                        type="button" 
+                        class="btn btn-link btn-danger" 
+                        data-dismiss="modal">Cerrar
+                    </button>
+                    <button 
+                        type="submit" 
+                        id="btn_aceptar_cpw" 
+                        class="btn bg-success ink-reaction" >
+                        Aceptar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

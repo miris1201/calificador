@@ -40,6 +40,12 @@ if($master != ""){
         $ocupacion          = $rowm->ocupacion;
         $genero =  ($rowm->sexo == 1) ? 'Femenino' : 'Masculino' ;
 
+
+        $allF = $cAccion->getFaltasByCiudadano( $id_ciudadano );
+
+        $anio_rem = $cAccion->getFechaRem( $master);
+        $salario = $cAccion->getCalculoTotalSMD( $anio_rem );
+
           
         $edoFisico  = (isset($arrayFisico[$id_edo_fisico]) && $arrayFisico[$id_edo_fisico] != "" ) ? $arrayFisico[$id_edo_fisico] : '';
         $nvlEstudios  = (isset($arrayEstudios[$id_nvl_estudios]) && $arrayEstudios[$id_nvl_estudios] != "" ) ? $arrayEstudios[$id_nvl_estudios] : $nvl_estudios;
@@ -48,7 +54,7 @@ if($master != ""){
         $resp .= "  <div class='row'>
                         <div class='col-xs-12'>
                             <div class='row' >                                
-                                <div class='col-xs-7 col-md-11 col-lg-5'>
+                                <div class='col-sm-6'>
                                     <h4 class='text-light'>                               
                                         <b>Nombre del Infractor: </b> $nm_remisor <br>
                                         <b>Edad: </b>: $edad años &nbsp;&nbsp; <b>Sexo: </b> $genero &nbsp;&nbsp; <b>Edo. Físico: </b> $edoFisico<br>
@@ -56,25 +62,66 @@ if($master != ""){
                                         <b>Domicilio: </b>: <br>$domicilio                                        
                                     </h4>
                                 </div>
-                                <div class='col-xs-7 col-md-11 col-lg-7'>
+                                <div class='col-lg-4'>
                                     <table class='table table-hover table-striped'>
                                         <thead>
                                             <tr>
-                                                <td width='3%'>Artículo</td>
-                                                <td width='10%'>Falta</td>
-                                                <td width='20%'>S/M Diario</td>
-                                                <td width='40%'>Hr de arresto</td>
-                                                <td width='40%'>Total</td>
+                                                <td width='4%' class='text-center'>Artículo</td>
+                                                <td width='4%' class='text-center'>Falta</td>
+                                                <td width='4%' class='text-center'>S/M Diario</td>
+                                                <td width='4%' class='text-center'>Hr de arresto</td>
+                                                <td width='4%' class='text-center'>Total</td>
+                                            </tr>
+                                            <tr>
+                                                    <td colpan='5' class='text-right'></td>
                                             </tr>
                                         </thead>
-                                        <tbody>                                    
+                                        <tbody> ";
+                                        $t_final = 0;
+                                        $t_horas = 0;
+                                        while($rowF = $allF->fetch(PDO::FETCH_OBJ)){
+                                            $id_rem_falta = $rowF->id_rem_falta;
+                                            $falta        = $rowF->falta;
+                                            $fraccion     = $rowF->fraccion;
+                                            $smd          = $rowF->smd;
+                                            $hr_arresto   = $rowF->hr_arresto; 
+
+                                            $total = $salario * $smd;
+
+                                            $t_final += $total;
+                                            $t_horas += $hr_arresto;
+                                            $resp .= "
+                                                <tr>
+                                                    <td width='3%' class='text-center'>$falta</td>
+                                                    <td width='4%' class='text-center'>$fraccion</td>
+                                                    <td width='4%' class='text-center'>$smd</td>
+                                                    <td width='4%' class='text-center'>$hr_arresto</td>
+                                                    <td width='4%' class='text-center text-success'>$$total</td>
+                                                </tr>                                                
+                                            ";                                        
+                                        }                                        
+                            $resp .= "      
+                                            <tr class='text-right text-danger'>
+                                                <td colspan='2'>Total de horas: $t_horas</td>
+                                                <td colspan='3'>Total a pagar: $$t_final</td>
+                                            </tr>
+                                        </tbody>                                 
                                     </table>
                                 </div>
-                                <div class='col-xs-7 col-md-11 col-lg-5'>
-                                    <a class='btn btn-ink-reaction btn-floating-action btn-danger'
-                                        id='btnFollow'
-                                        title='Agregar Seguimiento'>
-                                        <i class='fa fa-plus'></i>
+                                <div class='col-md-2'>
+                                    <a onclick='handleEditD($id_ciudadano, $id_rem_falta)'
+                                        class='btn ink-reaction btn-icon-toggle btn-warning'
+                                        data-placement='top'
+                                        id='btnEdit'
+                                        title='Editar datos'>
+                                        <i class='fa fa-pencil'></i>
+                                    </a>
+                                    <a onclick='handlePrint($id_rem_falta, $id_ciudadano)'
+                                        class='btn ink-reaction btn-icon-toggle btn-warning'
+                                        data-placement='top'
+                                        id='btnEdit'
+                                        title='Editar datos'>
+                                        <i class='fa fa-pencil'></i>
                                     </a>
                                 </div>
                             </div>

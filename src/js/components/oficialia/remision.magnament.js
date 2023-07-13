@@ -244,3 +244,34 @@ const showRemisionDtl = () => {
     }
 
 }
+
+const handleEditD = (id_c, id_f) => {
+
+    let master = sel('#id_remision').value;
+
+    sel("#id_t").value = id;
+    sel("#id_status_t").value = status;
+
+    const form = sel('#frm_turnado');
+    const data = new FormData(form);
+    const url = 'business/ajax/dataTurnado.php';
+
+
+    fetch(url, {
+            method: 'POST',
+            body: data
+        })
+        .then((resp) => resp.text())
+        .then(function(resp) {
+            sel('#tbl_turnado').innerHTML = resp;
+        })
+
+    .catch(function(error) {
+        console.log('Hubo un problema con la petición');
+
+    });
+
+    $('#modal_update_T').modal('show');
+   
+
+}

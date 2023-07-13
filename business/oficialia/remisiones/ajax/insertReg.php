@@ -67,8 +67,6 @@ if( !isset($_SESSION[id_usr])
 
     );
 
-    var_dump( $data );
-
     $inserted = $cAccion->insertRemision( $data );
 
     if(is_numeric($inserted) AND $inserted > 0){
